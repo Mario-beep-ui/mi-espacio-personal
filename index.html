@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio Personal de Mario</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gradient-start: #3498db;
+            --gradient-end: #8e44ad;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding-top: 70px;
+            padding-bottom: 60px;
+        }
+        
+        /* HEADER - Barra de navegación */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 70px;
+        }
+        
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--secondary);
+        }
+        
+        /* MAIN CONTENT */
+        .section {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Welcome Section */
+        .welcome-container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        
+        .gradient-text {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end), var(--gradient-start));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 8s ease infinite;
+            margin-bottom: 30px;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .welcome-text {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        /* Horarios Section */
+        .schedule-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        
+        .schedule-btn {
+            padding: 12px 25px;
+            background-color: white;
+            border: 2px solid var(--secondary);
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--dark);
+        }
+        
+        .schedule-btn.active, .schedule-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .schedule-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .schedule-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .schedule-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .schedule-content {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .day-columns {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .day-column {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .day-title {
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .day-tasks {
+            padding: 15px;
+        }
+        
+        .task-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rest-day {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .rest-day h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .rest-day-item {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .rest-day-item::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+        
+        /* FOOTER */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .day-columns {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .gradient-text {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .day-columns {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .gradient-text {
+                font-size: 2rem;
+            }
+            
+            .schedule-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .schedule-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .day-columns {
+                grid-template-columns: 1fr;
+            }
+            
+            .gradient-text {
+                font-size: 1.8rem;
+            }
+            
+            .nav-links li {
+                margin-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <div class="logo">Espacio Personal</div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link" data-target="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-target="schedules">Horarios</a></li>
+                <li><a href="#" class="nav-link">Proyectos</a></li>
+                <li><a href="#" class="nav-link">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="welcome-container">
+                <h1 class="gradient-text">Bienvenido a tu espacio personal Mario</h1>
+                <p class="welcome-text">Este es tu espacio personal donde podrás organizar tus horarios, proyectos y metas. Aquí encontrarás todo lo necesario para mantener tu rutina organizada y alcanzar tus objetivos.</p>
+                <button class="schedule-btn" data-target="schedules">Ver Mis Horarios</button>
+            </div>
+        </section>
+
+        <!-- Schedules Section -->
+        <section id="schedules" class="section">
+            <h2 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Mis Horarios</h2>
+            
+            <div class="schedule-selector">
+                <button class="schedule-btn active" data-schedule="morning">Horario de Mañana</button>
+                <button class="schedule-btn" data-schedule="afternoon">Horario de Tarde</button>
+            </div>
+            
+            <!-- Horario de Mañana -->
+            <div class="schedule-container morning-schedule">
+                <div class="schedule-header">
+                    <div class="schedule-title">Horario de Mañana - Semana Laboral</div>
+                </div>
+                
+                <div class="schedule-content">
+                    <div class="day-columns">
+                        <div class="day-column">
+                            <div class="day-title">LUNES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                                <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- BAÑARME</div>
+                                <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                                <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                                <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
+                                <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
+                                <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
+                                <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">MARTES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                                <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- BAÑARME</div>
+                                <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                                <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                                <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 5:00 PM A 8:00 PM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:00 PM A 9:15 PM</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 9:15 PM A 10:30 PM</div>
+                                <div class="task-item">- PREPARAR TODO PARA DORMIR</div>
+                                <div class="task-item">- DORMIR DE 10:50 A 11:00 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">MIÉRCOLES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                                <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- BAÑARME</div>
+                                <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                                <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                                <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
+                                <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
+                                <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
+                                <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">JUEVES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                                <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- BAÑARME</div>
+                                <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                                <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                                <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 5:00 PM A 8:00 PM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:00 PM A 9:15 PM</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 9:15 PM A 10:30 PM</div>
+                                <div class="task-item">- PREPARAR TODO PARA DORMIR</div>
+                                <div class="task-item">- DORMIR DE 10:50 A 11:00 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">VIERNES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                                <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- BAÑARME</div>
+                                <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                                <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                                <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
+                                <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
+                                <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
+                                <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rest-day">
+                        <h3>Días de Descanso</h3>
+                        <div class="rest-day-item">- CUANDO DESCANSO DE LUNES A VIERNES LEVANTARME A LAS 6 AM</div>
+                        <div class="rest-day-item">- LAVAR, RECOGER ESCRITORIO, EJERCICIO, DOBLAR ROPA, ESTUDIAR</div>
+                        <div class="rest-day-item">- SALIR CON SAM A LAS 3 PM</div>
+                        <div class="rest-day-item">- REGRESAR CON SAM A LAS 10:20 PM</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Horario de Tarde -->
+            <div class="schedule-container afternoon-schedule" style="display: none;">
+                <div class="schedule-header">
+                    <div class="schedule-title">Horario de Tarde - Semana Laboral</div>
+                </div>
+                
+                <div class="schedule-content">
+                    <div class="day-columns">
+                        <div class="day-column">
+                            <div class="day-title">LUNES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                                <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                                <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                                <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                                <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                                <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">MARTES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                                <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                                <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                                <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                                <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                                <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">MIÉRCOLES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                                <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                                <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                                <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                                <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                                <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">JUEVES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                                <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                                <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                                <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                                <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                                <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="day-column">
+                            <div class="day-title">VIERNES</div>
+                            <div class="day-tasks">
+                                <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                                <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                                <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                                <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                                <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                                <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                                <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                                <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                                <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                                <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                                <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="rest-day">
+                        <h3>Días de Descanso</h3>
+                        <div class="rest-day-item">- LEVANTARME A LAS 6 AM</div>
+                        <div class="rest-day-item">- LAVAR Y HACER PENDIENTES</div>
+                        <div class="rest-day-item">- ESTUDIAR PROGRAMACIÓN DE 8:40 AM A 10:40 PM</div>
+                        <div class="rest-day-item">- COMER EN 20 MINUTOS</div>
+                        <div class="rest-day-item">- PAUSA DE 30 MINUTOS</div>
+                        <div class="rest-day-item">- ESTUDIAR INGLÉS DE 11:30 AM A 12:40 PM</div>
+                        <div class="rest-day-item">- ESTUDIAR MATEMÁTICAS DE 12:40 PM A 1:55 PM</div>
+                        <div class="rest-day-item">- BAÑARME PARA SALIR CON SAM A LAS 2:20 PM</div>
+                        <div class="rest-day-item">- REGRESAR A CASA A LAS 11 PM</div>
+                        <div class="rest-day-item">- DORMIR A LAS 11:30 PM</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Todos los derechos reservados a Mario Vázquez © 2025</p>
+    </footer>
+
+    <script>
+        // Navegación entre secciones
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cambiar entre secciones
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    
+                    // Actualizar navegación activa
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar sección seleccionada
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if(section.id === target) {
+                            section.classList.add('active');
+                        }
+                    });
+                    
+                    // Si es la sección de horarios, mostrar horario de mañana por defecto
+                    if(target === 'schedules') {
+                        document.querySelector('.schedule-btn[data-schedule="morning"]').click();
+                    }
+                });
+            });
+            
+            // Botón de bienvenida
+            document.querySelector('.schedule-btn[data-target="schedules"]').addEventListener('click', function() {
+                document.querySelector('.nav-link[data-target="schedules"]').click();
+            });
+            
+            // Cambiar entre horarios
+            const scheduleBtns = document.querySelectorAll('.schedule-btn[data-schedule]');
+            const scheduleContainers = document.querySelectorAll('.schedule-container');
+            
+            scheduleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const scheduleType = this.getAttribute('data-schedule');
+                    
+                    // Actualizar botones activos
+                    scheduleBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar horario seleccionado
+                    scheduleContainers.forEach(container => {
+                        container.style.display = 'none';
+                        if(container.classList.contains(`${scheduleType}-schedule`)) {
+                            container.style.display = 'block';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
