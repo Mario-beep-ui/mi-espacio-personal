@@ -42,7 +42,7 @@
         body {
             background-color: #f5f7fa;
             color: #333;
-            padding-top: 70px; /* Espacio para la barra de navegación fija */
+            /* padding-top se establecerá dinámicamente con JavaScript */
             padding-bottom: 50px;
             min-height: 100vh;
             line-height: 1.5;
@@ -56,16 +56,17 @@
             background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
             box-shadow: var(--shadow);
             z-index: 1000;
-            padding: 0 15px;
+            padding: 0 15px; /* Mantenemos el padding horizontal */
         }
 
         .site-nav {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center; /* Centra verticalmente los elementos */
             max-width: 1200px;
             margin: 0 auto;
-            height: 70px;
+            padding: 10px 0; /* Añadimos padding vertical para asegurar espacio */
+            /* Eliminamos min-height aquí para que la altura sea dictada por el contenido + padding */
         }
 
         .site-logo {
@@ -725,6 +726,90 @@
             font-size: 1rem;
         }
 
+        /* Modal de Confirmación Personalizado */
+        .confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500; /* Mayor que el modal de préstamos */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .confirm-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .confirm-modal.active .confirm-content {
+            transform: scale(1);
+        }
+
+        .confirm-content h3 {
+            color: var(--dark-gray);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .confirm-content .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .confirm-btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .confirm-btn.yes {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .confirm-btn.yes:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .confirm-btn.no {
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            border: 1px solid #ccc;
+        }
+
+        .confirm-btn.no:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+
         /* Pie de página responsivo */
         footer {
             position: fixed;
@@ -748,16 +833,6 @@
             .desktop-only { display: none; }
         }
 
-        @media (max-width: 992px) {
-            .gradient-text {
-                font-size: 3rem;
-            }
-            
-            .welcome-text {
-                font-size: 1.2rem;
-            }
-        }
-
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -765,7 +840,7 @@
             
             .site-nav-links {
                 position: fixed;
-                top: 70px;
+                /* top se establecerá dinámicamente con JavaScript */
                 left: 0;
                 background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
                 width: 100%;
@@ -920,6 +995,10 @@
             .welcome-text {
                 font-size: 1.1rem;
             }
+            /* Adjust padding on header for very small screens if necessary */
+            .site-header {
+                padding: 0 10px; /* Slightly reduce horizontal padding */
+            }
         }
     </style>
 </head>
@@ -938,13 +1017,13 @@
                 <li><a href="#" class="nav-link" data-target="loans">Préstamos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="projects">Proyectos</a></li>
                 <li><a href="#" class="nav-link" data-target="cxc">CxC</a></li>
-                <li><a href="#" class="nav-link" data-target="pendientes">Pendientes</a></li>
-                <li><a href="#" class="nav-link" data-target="finanzas">Finanzas</a></li>
 
                 <!-- Menú "Más" para DESKTOP -->
                 <li class="more-menu-container desktop-only">
                     <a href="#" id="more-menu-btn" class="nav-link">Más <i class="fas fa-chevron-down"></i></a>
                     <ul class="more-links-modal" id="more-links-modal">
+                        <li><a href="#" class="nav-link" data-target="pendientes">Pendientes</a></li>
+                        <li><a href="#" class="nav-link" data-target="finanzas">Finanzas</a></li>
                         <li><a href="#" class="nav-link" data-target="por-hacer-sam">Por Hacer con Sam</a></li>
                         <li><a href="#" class="nav-link" data-target="gustos-sam">Gustos Sam</a></li>
                         <li><a href="#" class="nav-link" data-target="compras">Compras Generales</a></li>
@@ -953,6 +1032,8 @@
                 </li>
 
                 <!-- Links adicionales para MÓVIL -->
+                <li class="mobile-only"><a href="#" class="nav-link" data-target="pendientes">Pendientes</a></li>
+                <li class="mobile-only"><a href="#" class="nav-link" data-target="finanzas">Finanzas</a></li>
                 <li class="mobile-only"><a href="#" class="nav-link" data-target="por-hacer-sam">Por Hacer con Sam</a></li>
                 <li class="mobile-only"><a href="#" class="nav-link" data-target="gustos-sam">Gustos Sam</a></li>
                 <li class="mobile-only"><a href="#" class="nav-link" data-target="compras">Compras Generales</a></li>
@@ -1265,6 +1346,17 @@
         <span id="notification-text">Operación realizada con éxito</span>
     </div>
 
+    <!-- Modal de Confirmación Personalizado -->
+    <div class="confirm-modal" id="confirm-modal">
+        <div class="confirm-content">
+            <h3 id="confirm-message"></h3>
+            <div class="confirm-buttons">
+                <button class="confirm-btn yes" id="confirm-yes">Sí</button>
+                <button class="confirm-btn no" id="confirm-no">No</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Sección Proyectos -->
     <section id="projects" class="section">
         <div class="espacio-header">
@@ -1374,6 +1466,26 @@
             const navItems = document.querySelectorAll('.nav-link');
             const moreMenuBtn = document.getElementById('more-menu-btn');
             const moreLinksModal = document.getElementById('more-links-modal');
+            const siteHeader = document.querySelector('.site-header');
+            const body = document.body;
+
+            // --- Lógica para ajustar el padding del body ---
+            function adjustBodyPadding() {
+                // Obtiene la altura real del encabezado fijo
+                const headerHeight = siteHeader.offsetHeight;
+                // Aplica esa altura como padding-top al body
+                body.style.paddingTop = `${headerHeight}px`;
+                // Ajusta la posición del menú móvil para que comience debajo del header
+                if (window.innerWidth <= 768) { // Usar el mismo breakpoint que en CSS
+                    navLinks.style.top = `${headerHeight}px`;
+                } else {
+                    navLinks.style.top = ''; // Resetear en desktop
+                }
+            }
+
+            // Ejecutar al cargar la página y al redimensionar
+            adjustBodyPadding();
+            window.addEventListener('resize', adjustBodyPadding);
 
             // --- Lógica de Navegación ---
             
@@ -1402,7 +1514,7 @@
                     if (window.innerWidth <= 1024) {
                         navLinks.classList.remove('active');
                     }
-                    if (moreLinksModal.classList.contains('active')) {
+                    if (moreLinksModal && moreLinksModal.classList.contains('active')) {
                         moreLinksModal.classList.remove('active');
                         moreMenuBtn.classList.remove('open');
                     }
@@ -1420,7 +1532,7 @@
 
             // Cerrar menú "Más" si se hace clic fuera
             window.addEventListener('click', function(e) {
-                if (moreMenuBtn && !moreMenuBtn.parentElement.contains(e.target)) {
+                if (moreMenuBtn && !moreMenuBtn.parentElement.contains(e.target) && !e.target.closest('.more-links-modal')) {
                     moreLinksModal.classList.remove('active');
                     moreMenuBtn.classList.remove('open');
                 }
@@ -1493,6 +1605,13 @@
             const loanConceptInput = document.getElementById('loan-concept');
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notification-text');
+
+            // Elementos del modal de confirmación
+            const confirmModal = document.getElementById('confirm-modal');
+            const confirmMessage = document.getElementById('confirm-message');
+            const confirmYesBtn = document.getElementById('confirm-yes');
+            const confirmNoBtn = document.getElementById('confirm-no');
+            let confirmCallback = null;
             
             let loans = [];
             let currentEditId = null;
@@ -1537,7 +1656,7 @@
                         <td class="loan-date">${formattedDate}</td>
                         <td class="loan-actions">
                             <button class="action-btn edit-btn" onclick="editLoan(${loan.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteLoan(${loan.id})"><i class="fas fa-trash-alt"></i></button>
+                            <button class="action-btn delete-btn" onclick="showConfirmModal('¿Estás seguro de eliminar este préstamo?', () => deleteLoan(${loan.id}))"><i class="fas fa-trash-alt"></i></button>
                         </td>`;
                     loansList.appendChild(row);
                 });
@@ -1601,6 +1720,38 @@
                 if (type === 'info') icon.className = 'fas fa-info-circle';
                 setTimeout(() => notification.classList.remove('show'), 3000);
             }
+
+            // Función para mostrar el modal de confirmación personalizado
+            function showConfirmModal(message, callback) {
+                confirmMessage.textContent = message;
+                confirmCallback = callback;
+                confirmModal.classList.add('active');
+            }
+
+            // Función para ocultar el modal de confirmación
+            function hideConfirmModal() {
+                confirmModal.classList.remove('active');
+                confirmCallback = null;
+            }
+
+            // Manejadores de eventos para el modal de confirmación
+            confirmYesBtn.addEventListener('click', () => {
+                if (confirmCallback) {
+                    confirmCallback();
+                }
+                hideConfirmModal();
+            });
+
+            confirmNoBtn.addEventListener('click', () => {
+                hideConfirmModal();
+            });
+
+            // Cerrar modal de confirmación al hacer clic fuera
+            confirmModal.addEventListener('click', (e) => {
+                if (e.target === confirmModal) {
+                    hideConfirmModal();
+                }
+            });
             
             // Carga inicial y listeners de préstamos
             loadLoans();
@@ -1612,13 +1763,12 @@
             
             // Hacer funciones de préstamo globales para que onclick funcione
             window.editLoan = (id) => openLoanModal(id);
+            // La función deleteLoan ahora se llama desde el showConfirmModal
             window.deleteLoan = (id) => {
-                if (confirm('¿Estás seguro de eliminar este préstamo?')) {
-                    loans = loans.filter(loan => loan.id !== id);
-                    saveLoans();
-                    renderLoans();
-                    showNotification('Préstamo eliminado con éxito', 'success');
-                }
+                loans = loans.filter(loan => loan.id !== id);
+                saveLoans();
+                renderLoans();
+                showNotification('Préstamo eliminado con éxito', 'success');
             };
         });
     </script>
