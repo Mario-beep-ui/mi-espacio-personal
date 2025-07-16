@@ -42,7 +42,7 @@
         body {
             background-color: #f5f7fa;
             color: #333;
-            /* padding-top se establecerá dinámicamente con JavaScript */
+            padding-top: 70px; /* This needs to be adjusted based on the header's actual height */
             padding-bottom: 50px;
             min-height: 100vh;
             line-height: 1.5;
@@ -56,17 +56,18 @@
             background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
             box-shadow: var(--shadow);
             z-index: 1000;
-            padding: 0 15px; /* Mantenemos el padding horizontal */
+            padding: 0 15px;
+            /* Removed fixed height to allow content to dictate height */
         }
 
         .site-nav {
             display: flex;
             justify-content: space-between;
-            align-items: center; /* Centra verticalmente los elementos */
+            align-items: center; /* Ensures vertical alignment */
             max-width: 1200px;
             margin: 0 auto;
-            padding: 10px 0; /* Añadimos padding vertical para asegurar espacio */
-            /* Eliminamos min-height aquí para que la altura sea dictada por el contenido + padding */
+            min-height: 70px; /* Use min-height instead of fixed height */
+            padding: 10px 0; /* Add vertical padding to ensure content fits */
         }
 
         .site-logo {
@@ -726,90 +727,6 @@
             font-size: 1rem;
         }
 
-        /* Modal de Confirmación Personalizado */
-        .confirm-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2500; /* Mayor que el modal de préstamos */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .confirm-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .confirm-content {
-            background: var(--white);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .confirm-modal.active .confirm-content {
-            transform: scale(1);
-        }
-
-        .confirm-content h3 {
-            color: var(--dark-gray);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .confirm-content .confirm-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .confirm-btn {
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .confirm-btn.yes {
-            background: var(--error);
-            color: var(--white);
-        }
-
-        .confirm-btn.yes:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
-        }
-
-        .confirm-btn.no {
-            background: var(--light-gray);
-            color: var(--dark-gray);
-            border: 1px solid #ccc;
-        }
-
-        .confirm-btn.no:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-
-
         /* Pie de página responsivo */
         footer {
             position: fixed;
@@ -823,14 +740,96 @@
             z-index: 100;
         }
         
+        /* Modal para menú móvil */
+        .mobile-menu-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-content {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            width: 85%;
+            max-width: 400px;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .mobile-nav-links a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-nav-links a.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .close-mobile-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
         /* Clases para responsividad del menú */
         .mobile-only { display: none; }
         .desktop-only { display: list-item; }
 
         /* Media Queries para Responsividad */
         @media (max-width: 1024px) { /* Ajuste de breakpoint para el menú */
-            .mobile-only { display: list-item; }
-            .desktop-only { display: none; }
+            .desktop-nav { display: none; }
+            .menu-toggle { display: block; }
+        }
+
+        @media (max-width: 992px) {
+            .gradient-text {
+                font-size: 3rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.2rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -838,32 +837,8 @@
                 display: block;
             }
             
-            .site-nav-links {
-                position: fixed;
-                /* top se establecerá dinámicamente con JavaScript */
-                left: 0;
-                background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
-                width: 100%;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                transform: translateY(-100%);
-                transition: var(--transition);
-                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-                z-index: 999;
-            }
-            
-            .site-nav-links.active {
-                transform: translateY(0);
-            }
-            
-            .site-nav-links li {
-                margin: 15px 0;
-            }
-            
-            .site-nav-links a {
-                padding: 12px 25px;
-                font-size: 1.2rem;
+            .site-nav-links.desktop-nav {
+                display: none;
             }
             
             .gradient-text {
@@ -1003,22 +978,19 @@
     </style>
 </head>
 <body>
-    <!-- Cabecera responsiva - FIXED -->
     <header class="site-header">
         <nav class="site-nav">
             <div class="site-logo">Espacio Personal</div>
             <button class="menu-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
             </button>
-            <ul class="site-nav-links" id="nav-links">
-                <!-- Links visibles -->
+            <ul class="site-nav-links desktop-nav" id="nav-links">
                 <li><a href="#" class="nav-link active" data-target="home">Inicio</a></li>
                 <li><a href="#" class="nav-link" data-target="schedules">Horarios</a></li>
                 <li><a href="#" class="nav-link" data-target="loans">Préstamos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="projects">Proyectos</a></li>
                 <li><a href="#" class="nav-link" data-target="cxc">CxC</a></li>
 
-                <!-- Menú "Más" para DESKTOP -->
                 <li class="more-menu-container desktop-only">
                     <a href="#" id="more-menu-btn" class="nav-link">Más <i class="fas fa-chevron-down"></i></a>
                     <ul class="more-links-modal" id="more-links-modal">
@@ -1030,19 +1002,32 @@
                         <li><a href="#" class="nav-link" data-target="fechas">Fechas Importantes</a></li>
                     </ul>
                 </li>
-
-                <!-- Links adicionales para MÓVIL -->
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="pendientes">Pendientes</a></li>
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="finanzas">Finanzas</a></li>
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="por-hacer-sam">Por Hacer con Sam</a></li>
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="gustos-sam">Gustos Sam</a></li>
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="compras">Compras Generales</a></li>
-                <li class="mobile-only"><a href="#" class="nav-link" data-target="fechas">Fechas Importantes</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Sección de Bienvenida -->
+    <!-- Modal para menú móvil -->
+    <div class="mobile-menu-modal" id="mobile-menu-modal">
+        <button class="close-mobile-menu" id="close-mobile-menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-menu-content">
+            <ul class="mobile-nav-links" id="mobile-nav-links">
+                <li><a href="#" class="nav-link active" data-target="home">Inicio</a></li>
+                <li><a href="#" class="nav-link" data-target="schedules">Horarios</a></li>
+                <li><a href="#" class="nav-link" data-target="loans">Préstamos Sam</a></li>
+                <li><a href="#" class="nav-link" data-target="projects">Proyectos</a></li>
+                <li><a href="#" class="nav-link" data-target="cxc">CxC</a></li>
+                <li><a href="#" class="nav-link" data-target="pendientes">Pendientes</a></li>
+                <li><a href="#" class="nav-link" data-target="finanzas">Finanzas</a></li>
+                <li><a href="#" class="nav-link" data-target="por-hacer-sam">Por Hacer con Sam</a></li>
+                <li><a href="#" class="nav-link" data-target="gustos-sam">Gustos Sam</a></li>
+                <li><a href="#" class="nav-link" data-target="compras">Compras Generales</a></li>
+                <li><a href="#" class="nav-link" data-target="fechas">Fechas Importantes</a></li>
+            </ul>
+        </div>
+    </div>
+
     <section id="home" class="section active">
         <div class="welcome-container">
             <h1 class="gradient-text">Bienvenido a tu espacio personal Mario</h1>
@@ -1058,7 +1043,6 @@
         </div>
     </section>
 
-    <!-- Sección de Horarios -->
     <section id="schedules" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-calendar-alt"></i>Mis Horarios</h1>
@@ -1070,7 +1054,6 @@
             <button class="schedule-btn" data-schedule="afternoon">Horario de Tarde</button>
         </div>
         
-        <!-- Horario de Mañana -->
         <div class="schedule-container morning-schedule">
             <div class="schedule-content">
                 <div class="day-columns">
@@ -1170,7 +1153,6 @@
             </div>
         </div>
         
-        <!-- Horario de Tarde -->
         <div class="schedule-container afternoon-schedule" style="display: none;">
             <div class="schedule-content">
                 <div class="day-columns">
@@ -1277,7 +1259,6 @@
         </div>
     </section>
 
-    <!-- Sección de Préstamos Sam -->
     <section id="loans" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-hand-holding-usd"></i>Préstamos Sam & Pareja</h1>
@@ -1301,8 +1282,7 @@
                         </tr>
                     </thead>
                     <tbody id="loans-list">
-                        <!-- Los préstamos se cargarán aquí -->
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
 
@@ -1316,7 +1296,6 @@
         </div>
     </section>
 
-    <!-- Modal para préstamos -->
     <div class="modal" id="loan-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1340,24 +1319,11 @@
         </div>
     </div>
 
-    <!-- Notificación -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notification-text">Operación realizada con éxito</span>
     </div>
 
-    <!-- Modal de Confirmación Personalizado -->
-    <div class="confirm-modal" id="confirm-modal">
-        <div class="confirm-content">
-            <h3 id="confirm-message"></h3>
-            <div class="confirm-buttons">
-                <button class="confirm-btn yes" id="confirm-yes">Sí</button>
-                <button class="confirm-btn no" id="confirm-no">No</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sección Proyectos -->
     <section id="projects" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-folder-open"></i>Mis Proyectos</h1>
@@ -1369,7 +1335,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: CxC -->
     <section id="cxc" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-file-invoice-dollar"></i>Cuentas por Cobrar</h1>
@@ -1381,7 +1346,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Pendientes -->
     <section id="pendientes" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-tasks"></i>Pendientes</h1>
@@ -1393,7 +1357,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Finanzas -->
     <section id="finanzas" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-chart-line"></i>Finanzas Personales</h1>
@@ -1405,7 +1368,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Por Hacer con Sam -->
     <section id="por-hacer-sam" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-heart"></i>Por Hacer con Sam</h1>
@@ -1417,7 +1379,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Gustos Sam -->
     <section id="gustos-sam" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-gift"></i>Gustos de Sam</h1>
@@ -1429,7 +1390,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Compras Generales -->
     <section id="compras" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-shopping-cart"></i>Compras Generales</h1>
@@ -1441,7 +1401,6 @@
         </div>
     </section>
 
-    <!-- NUEVA SECCIÓN: Fechas Importantes -->
     <section id="fechas" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-star"></i>Fechas Importantes</h1>
@@ -1454,7 +1413,6 @@
     </section>
 
 
-    <!-- Pie de página -->
     <footer>
         <p>Todos los derechos reservados a Mario Vázquez © 2025</p>
     </footer>
@@ -1466,26 +1424,9 @@
             const navItems = document.querySelectorAll('.nav-link');
             const moreMenuBtn = document.getElementById('more-menu-btn');
             const moreLinksModal = document.getElementById('more-links-modal');
-            const siteHeader = document.querySelector('.site-header');
-            const body = document.body;
-
-            // --- Lógica para ajustar el padding del body ---
-            function adjustBodyPadding() {
-                // Obtiene la altura real del encabezado fijo
-                const headerHeight = siteHeader.offsetHeight;
-                // Aplica esa altura como padding-top al body
-                body.style.paddingTop = `${headerHeight}px`;
-                // Ajusta la posición del menú móvil para que comience debajo del header
-                if (window.innerWidth <= 768) { // Usar el mismo breakpoint que en CSS
-                    navLinks.style.top = `${headerHeight}px`;
-                } else {
-                    navLinks.style.top = ''; // Resetear en desktop
-                }
-            }
-
-            // Ejecutar al cargar la página y al redimensionar
-            adjustBodyPadding();
-            window.addEventListener('resize', adjustBodyPadding);
+            const mobileMenuModal = document.getElementById('mobile-menu-modal');
+            const closeMobileMenu = document.getElementById('close-mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('#mobile-nav-links .nav-link');
 
             // --- Lógica de Navegación ---
             
@@ -1494,10 +1435,30 @@
             
             // Toggle del menú móvil
             menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
+                mobileMenuModal.classList.add('active');
             });
             
-            // Clic en cualquier link de navegación
+            // Cerrar menú móvil
+            closeMobileMenu.addEventListener('click', () => {
+                mobileMenuModal.classList.remove('active');
+            });
+            
+            // Clic en cualquier link de navegación en el modal móvil
+            mobileNavLinks.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    activateSection(target);
+                    
+                    // Actualizar estado activo de los links
+                    updateActiveLink(this);
+                    
+                    // Cerrar modal móvil
+                    mobileMenuModal.classList.remove('active');
+                });
+            });
+
+            // Clic en cualquier link de navegación en escritorio
             navItems.forEach(item => {
                 // El botón "Más" no navega, solo abre el menú
                 if (item.id === 'more-menu-btn') return;
@@ -1514,7 +1475,7 @@
                     if (window.innerWidth <= 1024) {
                         navLinks.classList.remove('active');
                     }
-                    if (moreLinksModal && moreLinksModal.classList.contains('active')) {
+                    if (moreLinksModal.classList.contains('active')) {
                         moreLinksModal.classList.remove('active');
                         moreMenuBtn.classList.remove('open');
                     }
@@ -1532,7 +1493,7 @@
 
             // Cerrar menú "Más" si se hace clic fuera
             window.addEventListener('click', function(e) {
-                if (moreMenuBtn && !moreMenuBtn.parentElement.contains(e.target) && !e.target.closest('.more-links-modal')) {
+                if (moreMenuBtn && !moreMenuBtn.parentElement.contains(e.target)) {
                     moreLinksModal.classList.remove('active');
                     moreMenuBtn.classList.remove('open');
                 }
@@ -1561,14 +1522,18 @@
             }
 
             function updateActiveLink(activeLink) {
+                // Actualizar enlaces en escritorio
                 navItems.forEach(i => i.classList.remove('active'));
                 
+                // Actualizar enlaces en móvil
+                mobileNavLinks.forEach(i => i.classList.remove('active'));
+                
                 if (activeLink) {
-                    // Si el link está dentro del modal "Más", se activa el botón "Más"
+                    // If the link is inside the "More" modal, activate the "More" button
                     if (activeLink.closest('.more-links-modal')) {
                         if(moreMenuBtn) moreMenuBtn.classList.add('active');
                     } else {
-                        // Si es un link visible, se activa a sí mismo
+                        // If it's a visible link, activate itself
                         activeLink.classList.add('active');
                     }
                 }
@@ -1605,13 +1570,6 @@
             const loanConceptInput = document.getElementById('loan-concept');
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notification-text');
-
-            // Elementos del modal de confirmación
-            const confirmModal = document.getElementById('confirm-modal');
-            const confirmMessage = document.getElementById('confirm-message');
-            const confirmYesBtn = document.getElementById('confirm-yes');
-            const confirmNoBtn = document.getElementById('confirm-no');
-            let confirmCallback = null;
             
             let loans = [];
             let currentEditId = null;
@@ -1656,7 +1614,7 @@
                         <td class="loan-date">${formattedDate}</td>
                         <td class="loan-actions">
                             <button class="action-btn edit-btn" onclick="editLoan(${loan.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="showConfirmModal('¿Estás seguro de eliminar este préstamo?', () => deleteLoan(${loan.id}))"><i class="fas fa-trash-alt"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteLoan(${loan.id})"><i class="fas fa-trash-alt"></i></button>
                         </td>`;
                     loansList.appendChild(row);
                 });
@@ -1720,38 +1678,6 @@
                 if (type === 'info') icon.className = 'fas fa-info-circle';
                 setTimeout(() => notification.classList.remove('show'), 3000);
             }
-
-            // Función para mostrar el modal de confirmación personalizado
-            function showConfirmModal(message, callback) {
-                confirmMessage.textContent = message;
-                confirmCallback = callback;
-                confirmModal.classList.add('active');
-            }
-
-            // Función para ocultar el modal de confirmación
-            function hideConfirmModal() {
-                confirmModal.classList.remove('active');
-                confirmCallback = null;
-            }
-
-            // Manejadores de eventos para el modal de confirmación
-            confirmYesBtn.addEventListener('click', () => {
-                if (confirmCallback) {
-                    confirmCallback();
-                }
-                hideConfirmModal();
-            });
-
-            confirmNoBtn.addEventListener('click', () => {
-                hideConfirmModal();
-            });
-
-            // Cerrar modal de confirmación al hacer clic fuera
-            confirmModal.addEventListener('click', (e) => {
-                if (e.target === confirmModal) {
-                    hideConfirmModal();
-                }
-            });
             
             // Carga inicial y listeners de préstamos
             loadLoans();
@@ -1763,12 +1689,13 @@
             
             // Hacer funciones de préstamo globales para que onclick funcione
             window.editLoan = (id) => openLoanModal(id);
-            // La función deleteLoan ahora se llama desde el showConfirmModal
             window.deleteLoan = (id) => {
-                loans = loans.filter(loan => loan.id !== id);
-                saveLoans();
-                renderLoans();
-                showNotification('Préstamo eliminado con éxito', 'success');
+                if (confirm('¿Estás seguro de eliminar este préstamo?')) {
+                    loans = loans.filter(loan => loan.id !== id);
+                    saveLoans();
+                    renderLoans();
+                    showNotification('Préstamo eliminado con éxito', 'success');
+                }
             };
         });
     </script>
