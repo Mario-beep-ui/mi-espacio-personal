@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Espacio Personal de Mario</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Variables de colores y estilos */
         :root {
@@ -316,8 +316,8 @@
             color: #555;
         }
 
-        /* Sección de Horarios */
-        .schedule-selector {
+        /* Sección de Horarios y Finanzas - Selector de pestañas */
+        .schedule-selector, .finance-category-selector {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -325,7 +325,7 @@
             gap: 15px;
         }
 
-        .schedule-btn {
+        .schedule-btn, .finance-category-btn {
             padding: 12px 25px;
             background-color: white;
             border: 2px solid var(--primary-gradient-start);
@@ -341,13 +341,15 @@
         }
 
         .schedule-btn.active, 
-        .schedule-btn:hover {
+        .schedule-btn:hover,
+        .finance-category-btn.active,
+        .finance-category-btn:hover {
             background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
             color: white;
             border-color: transparent;
         }
 
-        .schedule-container {
+        .schedule-container, .finance-section-content {
             background-color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
@@ -842,6 +844,62 @@
         .mobile-only { display: none; }
         .desktop-only { display: list-item; }
 
+        /* Estilos específicos para las nuevas secciones de finanzas */
+        .finance-section {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-bottom: 30px; /* Espacio entre secciones de finanzas */
+        }
+
+        .finance-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .finance-controls label {
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .finance-controls input[type="date"] {
+            flex-grow: 1;
+            max-width: 180px;
+        }
+
+        /* Estilos para hacer las celdas de la tabla de deudas más anchas */
+        #debts-table th,
+        #debts-table td {
+            min-width: 120px; /* Ancho mínimo para las celdas de fechas y cantidades */
+            white-space: nowrap; /* Evita que el texto se envuelva en los encabezados */
+        }
+
+        #debts-table .amount-input {
+            width: 100%; /* Asegura que el input ocupe todo el ancho de la celda */
+            box-sizing: border-box; /* Incluye padding y border en el ancho total */
+        }
+
+        #debts-table .debt-checkbox {
+            margin: 0 auto; /* Centrar checkbox */
+            display: block;
+        }
+
+        /* Estilo para la fila de totales en la tabla de deudas */
+        #debts-total-row tr {
+            background-color: #e0e7ff; /* Un azul claro para destacar */
+            font-weight: bold;
+            color: var(--primary-gradient-end);
+        }
+
+        #debts-total-row td {
+            padding: 15px 16px; /* Un poco más de padding */
+            border-top: 2px solid var(--primary-gradient-start); /* Borde superior para separar */
+        }
+
         /* Media Queries para Responsividad */
         /* Modificaciones para el header en móviles */
         @media (max-width: 1024px) {
@@ -906,6 +964,17 @@
             .site-nav {
                 min-height: 60px;
                 padding: 8px 0;
+            }
+
+            .finance-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .finance-controls input[type="date"],
+            .finance-controls .add-btn {
+                max-width: 100%;
+                width: 100%;
+                margin-left: 0 !important;
             }
         }
 
@@ -1181,19 +1250,17 @@
                     
                     <div class="day-column">
                         <div class="day-title">VIERNES</div>
-                        <div class="day-tasks">
-                            <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
-                            <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
-                            <div class="task-item">- BAÑARME</div>
-                            <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
-                            <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
-                            <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
-                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
-                            <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
-                            <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
-                            <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
-                            <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
-                        </div>
+                        <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                        <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                        <div class="task-item">- BAÑARME</div>
+                        <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                        <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                        <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
+                        <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
+                        <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
+                        <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
+                        <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
                     </div>
                 </div>
                 
@@ -1280,19 +1347,17 @@
                     
                     <div class="day-column">
                         <div class="day-title">VIERNES</div>
-                        <div class="day-tasks">
-                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
-                        </div>
+                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
                     </div>
                 </div>
                 
@@ -1361,7 +1426,7 @@
         <div class="container">
             <div class="summary-card">
                 <h2>Total por cobrar</h2>
-                <div class="total-amount">$2,058.97</div>
+                <div class="total-amount" id="total-cxc-display">$0.00</div>
             </div>
 
             <div class="loans-container">
@@ -1374,38 +1439,7 @@
                         </tr>
                     </thead>
                     <tbody id="cxc-list">
-                        <tr>
-                            <td>2025129</td>
-                            <td class="loan-amount">$115.50</td>
-                            <td class="loan-actions">
-                                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2025130</td>
-                            <td class="loan-amount">$290.00</td>
-                            <td class="loan-actions">
-                                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2025131</td>
-                            <td class="loan-amount">$1,068.50</td>
-                            <td class="loan-actions">
-                                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2025132</td>
-                            <td class="loan-amount">$583.97</td>
-                            <td class="loan-actions">
-                                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
+                        <!-- Datos se cargarán dinámicamente desde JS y localStorage -->
                     </tbody>
                 </table>
             </div>
@@ -1447,9 +1481,109 @@
             <h1><i class="fas fa-chart-line"></i>Finanzas Personales</h1>
             <p>Control de tus ingresos y egresos</p>
         </div>
-        <div class="proximamente-container">
-            <h2>Próximamente...</h2>
-            <p>Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+
+        <div class="finance-category-selector">
+            <button class="finance-category-btn active" data-finance-category="debts">Deudas</button>
+            <button class="finance-category-btn" data-finance-category="gastos">Gastos Personales</button>
+            <button class="finance-category-btn" data-finance-category="pagos">Fechas de Pago</button>
+        </div>
+
+        <!-- Apartado de Deudas -->
+        <div class="container finance-section-content debts-content">
+            <div class="summary-card">
+                <h2>Total de Deudas</h2>
+                <div class="total-amount" id="total-deudas-display">$0.00</div>
+            </div>
+
+            <div class="finance-controls">
+                <label for="start-date-debts">Fecha de Inicio:</label>
+                <input type="date" id="start-date-debts" class="form-control" style="width: auto; display: inline-block; margin-right: 10px;">
+                <label for="end-date-debts">Fecha de Fin:</label>
+                <input type="date" id="end-date-debts" class="form-control" style="width: auto; display: inline-block;">
+                <button class="add-btn" id="generate-debt-dates-btn" style="width: auto; margin-left: 10px; padding: 10px 20px;">Generar Fechas</button>
+            </div>
+
+            <div class="loans-container" style="overflow-x: auto;">
+                <table class="loans-table" id="debts-table">
+                    <thead>
+                        <tr id="debt-dates-row">
+                            <th>Deuda</th>
+                            <!-- Fechas de viernes se añadirán aquí dinámicamente -->
+                        </tr>
+                    </thead>
+                    <tbody id="debts-list">
+                        <!-- Filas de deudas se añadirán aquí dinámicamente -->
+                    </tbody>
+                    <tfoot id="debts-total-row">
+                        <!-- Totales por fecha se añadirán aquí dinámicamente -->
+                    </tfoot>
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                <button class="add-btn" id="add-debt-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Deuda</button>
+                <button class="add-btn" id="edit-debt-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Deudas</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-debts-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionadas</button>
+            </div>
+        </div>
+
+        <!-- Apartado de Gastos Personales -->
+        <div class="container finance-section-content gastos-content" style="display: none;">
+            <div class="summary-card">
+                <h2>Total de Gastos Personales</h2>
+                <div class="total-amount" id="total-gastos-display">$0.00</div>
+            </div>
+
+            <div class="loans-container" style="overflow-x: auto;">
+                <table class="loans-table" id="gastos-table">
+                    <thead>
+                        <tr>
+                            <th>Gasto</th>
+                            <th>Cantidad</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gastos-list">
+                        <!-- Filas de gastos se añadirán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                <button class="add-btn" id="add-gasto-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Gasto</button>
+                <button class="add-btn" id="edit-gasto-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Gastos</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-gastos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionados</button>
+            </div>
+        </div>
+
+        <!-- Apartado de Fechas de Pago -->
+        <div class="container finance-section-content pagos-content" style="display: none;">
+            <div class="summary-card">
+                <h2>Fechas de Pago</h2>
+                <p>Registro de fechas importantes para pagos</p>
+            </div>
+
+            <div class="loans-container" style="overflow-x: auto;">
+                <table class="loans-table" id="fechas-pago-table">
+                    <thead>
+                        <tr>
+                            <th>Deuda</th>
+                            <th>Fecha de Pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fechas-pago-list">
+                        <!-- Datos de la imagen se añadirán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                <button class="add-btn" id="add-pago-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Pago</button>
+                <button class="add-btn" id="edit-pago-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Pagos</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-pagos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionados</button>
+            </div>
         </div>
     </section>
 
@@ -1540,6 +1674,103 @@
                     </div>
                     <button type="submit" class="btn-submit">Guardar CxC</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Añadir/Editar Deuda -->
+    <div class="modal" id="debt-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="debt-modal-title">Añadir Nueva Deuda</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="debt-form">
+                    <input type="hidden" id="debt-id">
+                    <div class="form-group">
+                        <label for="debt-name">Nombre de la Deuda</label>
+                        <input type="text" id="debt-name" class="form-control" required>
+                    </div>
+                    <div id="debt-amounts-group" class="form-group">
+                        <!-- Campos de cantidad para cada fecha se añadirán aquí dinámicamente -->
+                    </div>
+                    <button type="submit" class="btn-submit">Guardar Deuda</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Añadir/Editar Gasto Personal -->
+    <div class="modal" id="gasto-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="gasto-modal-title">Añadir Nuevo Gasto</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="gasto-form">
+                    <input type="hidden" id="gasto-id">
+                    <div class="form-group">
+                        <label for="gasto-name-select">Nombre del Gasto</label>
+                        <select id="gasto-name-select" class="form-control" required>
+                            <option value="">Selecciona un gasto</option>
+                            <option value="CxC">CxC</option>
+                            <option value="Saldo">Saldo</option>
+                            <option value="Dinero Transporte">Dinero Transporte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gasto-amount">Cantidad ($)</label>
+                        <input type="number" id="gasto-amount" class="form-control" step="0.01" min="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gasto-date">Fecha</label>
+                        <input type="date" id="gasto-date" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Guardar Gasto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Añadir/Editar Fecha de Pago -->
+    <div class="modal" id="pago-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="pago-modal-title">Añadir Nueva Fecha de Pago</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="pago-form">
+                    <input type="hidden" id="pago-id">
+                    <div class="form-group">
+                        <label for="pago-debt-name">Deuda</label>
+                        <input type="text" id="pago-debt-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pago-date-input">Fecha de Pago</label>
+                        <input type="text" id="pago-date-input" class="form-control" placeholder="Ej: 16 de cada mes / 22-jun-25" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Guardar Pago</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación para Eliminar (General) -->
+    <div class="modal" id="confirm-delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Eliminación</h3>
+                <button class="close-modal" id="close-confirm-delete-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-delete-message">¿Estás seguro de que deseas eliminar los elementos seleccionados?</p>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button class="btn-submit" id="cancel-delete-btn" style="background: #ccc; color: #333;">Cancelar</button>
+                    <button class="btn-submit" id="confirm-delete-btn" style="background: var(--error);">Eliminar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1697,10 +1928,10 @@
             // --- Lógica para Préstamos ---
             const loanForm = document.getElementById('loan-form');
             const loansList = document.getElementById('loans-list');
-            const totalAmountElement = document.querySelector('.total-amount');
+            const totalAmountElement = document.querySelector('#loans .total-amount'); // Corregido selector
             const openModalButton = document.getElementById('open-modal');
             const modal = document.getElementById('loan-modal');
-            const closeModalButton = document.querySelector('.close-modal');
+            const closeModalButton = modal.querySelector('.close-modal'); // Selector específico para este modal
             const modalTitle = document.getElementById('modal-title');
             const loanIdInput = document.getElementById('loan-id');
             const loanAmountInput = document.getElementById('loan-amount');
@@ -1715,6 +1946,7 @@
                 try {
                     const savedLoans = localStorage.getItem('prestamosSam');
                     loans = savedLoans ? JSON.parse(savedLoans) : [];
+                    console.log("Préstamos cargados:", loans); // Debug log
                 } catch (e) {
                     console.error("Error al cargar préstamos de localStorage", e);
                     loans = [];
@@ -1724,6 +1956,7 @@
             function saveLoans() {
                 try {
                     localStorage.setItem('prestamosSam', JSON.stringify(loans));
+                    console.log("Préstamos guardados:", loans); // Debug log
                 } catch (e) {
                     console.error("Error al guardar préstamos en localStorage", e);
                 }
@@ -1750,12 +1983,13 @@
                         <td class="loan-concept">${loan.concept}</td>
                         <td class="loan-date">${formattedDate}</td>
                         <td class="loan-actions">
-                            <button class="action-btn edit-btn" onclick="editLoan(${loan.id})"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete-btn" onclick="deleteLoan(${loan.id})"><i class="fas fa-trash-alt"></i></button>
+                            <button class="action-btn edit-btn" data-id="${loan.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn" data-id="${loan.id}"><i class="fas fa-trash-alt"></i></button>
                         </td>`;
                     loansList.appendChild(row);
                 });
                 calculateTotal();
+                addLoanRowEventListeners(); // Re-add event listeners after rendering
             }
             
             function openLoanModal(loanId = null) {
@@ -1781,7 +2015,7 @@
                 currentEditId = null;
             }
             
-            function handleFormSubmit(e) {
+            function handleLoanFormSubmit(e) {
                 e.preventDefault();
                 const amount = parseFloat(loanAmountInput.value);
                 const concept = loanConceptInput.value.trim();
@@ -1805,6 +2039,15 @@
                 renderLoans();
                 closeLoanModal();
             }
+
+            function addLoanRowEventListeners() {
+                loansList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.onclick = () => openLoanModal(parseInt(button.dataset.id));
+                });
+                loansList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'loan');
+                });
+            }
             
             function showNotification(message, type = 'success') {
                 notificationText.textContent = message;
@@ -1821,24 +2064,13 @@
             renderLoans();
             openModalButton.addEventListener('click', () => openLoanModal());
             closeModalButton.addEventListener('click', () => closeLoanModal());
-            loanForm.addEventListener('submit', handleFormSubmit);
+            loanForm.addEventListener('submit', handleLoanFormSubmit);
             modal.addEventListener('click', (e) => { if (e.target === modal) closeLoanModal(); });
             
-            // Hacer funciones de préstamo globales para que onclick funcione
-            window.editLoan = (id) => openLoanModal(id);
-            window.deleteLoan = (id) => {
-                if (confirm('¿Estás seguro de eliminar este préstamo?')) {
-                    loans = loans.filter(loan => loan.id !== id);
-                    saveLoans();
-                    renderLoans();
-                    showNotification('Préstamo eliminado con éxito', 'success');
-                }
-            };
-
             // --- Lógica para CxC ---
             const cxcForm = document.getElementById('cxc-form');
             const cxcList = document.getElementById('cxc-list');
-            const totalCxcAmountElement = document.querySelector('#cxc .total-amount');
+            const totalCxcAmountElement = document.getElementById('total-cxc-display'); // Changed to specific ID
             const addCxcButton = document.getElementById('add-cxc-btn');
             const cxcModal = document.getElementById('cxc-modal');
             const closeCxcModalButton = cxcModal.querySelector('.close-modal');
@@ -1846,19 +2078,65 @@
             const cxcWeekInput = document.getElementById('cxc-week');
             const cxcAmountInput = document.getElementById('cxc-amount');
             
-            let cxcs = [
-                { id: 1, week: '2025129', amount: 115.50 },
-                { id: 2, week: '2025130', amount: 290.00 },
-                { id: 3, week: '2025131', amount: 1068.50 },
-                { id: 4, week: '2025132', amount: 583.97 }
+            // Initial CxC data (from the original HTML, converted to JS array)
+            const initialCxCsData = [
+                { id: 1, week: "2025129", amount: 115.50 },
+                { id: 2, week: "2025130", amount: 290.00 },
+                { id: 3, week: "2025131", amount: 1068.50 },
+                { id: 4, week: "2025132", amount: 583.97 }
             ];
+
+            let cxcs = []; 
             
-            // Calcular total inicial
-            calculateTotalCxc();
-            
+            function loadCxCs() {
+                try {
+                    const savedCxCs = localStorage.getItem('cuentasPorCobrar');
+                    cxcs = savedCxCs ? JSON.parse(savedCxCs) : initialCxCsData; // Use initialCxCsData if nothing saved
+                    console.log("CxC cargadas:", cxcs); // Debug log
+                } catch (e) {
+                    console.error("Error al cargar CxC de localStorage", e);
+                    cxcs = initialCxCsData; // Fallback
+                }
+            }
+
+            function saveCxCs() {
+                try {
+                    localStorage.setItem('cuentasPorCobrar', JSON.stringify(cxcs));
+                    console.log("CxC guardadas:", cxcs); // Debug log
+                } catch (e) {
+                    console.error("Error al guardar CxC en localStorage", e);
+                }
+            }
+
             function calculateTotalCxc() {
                 const total = cxcs.reduce((sum, cxc) => sum + parseFloat(cxc.amount), 0);
                 totalCxcAmountElement.textContent = `$${total.toFixed(2)}`;
+            }
+
+            function renderCxCs() {
+                cxcList.innerHTML = '';
+                if (cxcs.length === 0) {
+                    cxcList.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px;">No hay cuentas por cobrar registradas</td></tr>`;
+                    calculateTotalCxc();
+                    return;
+                }
+                cxcs.forEach(cxc => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = cxc.id;
+                    row.dataset.week = cxc.week;
+                    row.dataset.amount = cxc.amount;
+                    row.innerHTML = `
+                        <td>${cxc.week}</td>
+                        <td class="loan-amount">$${parseFloat(cxc.amount).toFixed(2)}</td>
+                        <td class="loan-actions">
+                            <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    cxcList.appendChild(row);
+                    addCxcRowEventListeners(row);
+                });
+                calculateTotalCxc();
             }
             
             // Abrir modal para añadir CxC
@@ -1881,7 +2159,6 @@
                 const amount = parseFloat(cxcAmountInput.value);
                 
                 if (week && !isNaN(amount) && amount > 0) {
-                    // Añadir nuevo registro
                     const newCxc = {
                         id: Date.now(),
                         week: week,
@@ -1889,40 +2166,14 @@
                     };
                     
                     cxcs.push(newCxc);
+                    saveCxCs();
+                    renderCxCs(); // Re-render all CxCs to ensure event listeners are correctly attached
                     
-                    // Crear nueva fila en la tabla
-                    const newRow = document.createElement('tr');
-                    newRow.innerHTML = `
-                        <td>${week}</td>
-                        <td class="loan-amount">$${amount.toFixed(2)}</td>
-                        <td class="loan-actions">
-                            <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                            <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                        </td>
-                    `;
-                    
-                    // Agregar la nueva fila a la tabla
-                    cxcList.appendChild(newRow);
-                    
-                    // Actualizar el total
-                    calculateTotalCxc();
-                    
-                    // Cerrar modal
                     cxcModal.classList.remove('active');
-                    
-                    // Mostrar notificación
                     showNotification('Cuenta por cobrar añadida con éxito', 'success');
-                    
-                    // Agregar event listeners a los botones de la nueva fila
-                    addCxcRowEventListeners(newRow);
                 } else {
                     showNotification('Por favor ingresa datos válidos', 'error');
                 }
-            });
-            
-            // Agregar event listeners a las filas existentes
-            document.querySelectorAll('#cxc-list tr').forEach(row => {
-                addCxcRowEventListeners(row);
             });
             
             function addCxcRowEventListeners(row) {
@@ -1931,9 +2182,13 @@
                     const weekCell = row.cells[0];
                     const amountCell = row.cells[1];
                     
+                    // Guardar valores originales
+                    const originalWeek = weekCell.textContent;
+                    const originalAmount = parseFloat(amountCell.textContent.replace('$', ''));
+
                     // Convertir a campos editables
-                    weekCell.innerHTML = `<input type="text" class="form-control" value="${weekCell.textContent}">`;
-                    amountCell.innerHTML = `<input type="number" class="form-control" value="${amountCell.textContent.replace('$', '')}" step="0.01">`;
+                    weekCell.innerHTML = `<input type="text" class="form-control" value="${originalWeek}">`;
+                    amountCell.innerHTML = `<input type="number" class="form-control" value="${originalAmount}" step="0.01">`;
                     
                     // Cambiar botones
                     const actionsCell = row.cells[2];
@@ -1948,29 +2203,15 @@
                         const newAmount = parseFloat(row.querySelector('td:nth-child(2) input').value);
                         
                         if (newWeek && !isNaN(newAmount) && newAmount > 0) {
-                            weekCell.textContent = newWeek;
-                            amountCell.innerHTML = `$${newAmount.toFixed(2)}`;
-                            
-                            // Actualizar datos
+                            // Actualizar datos en el array
                             const rowId = parseInt(row.dataset.id);
-                            const cxc = cxcs.find(c => c.id === rowId);
-                            if (cxc) {
-                                cxc.week = newWeek;
-                                cxc.amount = newAmount;
+                            const cxcIndex = cxcs.findIndex(c => c.id === rowId);
+                            if (cxcIndex !== -1) {
+                                cxcs[cxcIndex].week = newWeek;
+                                cxcs[cxcIndex].amount = newAmount;
                             }
-                            
-                            // Restaurar botones
-                            actionsCell.innerHTML = `
-                                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-                            `;
-                            
-                            // Actualizar total
-                            calculateTotalCxc();
-                            
-                            // Volver a agregar event listeners
-                            addCxcRowEventListeners(row);
-                            
+                            saveCxCs();
+                            renderCxCs(); // Re-render all CxCs
                             showNotification('Cuenta actualizada con éxito', 'success');
                         } else {
                             showNotification('Datos inválidos', 'error');
@@ -1979,8 +2220,9 @@
                     
                     // Event listener para cancelar
                     actionsCell.querySelector('.cancel-btn').addEventListener('click', function() {
-                        weekCell.textContent = row.dataset.week;
-                        amountCell.innerHTML = `$${parseFloat(row.dataset.amount).toFixed(2)}`;
+                        // Restaurar valores originales
+                        weekCell.textContent = originalWeek;
+                        amountCell.innerHTML = `$${originalAmount.toFixed(2)}`;
                         
                         // Restaurar botones
                         actionsCell.innerHTML = `
@@ -1995,22 +2237,863 @@
                 
                 // Botón eliminar
                 row.querySelector('.delete-btn').addEventListener('click', function() {
-                    if (confirm('¿Estás seguro de eliminar esta cuenta por cobrar?')) {
-                        const rowId = parseInt(row.dataset.id);
-                        cxcs = cxcs.filter(cxc => cxc.id !== rowId);
-                        row.remove();
-                        calculateTotalCxc();
-                        showNotification('Cuenta eliminada con éxito', 'success');
-                    }
+                    const rowId = parseInt(row.dataset.id);
+                    showConfirmDeleteModal(rowId, 'cxc');
+                });
+            }
+
+            // Carga inicial de CxC
+            loadCxCs();
+            renderCxCs();
+
+            // --- Lógica para Finanzas (Deudas, Gastos Personales, Fechas de Pago) ---
+
+            // Referencias a elementos del DOM para Deudas
+            const startDateDebtsInput = document.getElementById('start-date-debts');
+            const endDateDebtsInput = document.getElementById('end-date-debts');
+            const generateDebtDatesBtn = document.getElementById('generate-debt-dates-btn');
+            const debtDatesRow = document.getElementById('debt-dates-row');
+            const debtsList = document.getElementById('debts-list');
+            const debtsTotalRow = document.getElementById('debts-total-row');
+            const totalDeudasDisplay = document.getElementById('total-deudas-display');
+            const addDebtBtn = document.getElementById('add-debt-btn');
+            const editDebtModeBtn = document.getElementById('edit-debt-mode-btn');
+            const deleteSelectedDebtsBtn = document.getElementById('delete-selected-debts-btn');
+            const debtModal = document.getElementById('debt-modal');
+            const debtModalCloseBtn = debtModal.querySelector('.close-modal');
+            const debtModalTitle = document.getElementById('debt-modal-title');
+            const debtForm = document.getElementById('debt-form');
+            const debtIdInput = document.getElementById('debt-id');
+            const debtNameInput = document.getElementById('debt-name');
+            const debtAmountsGroup = document.getElementById('debt-amounts-group');
+
+            // Referencias a elementos del DOM para Gastos Personales
+            const gastosList = document.getElementById('gastos-list');
+            const totalGastosDisplay = document.getElementById('total-gastos-display');
+            const addGastoBtn = document.getElementById('add-gasto-btn');
+            const editGastoModeBtn = document.getElementById('edit-gasto-mode-btn');
+            const deleteSelectedGastosBtn = document.getElementById('delete-selected-gastos-btn');
+            const gastoModal = document.getElementById('gasto-modal');
+            const gastoModalCloseBtn = gastoModal.querySelector('.close-modal');
+            const gastoModalTitle = document.getElementById('gasto-modal-title');
+            const gastoForm = document.getElementById('gasto-form');
+            const gastoIdInput = document.getElementById('gasto-id');
+            const gastoNameSelect = document.getElementById('gasto-name-select');
+            const gastoAmountInput = document.getElementById('gasto-amount');
+            const gastoDateInput = document.getElementById('gasto-date');
+
+            // Referencias a elementos del DOM para Fechas de Pago
+            const fechasPagoList = document.getElementById('fechas-pago-list');
+            const addPagoBtn = document.getElementById('add-pago-btn');
+            const editPagoModeBtn = document.getElementById('edit-pago-mode-btn');
+            const deleteSelectedPagosBtn = document.getElementById('delete-selected-pagos-btn');
+            const pagoModal = document.getElementById('pago-modal');
+            const pagoModalCloseBtn = pagoModal.querySelector('.close-modal');
+            const pagoModalTitle = document.getElementById('pago-modal-title');
+            const pagoForm = document.getElementById('pago-form');
+            const pagoIdInput = document.getElementById('pago-id');
+            const pagoDebtNameInput = document.getElementById('pago-debt-name');
+            const pagoDateInput = document.getElementById('pago-date-input');
+
+            // Referencias para el modal de confirmación de eliminación
+            const confirmDeleteModal = document.getElementById('confirm-delete-modal');
+            const closeConfirmDeleteModalBtn = document.getElementById('close-confirm-delete-modal');
+            const confirmDeleteMessage = document.getElementById('confirm-delete-message');
+            const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+
+            let debts = [];
+            let gastos = [];
+            let pagos = [];
+            let currentDebtDates = [];
+            let currentDeleteTarget = null; // 'loan', 'cxc', 'debt', 'gasto', 'pago'
+            let currentDeleteId = null; // ID for single item deletion
+            let isEditModeDebts = false;
+            let isEditModeGastos = false;
+            let isEditModePagos = false;
+
+
+            // Datos iniciales de deudas (nombres de la imagen)
+            const initialDebtNames = [
+                "DIDI PRESTAMO", "MERCADO PAGO", "MELI +", "MAX", "PRIME VIDEO",
+                "TALA", "BAUBAP", "RIFA VERO", "RIFA ANDREA", "KUESKI"
+            ];
+
+            // Datos iniciales de fechas de pago (de la imagen)
+            const initialPagos = [
+                { id: 1, debtName: "DIDI PRESTAMO", paymentDate: "CADA QUINCENA" },
+                { id: 2, debtName: "MERCADO PAGO", paymentDate: "16 DE CADA MES" },
+                { id: 3, debtName: "MELI +", paymentDate: "22 JUNIO 2025" },
+                { id: 4, debtName: "MAX", paymentDate: "05-jul-25" },
+                { id: 5, debtName: "PRIME VIDEO", paymentDate: "-----" },
+                { id: 6, debtName: "TALA", paymentDate: "12-jul-25" },
+                { id: 7, debtName: "BAUBAP", paymentDate: "30-jun-25" },
+                { id: 8, debtName: "RIFA VERO", paymentDate: "CADA QUINCENA" },
+                { id: 9, debtName: "RIFA ANDREA", paymentDate: "-----" },
+                { id: 10, debtName: "KUESKI", paymentDate: "04-jul-25" }
+            ];
+
+            // --- Funciones Generales de Utilidad ---
+
+            function showConfirmDeleteModal(id, type) {
+                currentDeleteTarget = type;
+                currentDeleteId = id;
+                confirmDeleteMessage.textContent = `¿Estás seguro de que deseas eliminar ${id ? 'este elemento' : 'los elementos seleccionados'} de ${type === 'loan' ? 'préstamos' : type === 'cxc' ? 'cuentas por cobrar' : type === 'debt' ? 'deudas' : type === 'gasto' ? 'gastos personales' : 'fechas de pago'}?`;
+                confirmDeleteModal.classList.add('active');
+            }
+
+            function closeConfirmDeleteModal() {
+                confirmDeleteModal.classList.remove('active');
+                currentDeleteTarget = null;
+                currentDeleteId = null;
+            }
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (currentDeleteTarget === 'loan') {
+                    loans = loans.filter(loan => loan.id !== currentDeleteId);
+                    saveLoans();
+                    renderLoans();
+                    showNotification('Préstamo eliminado con éxito', 'success');
+                } else if (currentDeleteTarget === 'cxc') {
+                    cxcs = cxcs.filter(cxc => cxc.id !== currentDeleteId);
+                    saveCxCs();
+                    renderCxCs();
+                    showNotification('Cuenta eliminada con éxito', 'success');
+                } else if (currentDeleteTarget === 'debt') {
+                    deleteSelectedDebts();
+                } else if (currentDeleteTarget === 'gasto') {
+                    deleteSelectedGastos();
+                } else if (currentDeleteTarget === 'pago') {
+                    deleteSelectedPagos();
+                }
+                closeConfirmDeleteModal();
+            });
+
+            cancelDeleteBtn.addEventListener('click', () => {
+                closeConfirmDeleteModal();
+            });
+
+            closeConfirmDeleteModalBtn.addEventListener('click', () => {
+                closeConfirmDeleteModal();
+            });
+
+            confirmDeleteModal.addEventListener('click', (e) => {
+                if (e.target === confirmDeleteModal) {
+                    closeConfirmDeleteModal();
+                }
+            });
+
+
+            // --- Lógica para Deudas ---
+
+            function getFridaysInPeriod(startDate, endDate) {
+                const dates = [];
+                let currentDate = new Date(startDate);
+                currentDate.setDate(currentDate.getDate() + (5 + 7 - currentDate.getDay()) % 7); // Go to first Friday
+
+                while (currentDate <= endDate) {
+                    dates.push(new Date(currentDate));
+                    currentDate.setDate(currentDate.getDate() + 7); // Add 7 days for next Friday
+                }
+                return dates;
+            }
+
+            function formatToYYYYMMDD(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            function formatToDDMonYY(date) {
+                const options = { day: '2-digit', month: 'short', year: '2-digit' };
+                return date.toLocaleDateString('es-ES', options).replace(/\./g, '').replace(' ', '-');
+            }
+
+            function loadDebts() {
+                try {
+                    const savedDebts = localStorage.getItem('deudas');
+                    // If there are saved debts, parse them. Otherwise, use initial debt names and initialize amounts.
+                    debts = savedDebts ? JSON.parse(savedDebts) : initialDebtNames.map(name => ({
+                        id: Date.now() + Math.random(),
+                        name: name,
+                        amounts: {} // Amounts will be keyed by date (YYYY-MM-DD)
+                    }));
+                    console.log("Deudas cargadas:", debts); // Debug log
+                } catch (e) {
+                    console.error("Error al cargar deudas de localStorage", e);
+                    // Fallback to initial data if loading fails
+                    debts = initialDebtNames.map(name => ({
+                        id: Date.now() + Math.random(),
+                        name: name,
+                        amounts: {}
+                    }));
+                }
+            }
+
+            function saveDebts() {
+                try {
+                    localStorage.setItem('deudas', JSON.stringify(debts));
+                    console.log("Deudas guardadas:", debts); // Debug log
+                } catch (e) {
+                    console.error("Error al guardar deudas en localStorage", e);
+                }
+            }
+
+            function calculateTotalDebts() {
+                const totalByDate = {};
+                currentDebtDates.forEach(date => {
+                    const dateKey = formatToYYYYMMDD(date);
+                    totalByDate[dateKey] = 0;
+                });
+
+                debts.forEach(debt => {
+                    currentDebtDates.forEach(date => {
+                        const dateKey = formatToYYYYMMDD(date);
+                        // Always read from the 'amounts' object in the debt array,
+                        // as the input listener ensures this is up-to-date.
+                        const amount = debt.amounts[dateKey] || 0;
+                        totalByDate[dateKey] += amount;
+                    });
+                });
+
+                // Clear existing tfoot content
+                debtsTotalRow.innerHTML = ''; 
+                
+                // Create the new total row structure
+                const totalRowContent = document.createElement('tr');
+                totalRowContent.classList.add('total-row'); // Add class for styling
+                
+                totalRowContent.innerHTML = `<td><strong>Total</strong></td>`; // First cell for "Total" label
+                
+                currentDebtDates.forEach(date => {
+                    const dateKey = formatToYYYYMMDD(date);
+                    totalRowContent.innerHTML += `<td><strong>$${totalByDate[dateKey].toFixed(2)}</strong></td>`; // Add cells for each date total
                 });
                 
-                // Guardar datos en atributos para edición
-                const week = row.cells[0].textContent;
-                const amount = parseFloat(row.cells[1].textContent.replace('$', ''));
-                row.dataset.id = row.querySelector('.edit-btn') ? row.id : Date.now();
-                row.dataset.week = week;
-                row.dataset.amount = amount;
+                debtsTotalRow.appendChild(totalRowContent); // Append the new row to tfoot
+
+                // Update the overall total debts display
+                const overallTotal = Object.values(totalByDate).reduce((sum, val) => sum + val, 0);
+                totalDeudasDisplay.textContent = `$${overallTotal.toFixed(2)}`;
             }
+
+            function renderDebts() {
+                debtDatesRow.innerHTML = '<th>Deuda</th>';
+                currentDebtDates.forEach(date => {
+                    debtDatesRow.innerHTML += `<th>${formatToDDMonYY(date)}</th>`;
+                });
+                if (isEditModeDebts) {
+                    debtDatesRow.innerHTML += '<th>Eliminar</th>'; // Add delete column in edit mode
+                }
+
+                debtsList.innerHTML = '';
+                if (debts.length === 0) {
+                    debtsList.innerHTML = `<tr><td colspan="${currentDebtDates.length + (isEditModeDebts ? 2 : 1)}" style="text-align: center; padding: 30px;">No hay deudas registradas</td></tr>`;
+                    calculateTotalDebts();
+                    return;
+                }
+
+                debts.forEach(debt => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = debt.id;
+                    let rowContent = `<td>${debt.name}</td>`;
+                    currentDebtDates.forEach(date => {
+                        const dateKey = formatToYYYYMMDD(date);
+                        const amount = debt.amounts[dateKey] || 0;
+                        if (isEditModeDebts) {
+                            rowContent += `<td><input type="number" class="form-control amount-input" data-date="${dateKey}" value="${amount.toFixed(2)}" step="0.01"></td>`;
+                        } else {
+                            rowContent += `<td>$${amount.toFixed(2)}</td>`;
+                        }
+                    });
+                    if (isEditModeDebts) {
+                        rowContent += `<td><input type="checkbox" class="debt-checkbox" data-id="${debt.id}"></td>`;
+                    }
+                    row.innerHTML = rowContent;
+                    debtsList.appendChild(row);
+                });
+                calculateTotalDebts(); // Calculate totals after rendering rows
+
+                // Add input event listeners if in edit mode
+                if (isEditModeDebts) {
+                    debtsList.querySelectorAll('.amount-input').forEach(input => {
+                        input.addEventListener('input', function() {
+                            const debtId = parseInt(this.closest('tr').dataset.id);
+                            const dateKey = this.dataset.date;
+                            const newAmount = parseFloat(this.value) || 0;
+                            
+                            const debtIndex = debts.findIndex(d => d.id === debtId);
+                            if (debtIndex !== -1) {
+                                debts[debtIndex].amounts[dateKey] = newAmount;
+                            }
+                            calculateTotalDebts(); // Recalculate totals on input change
+                        });
+                    });
+                }
+            }
+
+            function openDebtModal(debtId = null) {
+                currentEditId = debtId;
+                debtAmountsGroup.innerHTML = ''; // Clear previous amount inputs
+
+                if (debtId) {
+                    debtModalTitle.textContent = 'Editar Deuda';
+                    const debt = debts.find(d => d.id === debtId);
+                    if (debt) {
+                        debtIdInput.value = debt.id;
+                        debtNameInput.value = debt.name;
+                        currentDebtDates.forEach(date => {
+                            const dateKey = formatToYYYYMMDD(date);
+                            const amount = debt.amounts[dateKey] || 0;
+                            debtAmountsGroup.innerHTML += `
+                                <div class="form-group">
+                                    <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
+                                    <input type="number" id="amount-${dateKey}" class="form-control debt-amount-input" data-date="${dateKey}" value="${amount.toFixed(2)}" step="0.01">
+                                </div>
+                            `;
+                        });
+                    }
+                } else {
+                    debtModalTitle.textContent = 'Añadir Nueva Deuda';
+                    debtForm.reset();
+                    debtIdInput.value = '';
+                    currentDebtDates.forEach(date => {
+                        const dateKey = formatToYYYYMMDD(date);
+                        debtAmountsGroup.innerHTML += `
+                            <div class="form-group">
+                                <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
+                                <input type="number" id="amount-${dateKey}" class="form-control debt-amount-input" data-date="${dateKey}" value="0.00" step="0.01">
+                            </div>
+                        `;
+                    });
+                }
+                debtModal.classList.add('active');
+            }
+
+            function closeDebtModal() {
+                debtModal.classList.remove('active');
+                currentEditId = null;
+            }
+
+            function handleDebtFormSubmit(e) {
+                e.preventDefault();
+                const debtName = debtNameInput.value.trim();
+                if (debtName === '') {
+                    showNotification('El nombre de la deuda no puede estar vacío', 'error');
+                    return;
+                }
+
+                const amounts = {};
+                document.querySelectorAll('.debt-amount-input').forEach(input => {
+                    const dateKey = input.dataset.date;
+                    amounts[dateKey] = parseFloat(input.value) || 0;
+                });
+
+                if (currentEditId) {
+                    const debtIndex = debts.findIndex(d => d.id === currentEditId);
+                    if (debtIndex !== -1) {
+                        debts[debtIndex].name = debtName;
+                        debts[debtIndex].amounts = amounts;
+                        showNotification('Deuda actualizada con éxito', 'success');
+                    }
+                } else {
+                    const newDebt = { id: Date.now(), name: debtName, amounts: amounts };
+                    debts.push(newDebt);
+                    showNotification('Deuda añadida con éxito', 'success');
+                }
+                saveDebts(); // Save to localStorage after adding/updating
+                renderDebts();
+                closeDebtModal();
+            }
+
+            function toggleEditModeDebts() {
+                isEditModeDebts = !isEditModeDebts;
+                if (isEditModeDebts) {
+                    editDebtModeBtn.textContent = 'Guardar Cambios';
+                    editDebtModeBtn.classList.add('active'); // Visual feedback for active edit mode
+                    addDebtBtn.style.display = 'none'; // Hide add button in edit mode
+                    deleteSelectedDebtsBtn.style.display = 'inline-flex'; // Show delete button
+                } else {
+                    // When exiting edit mode, explicitly save all current input values
+                    debtsList.querySelectorAll('tr').forEach(rowElement => {
+                        const debtId = parseInt(rowElement.dataset.id);
+                        const debt = debts.find(d => d.id === debtId);
+                        if (debt) {
+                            rowElement.querySelectorAll('.amount-input').forEach(inputElement => {
+                                const dateKey = inputElement.dataset.date;
+                                debt.amounts[dateKey] = parseFloat(inputElement.value) || 0;
+                            });
+                        }
+                    });
+                    saveDebts(); // Save the updated debts array
+                    editDebtModeBtn.textContent = 'Editar Deudas';
+                    editDebtModeBtn.classList.remove('active');
+                    addDebtBtn.style.display = 'inline-flex';
+                    deleteSelectedDebtsBtn.style.display = 'none';
+                    showNotification('Cambios en deudas guardados', 'success');
+                }
+                renderDebts(); // Re-render table to reflect edit mode (either with inputs or display values)
+            }
+
+            function deleteSelectedDebts() {
+                const selectedDebtIds = Array.from(document.querySelectorAll('.debt-checkbox:checked'))
+                                            .map(checkbox => parseInt(checkbox.dataset.id));
+                if (selectedDebtIds.length > 0) {
+                    debts = debts.filter(debt => !selectedDebtIds.includes(debt.id));
+                    saveDebts(); // Save to localStorage after deletion
+                    renderDebts();
+                    showNotification('Deudas seleccionadas eliminadas', 'success');
+                } else {
+                    showNotification('Ninguna deuda seleccionada para eliminar', 'info');
+                }
+                closeConfirmDeleteModal();
+            }
+
+            // Event Listeners para Deudas
+            generateDebtDatesBtn.addEventListener('click', () => {
+                const startDate = new Date(startDateDebtsInput.value);
+                const endDate = new Date(endDateDebtsInput.value);
+
+                if (isNaN(startDate) || isNaN(endDate) || startDate > endDate) {
+                    showNotification('Por favor, selecciona un rango de fechas válido.', 'error');
+                    return;
+                }
+
+                const today = new Date(); // Define today here for consistency
+                const threeMonthsLater = new Date();
+                threeMonthsLater.setMonth(today.getMonth() + 3); 
+
+                if (endDate > threeMonthsLater) {
+                    showNotification('El período no puede exceder 3 meses a partir de la fecha actual.', 'error');
+                    return;
+                }
+
+                currentDebtDates = getFridaysInPeriod(startDate, endDate);
+                renderDebts();
+            });
+
+            addDebtBtn.addEventListener('click', () => openDebtModal());
+            debtModalCloseBtn.addEventListener('click', () => closeDebtModal());
+            debtForm.addEventListener('submit', handleDebtFormSubmit);
+            debtModal.addEventListener('click', (e) => { if (e.target === debtModal) closeDebtModal(); });
+            editDebtModeBtn.addEventListener('click', toggleEditModeDebts);
+            deleteSelectedDebtsBtn.addEventListener('click', () => {
+                const selectedCount = document.querySelectorAll('.debt-checkbox:checked').length;
+                if (selectedCount > 0) {
+                    showConfirmDeleteModal(null, 'debt'); // Pass null for ID to indicate multiple deletion
+                } else {
+                    showNotification('Ninguna deuda seleccionada para eliminar', 'info');
+                }
+            });
+
+            // Set default dates for Debt section (current date to 3 months from now)
+            const today = new Date();
+            const threeMonthsFromNow = new Date();
+            threeMonthsFromNow.setMonth(today.getMonth() + 3);
+            startDateDebtsInput.value = formatToYYYYMMDD(today);
+            endDateDebtsInput.value = formatToYYYYMMDD(threeMonthsFromNow);
+            // Automatically generate dates on load
+            currentDebtDates = getFridaysInPeriod(new Date(startDateDebtsInput.value), new Date(endDateDebtsInput.value));
+            loadDebts(); // Load debts from localStorage first
+            renderDebts();
+
+
+            // --- Lógica para Gastos Personales ---
+
+            function loadGastos() {
+                try {
+                    const savedGastos = localStorage.getItem('gastosPersonales');
+                    gastos = savedGastos ? JSON.parse(savedGastos) : [];
+                    console.log("Gastos cargados:", gastos); // Debug log
+                } catch (e) {
+                    console.error("Error al cargar gastos de localStorage", e);
+                    gastos = [];
+                }
+            }
+
+            function saveGastos() {
+                try {
+                    localStorage.setItem('gastosPersonales', JSON.stringify(gastos));
+                    console.log("Gastos guardados:", gastos); // Debug log
+                } catch (e) {
+                    console.error("Error al guardar gastos en localStorage", e);
+                }
+            }
+
+            function calculateTotalGastos() {
+                const total = gastos.reduce((sum, gasto) => sum + parseFloat(gasto.amount), 0);
+                totalGastosDisplay.textContent = `$${total.toFixed(2)}`;
+            }
+
+            function renderGastos() {
+                gastosList.innerHTML = '';
+                if (gastos.length === 0) {
+                    gastosList.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 30px;">No hay gastos registrados</td></tr>`;
+                    calculateTotalGastos();
+                    return;
+                }
+                gastos.forEach(gasto => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = gasto.id;
+                    let rowContent = `
+                        <td>${gasto.name}</td>
+                        <td class="loan-amount">$${parseFloat(gasto.amount).toFixed(2)}</td>
+                        <td>${gasto.date}</td>
+                    `;
+                    if (isEditModeGastos) {
+                        rowContent = `
+                            <td><input type="text" class="form-control" value="${gasto.name}" data-field="name"></td>
+                            <td><input type="number" class="form-control amount-input" value="${parseFloat(gasto.amount).toFixed(2)}" step="0.01" data-field="amount"></td>
+                            <td><input type="date" class="form-control" value="${gasto.date}" data-field="date"></td>
+                            <td><input type="checkbox" class="gasto-checkbox" data-id="${gasto.id}"></td>
+                        `;
+                    } else {
+                        rowContent += `
+                            <td class="loan-actions">
+                                <button class="action-btn edit-btn" data-id="${gasto.id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn" data-id="${gasto.id}"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        `;
+                    }
+                    row.innerHTML = rowContent;
+                    gastosList.appendChild(row);
+                });
+                calculateTotalGastos();
+                if (!isEditModeGastos) {
+                    addGastoRowEventListeners();
+                }
+            }
+
+            function addGastoRowEventListeners() {
+                gastosList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.onclick = () => openGastoModal(parseInt(button.dataset.id));
+                });
+                gastosList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'gasto');
+                });
+            }
+
+            function openGastoModal(gastoId = null) {
+                currentEditId = gastoId;
+                if (gastoId) {
+                    gastoModalTitle.textContent = 'Editar Gasto';
+                    const gasto = gastos.find(g => g.id === gastoId);
+                    if (gasto) {
+                        gastoIdInput.value = gasto.id;
+                        gastoNameSelect.value = gasto.name;
+                        gastoAmountInput.value = gasto.amount;
+                        gastoDateInput.value = gasto.date;
+                    }
+                } else {
+                    gastoModalTitle.textContent = 'Añadir Nuevo Gasto';
+                    gastoForm.reset();
+                    gastoIdInput.value = '';
+                    gastoDateInput.value = formatToYYYYMMDD(new Date()); // Default to today
+                }
+                gastoModal.classList.add('active');
+            }
+
+            function closeGastoModal() {
+                gastoModal.classList.remove('active');
+                currentEditId = null;
+            }
+
+            function handleGastoFormSubmit(e) {
+                e.preventDefault();
+                const name = gastoNameSelect.value.trim();
+                const amount = parseFloat(gastoAmountInput.value);
+                const date = gastoDateInput.value;
+
+                if (name === '' || isNaN(amount) || amount <= 0 || date === '') {
+                    showNotification('Por favor completa todos los campos de gasto correctamente', 'error');
+                    return;
+                }
+
+                if (currentEditId) {
+                    const gastoIndex = gastos.findIndex(g => g.id === currentEditId);
+                    if (gastoIndex !== -1) {
+                        gastos[gastoIndex].name = name;
+                        gastos[gastoIndex].amount = amount;
+                        gastos[gastoIndex].date = date;
+                        showNotification('Gasto actualizado con éxito', 'success');
+                    }
+                } else {
+                    const newGasto = { id: Date.now(), name: name, amount: amount, date: date };
+                    gastos.push(newGasto);
+                    showNotification('Gasto añadido con éxito', 'success');
+                }
+                saveGastos();
+                renderGastos();
+                closeGastoModal();
+            }
+
+            function toggleEditModeGastos() {
+                isEditModeGastos = !isEditModeGastos;
+                if (isEditModeGastos) {
+                    editGastoModeBtn.textContent = 'Guardar Cambios';
+                    editGastoModeBtn.classList.add('active');
+                    addGastoBtn.style.display = 'none';
+                    deleteSelectedGastosBtn.style.display = 'inline-flex';
+                } else {
+                    editGastoModeBtn.textContent = 'Editar Gastos';
+                    editGastoModeBtn.classList.remove('active');
+                    addGastoBtn.style.display = 'inline-flex';
+                    deleteSelectedGastosBtn.style.display = 'none';
+                    // Save changes from inline edits
+                    gastosList.querySelectorAll('tr').forEach(row => {
+                        const gastoId = parseInt(row.dataset.id);
+                        const gastoIndex = gastos.findIndex(g => g.id === gastoId);
+                        if (gastoIndex !== -1) {
+                            gastos[gastoIndex].name = row.querySelector('[data-field="name"]').value;
+                            gastos[gastoIndex].amount = parseFloat(row.querySelector('[data-field="amount"]').value) || 0;
+                            gastos[gastoIndex].date = row.querySelector('[data-field="date"]').value;
+                        }
+                    });
+                    saveGastos();
+                    showNotification('Cambios en gastos guardados', 'success');
+                }
+                renderGastos();
+            }
+
+            function deleteSelectedGastos() {
+                const selectedGastoIds = Array.from(document.querySelectorAll('.gasto-checkbox:checked'))
+                                            .map(checkbox => parseInt(checkbox.dataset.id));
+                if (selectedGastoIds.length > 0) {
+                    gastos = gastos.filter(gasto => !selectedGastoIds.includes(gasto.id));
+                    saveGastos();
+                    renderGastos();
+                    showNotification('Gastos seleccionados eliminados', 'success');
+                } else {
+                    showNotification('Ningún gasto seleccionado para eliminar', 'info');
+                }
+                closeConfirmDeleteModal();
+            }
+
+            // Event Listeners para Gastos Personales
+            addGastoBtn.addEventListener('click', () => openGastoModal());
+            gastoModalCloseBtn.addEventListener('click', () => closeGastoModal());
+            gastoForm.addEventListener('submit', handleGastoFormSubmit);
+            gastoModal.addEventListener('click', (e) => { if (e.target === gastoModal) closeGastoModal(); });
+            editGastoModeBtn.addEventListener('click', toggleEditModeGastos);
+            deleteSelectedGastosBtn.addEventListener('click', () => {
+                const selectedCount = document.querySelectorAll('.gasto-checkbox:checked').length;
+                if (selectedCount > 0) {
+                    showConfirmDeleteModal(null, 'gasto');
+                } else {
+                    showNotification('Ningún gasto seleccionado para eliminar', 'info');
+                }
+            });
+
+            loadGastos();
+            renderGastos();
+
+            // --- Lógica para Fechas de Pago ---
+
+            function loadPagos() {
+                try {
+                    const savedPagos = localStorage.getItem('fechasDePago');
+                    pagos = savedPagos ? JSON.parse(savedPagos) : initialPagos;
+                    console.log("Fechas de pago cargadas:", pagos); // Debug log
+                } catch (e) {
+                    console.error("Error al cargar fechas de pago de localStorage", e);
+                    pagos = initialPagos;
+                }
+            }
+
+            function savePagos() {
+                try {
+                    localStorage.setItem('fechasDePago', JSON.stringify(pagos));
+                    console.log("Fechas de pago guardadas:", pagos); // Debug log
+                } catch (e) {
+                    console.error("Error al guardar fechas de pago en localStorage", e);
+                }
+            }
+
+            function renderPagos() {
+                fechasPagoList.innerHTML = '';
+                if (pagos.length === 0) {
+                    fechasPagoList.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px;">No hay fechas de pago registradas</td></tr>`;
+                    return;
+                }
+                pagos.forEach(pago => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = pago.id;
+                    let rowContent = `
+                        <td>${pago.debtName}</td>
+                        <td>${pago.paymentDate}</td>
+                    `;
+                    if (isEditModePagos) {
+                        rowContent = `
+                            <td><input type="text" class="form-control" value="${pago.debtName}" data-field="debtName"></td>
+                            <td><input type="text" class="form-control" value="${pago.paymentDate}" data-field="paymentDate"></td>
+                            <td><input type="checkbox" class="pago-checkbox" data-id="${pago.id}"></td>
+                        `;
+                    } else {
+                        rowContent += `
+                            <td class="loan-actions">
+                                <button class="action-btn edit-btn" data-id="${pago.id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn" data-id="${pago.id}"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        `;
+                    }
+                    row.innerHTML = rowContent;
+                    fechasPagoList.appendChild(row);
+                });
+                if (!isEditModePagos) {
+                    addPagoRowEventListeners();
+                }
+            }
+
+            function addPagoRowEventListeners() {
+                fechasPagoList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.onclick = () => openPagoModal(parseInt(button.dataset.id));
+                });
+                fechasPagoList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'pago');
+                });
+            }
+
+            function openPagoModal(pagoId = null) {
+                currentEditId = pagoId;
+                if (pagoId) {
+                    pagoModalTitle.textContent = 'Editar Fecha de Pago';
+                    const pago = pagos.find(p => p.id === pagoId);
+                    if (pago) {
+                        pagoIdInput.value = pago.id;
+                        pagoDebtNameInput.value = pago.debtName;
+                        pagoDateInput.value = pago.paymentDate;
+                    }
+                } else {
+                    pagoModalTitle.textContent = 'Añadir Nueva Fecha de Pago';
+                    pagoForm.reset();
+                    pagoIdInput.value = '';
+                }
+                pagoModal.classList.add('active');
+            }
+
+            function closePagoModal() {
+                pagoModal.classList.remove('active');
+                currentEditId = null;
+            }
+
+            function handlePagoFormSubmit(e) {
+                e.preventDefault();
+                const debtName = pagoDebtNameInput.value.trim();
+                const paymentDate = pagoDateInput.value.trim();
+
+                if (debtName === '' || paymentDate === '') {
+                    showNotification('Por favor completa todos los campos de pago correctamente', 'error');
+                    return;
+                }
+
+                if (currentEditId) {
+                    const pagoIndex = pagos.findIndex(p => p.id === currentEditId);
+                    if (pagoIndex !== -1) {
+                        pagos[pagoIndex].debtName = debtName;
+                        pagos[pagoIndex].paymentDate = paymentDate;
+                        showNotification('Fecha de pago actualizada con éxito', 'success');
+                    }
+                } else {
+                    const newPago = { id: Date.now(), debtName: debtName, paymentDate: paymentDate };
+                    pagos.push(newPago);
+                    showNotification('Fecha de pago añadida con éxito', 'success');
+                }
+                savePagos();
+                renderPagos();
+                closePagoModal();
+            }
+
+            function toggleEditModePagos() {
+                isEditModePagos = !isEditModePagos;
+                if (isEditModePagos) {
+                    editPagoModeBtn.textContent = 'Guardar Cambios';
+                    editPagoModeBtn.classList.add('active');
+                    addPagoBtn.style.display = 'none';
+                    deleteSelectedPagosBtn.style.display = 'inline-flex';
+                } else {
+                    editPagoModeBtn.textContent = 'Editar Pagos';
+                    editPagoModeBtn.classList.remove('active');
+                    addPagoBtn.style.display = 'inline-flex';
+                    deleteSelectedPagosBtn.style.display = 'none';
+                    // Save changes from inline edits
+                    fechasPagoList.querySelectorAll('tr').forEach(row => {
+                        const pagoId = parseInt(row.dataset.id);
+                        const pagoIndex = pagos.findIndex(p => p.id === pagoId);
+                        if (pagoIndex !== -1) {
+                            pagos[pagoIndex].debtName = row.querySelector('[data-field="debtName"]').value;
+                            pagos[pagoIndex].paymentDate = row.querySelector('[data-field="paymentDate"]').value;
+                        }
+                    });
+                    savePagos();
+                    showNotification('Cambios en fechas de pago guardados', 'success');
+                }
+                renderPagos();
+            }
+
+            function deleteSelectedPagos() {
+                const selectedPagoIds = Array.from(document.querySelectorAll('.pago-checkbox:checked'))
+                                            .map(checkbox => parseInt(checkbox.dataset.id));
+                if (selectedPagoIds.length > 0) {
+                    pagos = pagos.filter(pago => !selectedPagoIds.includes(pago.id));
+                    savePagos();
+                    renderPagos();
+                    showNotification('Fechas de pago seleccionadas eliminadas', 'success');
+                } else {
+                    showNotification('Ninguna fecha de pago seleccionada para eliminar', 'info');
+                }
+                closeConfirmDeleteModal();
+            }
+
+            // Event Listeners para Fechas de Pago
+            addPagoBtn.addEventListener('click', () => openPagoModal());
+            pagoModalCloseBtn.addEventListener('click', () => closePagoModal());
+            pagoForm.addEventListener('submit', handlePagoFormSubmit);
+            pagoModal.addEventListener('click', (e) => { if (e.target === pagoModal) closePagoModal(); });
+            editPagoModeBtn.addEventListener('click', toggleEditModePagos);
+            deleteSelectedPagosBtn.addEventListener('click', () => {
+                const selectedCount = document.querySelectorAll('.pago-checkbox:checked').length;
+                if (selectedCount > 0) {
+                    showConfirmDeleteModal(null, 'pago');
+                } else {
+                    showNotification('Ninguna fecha de pago seleccionada para eliminar', 'info');
+                }
+            });
+
+            loadPagos();
+            renderPagos();
+
+            // --- Lógica para el selector de categorías de Finanzas ---
+            const financeCategoryBtns = document.querySelectorAll('.finance-category-btn');
+            const financeSectionContents = document.querySelectorAll('.finance-section-content');
+
+            function activateFinanceCategory(category) {
+                financeCategoryBtns.forEach(btn => {
+                    if (btn.dataset.financeCategory === category) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                financeSectionContents.forEach(content => {
+                    if (content.classList.contains(`${category}-content`)) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            }
+
+            financeCategoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    activateFinanceCategory(this.dataset.financeCategory);
+                });
+            });
+
+            // Activar la primera categoría de finanzas por defecto al cargar
+            activateFinanceCategory('debts');
+
         });
     </script>
 </body>
