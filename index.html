@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Espacio Personal de Mario</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link rel="stylesheet" href="styles.css">
     <style>
         /* Variables de colores y estilos */
         :root {
@@ -316,8 +316,8 @@
             color: #555;
         }
 
-        /* Sección de Horarios y Finanzas - Selector de pestañas */
-        .schedule-selector, .finance-category-selector {
+        /* Selector de pestañas general */
+        .schedule-selector, .finance-category-selector, .routine-selector, .pending-category-selector {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -325,7 +325,7 @@
             gap: 15px;
         }
 
-        .schedule-btn, .finance-category-btn {
+        .schedule-btn, .finance-category-btn, .routine-btn, .pending-btn {
             padding: 12px 25px;
             background-color: white;
             border: 2px solid var(--primary-gradient-start);
@@ -336,20 +336,24 @@
             transition: var(--transition);
             color: var(--dark-gray);
             flex: 1;
-            min-width: 200px;
+            min-width: 150px; /* Adjusted for more buttons */
             max-width: 250px;
         }
 
         .schedule-btn.active, 
         .schedule-btn:hover,
         .finance-category-btn.active,
-        .finance-category-btn:hover {
+        .finance-category-btn:hover,
+        .routine-btn.active,
+        .routine-btn:hover,
+        .pending-btn.active,
+        .pending-btn:hover {
             background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
             color: white;
             border-color: transparent;
         }
 
-        .schedule-container, .finance-section-content {
+        .schedule-container, .finance-section-content, .routine-content-container, .pending-section-content {
             background-color: white;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
@@ -358,7 +362,7 @@
             display: block;
         }
 
-        .schedule-content {
+        .schedule-content, .routine-details, .pending-content {
             padding: 20px;
         }
 
@@ -844,13 +848,13 @@
         .mobile-only { display: none; }
         .desktop-only { display: list-item; }
 
-        /* Estilos específicos para las nuevas secciones de finanzas */
-        .finance-section {
+        /* Estilos específicos para las nuevas secciones de finanzas y rutinas */
+        .finance-section, .exercise-routine-section, .pending-section {
             background-color: var(--white);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 25px;
-            margin-bottom: 30px; /* Espacio entre secciones de finanzas */
+            margin-bottom: 30px; /* Espacio entre secciones */
         }
 
         .finance-controls {
@@ -898,6 +902,161 @@
         #debts-total-row td {
             padding: 15px 16px; /* Un poco más de padding */
             border-top: 2px solid var(--primary-gradient-start); /* Borde superior para separar */
+        }
+
+        /* Estilos para las rutinas de ejercicio */
+        .routine-details h3 {
+            color: var(--primary-gradient-end);
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            border-bottom: 2px solid var(--primary-gradient-start);
+            padding-bottom: 10px;
+        }
+
+        .routine-details p {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-item {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .exercise-item h4 {
+            color: var(--secondary-gradient-end);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .exercise-item p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .exercise-item p strong {
+            color: var(--dark-gray);
+        }
+
+        .additional-tips {
+            background-color: #e0e7ff;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .additional-tips h3 {
+            color: var(--primary-gradient-end);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--primary-gradient-start);
+            padding-bottom: 10px;
+        }
+
+        .additional-tips ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .additional-tips li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .additional-tips li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--primary-gradient-start);
+            font-size: 1.5rem;
+            top: -4px;
+        }
+
+        /* Estilos para la sección de Pendientes */
+        .pending-list {
+            margin-top: 20px;
+        }
+
+        .pending-item {
+            background-color: #f8f8f8; /* Tono de gris muy bajo */
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .pending-item-text {
+            flex-grow: 1;
+            font-size: 1rem;
+            color: #333;
+            margin-right: 10px;
+            word-break: break-word; /* Break long words */
+        }
+
+        .pending-item-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            flex-basis: 100%; /* Take full width on small screens */
+            text-align: right;
+        }
+        
+        .pending-item-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px; /* Space from text on small screens */
+            flex-basis: 100%; /* Take full width on small screens */
+            justify-content: flex-end;
+        }
+
+        /* Adjust for larger screens */
+        @media (min-width: 768px) {
+            .pending-item-date {
+                flex-basis: auto; /* Revert to auto width */
+                margin-top: 0;
+                margin-left: 15px;
+                text-align: left;
+            }
+            .pending-item-actions {
+                flex-basis: auto; /* Revert to auto width */
+                margin-top: 0;
+            }
+        }
+
+        .pending-item .action-btn {
+            width: 30px;
+            height: 30px;
+            font-size: 0.85rem;
+        }
+
+        .pending-radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .pending-radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
         }
 
         /* Media Queries para Responsividad */
@@ -951,7 +1110,7 @@
                 font-size: 1.8rem;
             }
             
-            .schedule-btn {
+            .schedule-btn, .finance-category-btn, .routine-btn, .pending-btn {
                 min-width: 100%;
                 max-width: 300px;
             }
@@ -1113,6 +1272,7 @@
                 <li><a href="#" class="nav-link" data-target="loans"><i class="fas fa-hand-holding-usd"></i>Préstamos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="projects"><i class="fas fa-folder-open"></i>Proyectos</a></li>
                 <li><a href="#" class="nav-link" data-target="cxc"><i class="fas fa-file-invoice-dollar"></i>CxC</a></li>
+                <li><a href="#" class="nav-link" data-target="exercise-routines"><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</a></li>
 
                 <li class="more-menu-container desktop-only">
                     <a href="#" id="more-menu-btn" class="nav-link">Más <i class="fas fa-chevron-down"></i></a>
@@ -1141,6 +1301,7 @@
                 <li><a href="#" class="nav-link" data-target="loans"><i class="fas fa-hand-holding-usd"></i>Préstamos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="projects"><i class="fas fa-folder-open"></i>Proyectos</a></li>
                 <li><a href="#" class="nav-link" data-target="cxc"><i class="fas fa-file-invoice-dollar"></i>CxC</a></li>
+                <li><a href="#" class="nav-link" data-target="exercise-routines"><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</a></li>
                 <li><a href="#" class="nav-link" data-target="pendientes"><i class="fas fa-tasks"></i>Pendientes</a></li>
                 <li><a href="#" class="nav-link" data-target="finanzas"><i class="fas fa-chart-line"></i>Finanzas</a></li>
                 <li><a href="#" class="nav-link" data-target="por-hacer-sam"><i class="fas fa-heart"></i>Por Hacer con Sam</a></li>
@@ -1250,17 +1411,19 @@
                     
                     <div class="day-column">
                         <div class="day-title">VIERNES</div>
-                        <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
-                        <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
-                        <div class="task-item">- BAÑARME</div>
-                        <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
-                        <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
-                        <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
-                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
-                        <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
-                        <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
-                        <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
-                        <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
+                        <div class="day-tasks">
+                            <div class="task-item">- LEVANTARME A LAS 4:40 AM</div>
+                            <div class="task-item">- 10 MINUTOS PARA DESPERTAR</div>
+                            <div class="task-item">- BAÑARME</div>
+                            <div class="task-item">- SALIR A TRABAJAR A LAS 5:20 AM</div>
+                            <div class="task-item">- SALIR DE TRABAJAR A LAS 3:00 PM</div>
+                            <div class="task-item">- LLEGAR A CASA A LAS 4:30 PM</div>
+                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 4:55 PM A 6:20 PM</div>
+                            <div class="task-item">- SALIR CON SAM A LAS 6:25 PM</div>
+                            <div class="task-item">- REGRESAR A CASA A LAS 11:30 PM</div>
+                            <div class="task-item">- PREPARAR TODO PARA MAÑANA EN 10 MINUTOS</div>
+                            <div class="task-item">- DORMIR ENTRE 11:45 Y 11:50 PM</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1313,36 +1476,32 @@
                     
                     <div class="day-column">
                         <div class="day-title">MIÉRCOLES</div>
-                        <div class="day-tasks">
-                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
-                        </div>
+                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
                     </div>
                     
                     <div class="day-column">
                         <div class="day-title">JUEVES</div>
-                        <div class="day-tasks">
-                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
-                        </div>
+                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
                     </div>
                     
                     <div class="day-column">
@@ -1465,14 +1624,198 @@
         </div>
     </section>
 
+    <section id="exercise-routines" class="section">
+        <div class="espacio-header">
+            <h1><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</h1>
+            <p>¡Entrena en casa con estas rutinas de 20 minutos!</p>
+        </div>
+        <div class="container exercise-routine-section">
+            <p style="margin-bottom: 20px; font-size: 1.1rem; color: #555;">¡Claro! Aquí tienes tres rutinas de 20 minutos cada una, diseñadas para trabajar brazos, hombros, pecho, abdomen y piernas, utilizando únicamente tu peso corporal. Recuerda calentar unos 5 minutos antes de cada rutina y estirar al finalizar.</p>
+
+            <div class="routine-selector">
+                <button class="routine-btn active" data-routine="upper-body">Parte Superior</button>
+                <button class="routine-btn" data-routine="core">Intermedio</button>
+                <button class="routine-btn" data-routine="lower-body">Parte Inferior</button>
+            </div>
+
+            <div class="routine-content-container upper-body-routine">
+                <div class="routine-details">
+                    <h3>Rutina 1: Brazos, Hombros y Pecho (20 minutos)</h3>
+                    <p>Realiza cada ejercicio durante 45 segundos, seguido de 15 segundos de descanso. Completa 3 rondas de todos los ejercicios.</p>
+                    <ul class="exercise-list">
+                        <li class="exercise-item">
+                            <h4>Flexiones (Push-ups)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Colócate boca abajo con las manos un poco más anchas que los hombros. Baja el pecho hacia el suelo, manteniendo el cuerpo recto, y luego empuja hacia arriba. Si es muy difícil, apoya las rodillas en el suelo.</p>
+                            <p><strong>Enfoque:</strong> Pecho, hombros, tríceps.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Fondos en Silla (Triceps Dips - si tienes una silla estable)</h4>
+                            <p><strong>Cómo hacerlos:</strong> Si tienes una silla o banco estable, siéntate en el borde y coloca las manos a los lados de tus caderas, con los dedos apuntando hacia adelante. Desliza las caderas fuera de la silla y baja el cuerpo doblando los codos a 90 grados. Empuja hacia arriba para volver a la posición inicial. Si no tienes una silla, puedes omitir este ejercicio o hacer flexiones más cerradas.</p>
+                            <p><strong>Enfoque:</strong> Tríceps, hombros.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Flexiones Inclinadas (Incline Push-ups)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Coloca las manos en una superficie elevada (una pared, una mesa baja, un escalón). Cuanto más alta sea la superficie, más fácil será el ejercicio. Realiza las flexiones como de costumbre.</p>
+                            <p><strong>Enfoque:</strong> Pecho, hombros.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Pike Push-ups (Flexiones de Pica)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Empieza en una posición de plancha alta, luego levanta las caderas hacia el techo formando una "V" invertida con tu cuerpo. Baja la cabeza hacia el suelo doblando los codos, como si quisieras tocar el suelo con la coronilla, y luego empuja hacia arriba.</p>
+                            <p><strong>Enfoque:</strong> Hombros.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Plancha con Toque de Hombro (Shoulder Tap Plank)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Colócate en posición de plancha alta (manos debajo de los hombros, cuerpo recto). Sin mover las caderas, levanta una mano y toca el hombro opuesto. Alterna los lados.</p>
+                            <p><strong>Enfoque:</strong> Hombros, core.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="routine-content-container core-routine" style="display: none;">
+                <div class="routine-details">
+                    <h3>Rutina 2: Abdomen (20 minutos)</h3>
+                    <p>Realiza cada ejercicio durante 45 segundos, seguido de 15 segundos de descanso. Completa 3 rondas de todos los ejercicios.</p>
+                    <ul class="exercise-list">
+                        <li class="exercise-item">
+                            <h4>Crunches (Encogimientos)</h4>
+                            <p><strong>Cómo hacerlos:</strong> Acuéstate boca arriba con las rodillas flexionadas y los pies apoyados en el suelo. Coloca las manos detrás de la cabeza o cruzadas sobre el pecho. Levanta la parte superior del cuerpo hacia las rodillas, contrayendo el abdomen, y luego baja lentamente.</p>
+                            <p><strong>Enfoque:</strong> Abdomen superior.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Elevación de Piernas (Leg Raises)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Acuéstate boca arriba con las piernas estiradas. Puedes colocar las manos debajo de los glúteos para mayor soporte lumbar. Levanta las piernas rectas hacia el techo hasta que formen un ángulo de 90 grados con tu cuerpo, y luego bájalas lentamente sin tocar el suelo.</p>
+                            <p><strong>Enfoque:</strong> Abdomen inferior.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Plancha (Plank)</h4>
+                            <p><strong>Cómo hacerla:</strong> Colócate boca abajo, apoyándote en los antebrazos y las puntas de los pies. Mantén el cuerpo recto desde la cabeza hasta los talones, contrayendo el abdomen y los glúteos. Evita que las caderas se caigan o se eleven demasiado.</p>
+                            <p><strong>Enfoque:</strong> Core completo.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Giros Rusos (Russian Twists)</h4>
+                            <p><strong>Cómo hacerlos:</strong> Siéntate en el suelo con las rodillas flexionadas y los pies ligeramente levantados (o apoyados si es muy difícil). Inclina el torso ligeramente hacia atrás, manteniendo la espalda recta. Gira el torso de un lado a otro, tocando el suelo con las manos a cada lado (o simplemente moviendo los brazos).</p>
+                            <p><strong>Enfoque:</strong> Oblicuos.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Bicicletas (Bicycle Crunches)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Acuéstate boca arriba con las manos detrás de la cabeza. Lleva una rodilla hacia el pecho mientras extiendes la otra pierna, y al mismo tiempo, lleva el codo opuesto hacia la rodilla que se flexiona. Alterna los lados, como si pedalearas una bicicleta.</p>
+                            <p><strong>Enfoque:</strong> Abdomen superior e inferior, oblicuos.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="routine-content-container lower-body-routine" style="display: none;">
+                <div class="routine-details">
+                    <h3>Rutina 3: Piernas (20 minutos)</h3>
+                    <p>Realiza cada ejercicio durante 45 segundos, seguido de 15 segundos de descanso. Completa 3 rondas de todos los ejercicios.</p>
+                    <ul class="exercise-list">
+                        <li class="exercise-item">
+                            <h4>Sentadillas (Squats)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Ponte de pie con los pies al ancho de los hombros. Baja las caderas como si fueras a sentarte en una silla, manteniendo la espalda recta y el pecho erguido. Asegúrate de que tus rodillas no sobrepasen los dedos de tus pies. Vuelve a la posición inicial.</p>
+                            <p><strong>Enfoque:</strong> Cuádriceps, glúteos, isquiotibiales.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Zancadas (Lunges)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Ponte de pie con los pies juntos. Da un paso largo hacia adelante con una pierna y baja las caderas hasta que ambas rodillas formen un ángulo de 90 grados. La rodilla trasera debe casi tocar el suelo y la rodilla delantera debe estar alineada con el tobillo. Empuja con la pierna delantera para volver a la posición inicial. Alterna las piernas.</p>
+                            <p><strong>Enfoque:</strong> Cuádriceps, glúteos, isquiotibiales.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Puente de Glúteos (Glute Bridges)</h4>
+                            <p><strong>Cómo hacerlos:</strong> Acuéstate boca arriba con las rodillas flexionadas y los pies apoyados en el suelo, cerca de los glúteos. Levanta las caderas del suelo hasta que tu cuerpo forme una línea recta desde los hombros hasta las rodillas. Contrae los glúteos en la parte superior y baja lentamente.</p>
+                            <p><strong>Enfoque:</strong> Glúteos, isquiotibiales.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Sentadilla Búlgara (Bulgarian Split Squats - con una silla estable)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Ponte de espaldas a una silla o banco bajo. Coloca el empeine de un pie sobre la silla, dejando la otra pierna adelante. Baja el cuerpo flexionando la rodilla delantera hasta que el muslo esté paralelo al suelo. Empuja hacia arriba para volver. Haz 45 segundos con una pierna y en la siguiente ronda, cambia de pierna.</p>
+                            <p><strong>Enfoque:</strong> Cuádriceps, glúteos, isquiotibiales, equilibrio.</p>
+                        </li>
+                        <li class="exercise-item">
+                            <h4>Elevación de Gemelos (Calf Raises)</h4>
+                            <p><strong>Cómo hacerlas:</strong> Ponte de pie con los pies al ancho de los hombros. Levanta los talones del suelo, poniéndote de puntillas, y luego baja lentamente. Puedes hacerlo con ambos pies a la vez o alternando.</p>
+                            <p><strong>Enfoque:</strong> Gemelos.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="additional-tips">
+                <h3>Consejos Adicionales:</h3>
+                <ul>
+                    <li><strong>Escucha a tu cuerpo:</strong> Si sientes dolor, detente.</li>
+                    <li><strong>Hidratación:</strong> Bebe agua antes, durante y después del ejercicio.</li>
+                    <li><strong>Progresión:</strong> A medida que te fortalezcas, puedes aumentar el tiempo de trabajo, disminuir el tiempo de descanso, o aumentar el número de rondas.</li>
+                    <li><strong>Consistencia:</strong> La clave para ver resultados es ser constante. Intenta hacer estas rutinas 3-4 veces por semana.</li>
+                </ul>
+                <p style="margin-top: 20px; text-align: center; font-style: italic; color: #666;">¡Espero que disfrutes estas rutinas!</p>
+            </div>
+        </div>
+    </section>
+
     <section id="pendientes" class="section">
         <div class="espacio-header">
             <h1><i class="fas fa-tasks"></i>Pendientes</h1>
             <p>Lista de tareas y asuntos pendientes</p>
         </div>
-        <div class="proximamente-container">
-            <h2>Próximamente...</h2>
-            <p>Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+        <div class="container pending-section">
+            <div class="pending-category-selector">
+                <button class="pending-btn active" data-pending-category="personales">Personales</button>
+                <button class="pending-btn" data-pending-category="escolares">Escolares</button>
+                <button class="pending-btn" data-pending-category="trabajo">Trabajo</button>
+                <button class="pending-btn" data-pending-category="financieros">Financieros</button>
+            </div>
+
+            <div class="pending-section-content personales-pendings-content">
+                <div class="pending-content">
+                    <h3>Pendientes Personales</h3>
+                    <div class="pending-list" id="personal-pendings-list">
+                        <!-- Pendientes personales se cargarán aquí -->
+                    </div>
+                    <button class="add-btn" id="add-personal-pending-btn" style="width: auto; margin-top: 20px;">
+                        <i class="fas fa-plus-circle"></i>Agregar Pendiente Personal
+                    </button>
+                </div>
+            </div>
+
+            <div class="pending-section-content escolares-pendings-content" style="display: none;">
+                <div class="pending-content">
+                    <h3>Pendientes Escolares</h3>
+                    <div class="pending-list" id="escolar-pendings-list">
+                        <!-- Pendientes escolares se cargarán aquí -->
+                    </div>
+                    <button class="add-btn" id="add-escolar-pending-btn" style="width: auto; margin-top: 20px;">
+                        <i class="fas fa-plus-circle"></i>Agregar Pendiente Escolar
+                    </button>
+                </div>
+            </div>
+
+            <div class="pending-section-content trabajo-pendings-content" style="display: none;">
+                <div class="pending-content">
+                    <h3>Pendientes de Trabajo</h3>
+                    <div class="pending-list" id="trabajo-pendings-list">
+                        <!-- Pendientes de trabajo se cargarán aquí -->
+                    </div>
+                    <button class="add-btn" id="add-trabajo-pending-btn" style="width: auto; margin-top: 20px;">
+                        <i class="fas fa-plus-circle"></i>Agregar Pendiente de Trabajo
+                    </button>
+                </div>
+            </div>
+
+            <div class="pending-section-content financieros-pendings-content" style="display: none;">
+                <div class="pending-content">
+                    <h3>Pendientes Financieros</h3>
+                    <div class="pending-list" id="financiero-pendings-list">
+                        <!-- Pendientes financieros se cargarán aquí -->
+                    </div>
+                    <button class="add-btn" id="add-financiero-pending-btn" style="width: auto; margin-top: 20px;">
+                        <i class="fas fa-plus-circle"></i>Agregar Pendiente Financiero
+                    </button>
+                </div>
+            </div>
+            <div class="storage-info">
+                <i class="fas fa-database"></i> Datos de pendientes guardados en tu navegador
+            </div>
         </div>
     </section>
 
@@ -1758,6 +2101,38 @@
         </div>
     </div>
 
+    <!-- Modal para Añadir/Editar Pendiente -->
+    <div class="modal" id="pending-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="pending-modal-title">Agregar Nuevo Pendiente</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="pending-form">
+                    <input type="hidden" id="pending-id">
+                    <input type="hidden" id="pending-category-input"> <!-- Hidden input to store current category -->
+                    <div class="form-group">
+                        <label for="pending-text">Descripción del Pendiente</label>
+                        <textarea id="pending-text" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="pending-radio-group">
+                            <label>
+                                <input type="radio" name="pending-date-option" value="specific" checked> Fecha Específica
+                            </label>
+                            <label>
+                                <input type="radio" name="pending-date-option" value="indefinite"> Indefinida
+                            </label>
+                        </div>
+                        <input type="date" id="pending-date-input" class="form-control">
+                    </div>
+                    <button type="submit" class="btn-submit">Guardar Pendiente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Confirmación para Eliminar (General) -->
     <div class="modal" id="confirm-delete-modal">
         <div class="modal-content">
@@ -1840,9 +2215,6 @@
                     updateActiveLink(this);
                     
                     // Cerrar menús
-                    if (window.innerWidth <= 1024) {
-                        navLinks.classList.remove('active');
-                    }
                     if (moreLinksModal.classList.contains('active')) {
                         moreLinksModal.classList.remove('active');
                         moreMenuBtn.classList.remove('open');
@@ -2306,7 +2678,7 @@
             let gastos = [];
             let pagos = [];
             let currentDebtDates = [];
-            let currentDeleteTarget = null; // 'loan', 'cxc', 'debt', 'gasto', 'pago'
+            let currentDeleteTarget = null; // 'loan', 'cxc', 'debt', 'gasto', 'pago', 'pending'
             let currentDeleteId = null; // ID for single item deletion
             let isEditModeDebts = false;
             let isEditModeGastos = false;
@@ -2338,7 +2710,21 @@
             function showConfirmDeleteModal(id, type) {
                 currentDeleteTarget = type;
                 currentDeleteId = id;
-                confirmDeleteMessage.textContent = `¿Estás seguro de que deseas eliminar ${id ? 'este elemento' : 'los elementos seleccionados'} de ${type === 'loan' ? 'préstamos' : type === 'cxc' ? 'cuentas por cobrar' : type === 'debt' ? 'deudas' : type === 'gasto' ? 'gastos personales' : 'fechas de pago'}?`;
+                let message = '¿Estás seguro de que deseas eliminar ';
+                if (id) {
+                    message += 'este elemento';
+                } else {
+                    message += 'los elementos seleccionados';
+                }
+
+                if (type === 'loan') message += ' de préstamos';
+                else if (type === 'cxc') message += ' de cuentas por cobrar';
+                else if (type === 'debt') message += ' de deudas';
+                else if (type === 'gasto') message += ' de gastos personales';
+                else if (type === 'pago') message += ' de fechas de pago';
+                else if (type === 'pending') message += ' este pendiente';
+
+                confirmDeleteMessage.textContent = message + '?';
                 confirmDeleteModal.classList.add('active');
             }
 
@@ -2360,11 +2746,24 @@
                     renderCxCs();
                     showNotification('Cuenta eliminada con éxito', 'success');
                 } else if (currentDeleteTarget === 'debt') {
-                    deleteSelectedDebts();
+                    // No multiple delete for debts via this modal, it's handled by checkbox
+                    // This path is for single debt deletion from a future edit button, if implemented
+                    debts = debts.filter(debt => debt.id !== currentDeleteId);
+                    saveDebts();
+                    renderDebts();
+                    showNotification('Deuda eliminada con éxito', 'success');
                 } else if (currentDeleteTarget === 'gasto') {
-                    deleteSelectedGastos();
+                    gastos = gastos.filter(gasto => gasto.id !== currentDeleteId);
+                    saveGastos();
+                    renderGastos();
+                    showNotification('Gasto eliminado con éxito', 'success');
                 } else if (currentDeleteTarget === 'pago') {
-                    deleteSelectedPagos();
+                    pagos = pagos.filter(pago => pago.id !== currentDeleteId);
+                    savePagos();
+                    renderPagos();
+                    showNotification('Fecha de pago eliminada con éxito', 'success');
+                } else if (currentDeleteTarget === 'pending') {
+                    deletePendingTask(currentDeleteId);
                 }
                 closeConfirmDeleteModal();
             });
@@ -3094,6 +3493,310 @@
             // Activar la primera categoría de finanzas por defecto al cargar
             activateFinanceCategory('debts');
 
+            // --- Lógica para el selector de Rutinas de Ejercicio ---
+            const routineBtns = document.querySelectorAll('.routine-btn');
+            const routineContentContainers = document.querySelectorAll('.routine-content-container');
+
+            function activateRoutineCategory(category) {
+                routineBtns.forEach(btn => {
+                    if (btn.dataset.routine === category) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                routineContentContainers.forEach(container => {
+                    if (container.classList.contains(`${category}-routine`)) {
+                        container.style.display = 'block';
+                    } else {
+                        container.style.display = 'none';
+                    }
+                });
+            }
+
+            routineBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    activateRoutineCategory(this.dataset.routine);
+                });
+            });
+
+            // Activar la primera rutina de ejercicio por defecto al cargar
+            activateRoutineCategory('upper-body');
+
+            // --- Lógica para Pendientes ---
+            const pendingCategoryBtns = document.querySelectorAll('.pending-btn');
+            const pendingSectionContents = document.querySelectorAll('.pending-section-content');
+            const pendingModal = document.getElementById('pending-modal');
+            const pendingModalCloseBtn = pendingModal.querySelector('.close-modal');
+            const pendingModalTitle = document.getElementById('pending-modal-title');
+            const pendingForm = document.getElementById('pending-form');
+            const pendingIdInput = document.getElementById('pending-id');
+            const pendingCategoryInput = document.getElementById('pending-category-input');
+            const pendingTextInput = document.getElementById('pending-text');
+            const pendingDateOptionSpecific = document.querySelector('input[name="pending-date-option"][value="specific"]');
+            const pendingDateOptionIndefinite = document.querySelector('input[name="pending-date-option"][value="indefinite"]');
+            const pendingDateInput = document.getElementById('pending-date-input');
+
+            let allPendings = [];
+            let currentPendingCategory = 'personales'; // Default category
+
+            function loadPendings() {
+                try {
+                    const savedPendings = localStorage.getItem('allPendings');
+                    allPendings = savedPendings ? JSON.parse(savedPendings) : [];
+                    console.log("Pendientes cargados:", allPendings);
+                } catch (e) {
+                    console.error("Error al cargar pendientes de localStorage", e);
+                    allPendings = [];
+                }
+            }
+
+            function savePendings() {
+                try {
+                    localStorage.setItem('allPendings', JSON.stringify(allPendings));
+                    console.log("Pendientes guardados:", allPendings);
+                } catch (e) {
+                    console.error("Error al guardar pendientes en localStorage", e);
+                }
+            }
+
+            function renderPendings(category) {
+                currentPendingCategory = category;
+                const targetList = document.getElementById(`${category}-pendings-list`);
+                if (!targetList) return;
+
+                targetList.innerHTML = '';
+                const filteredPendings = allPendings.filter(p => p.category === category);
+
+                if (filteredPendings.length === 0) {
+                    targetList.innerHTML = `<p style="text-align: center; padding: 20px; color: #777;">No hay pendientes en esta categoría.</p>`;
+                    return;
+                }
+
+                filteredPendings.forEach(pending => {
+                    const pendingItem = document.createElement('div');
+                    pendingItem.classList.add('pending-item');
+                    pendingItem.dataset.id = pending.id;
+
+                    const dateDisplay = pending.date ? new Date(pending.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Indefinida';
+
+                    pendingItem.innerHTML = `
+                        <span class="pending-item-text">${pending.text}</span>
+                        <span class="pending-item-date">${dateDisplay}</span>
+                        <div class="pending-item-actions">
+                            <button class="action-btn edit-btn" data-id="${pending.id}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn" data-id="${pending.id}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    `;
+                    targetList.appendChild(pendingItem);
+                });
+                addPendingItemEventListeners(category);
+            }
+
+            function addPendingItemEventListeners(category) {
+                const targetList = document.getElementById(`${category}-pendings-list`);
+                if (!targetList) return;
+
+                targetList.querySelectorAll('.edit-btn').forEach(button => {
+                    button.onclick = () => openPendingModal(parseInt(button.dataset.id));
+                });
+                targetList.querySelectorAll('.delete-btn').forEach(button => {
+                    button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'pending');
+                });
+            }
+
+            function openPendingModal(pendingId = null) {
+                currentEditId = pendingId;
+                pendingForm.reset();
+                pendingDateInput.style.display = 'block'; // Default to specific date
+
+                if (pendingId) {
+                    pendingModalTitle.textContent = 'Editar Pendiente';
+                    const pending = allPendings.find(p => p.id === pendingId);
+                    if (pending) {
+                        pendingIdInput.value = pending.id;
+                        pendingCategoryInput.value = pending.category; // Set category for editing
+                        pendingTextInput.value = pending.text;
+                        if (pending.date) {
+                            pendingDateOptionSpecific.checked = true;
+                            pendingDateInput.value = pending.date;
+                            pendingDateInput.style.display = 'block';
+                        } else {
+                            pendingDateOptionIndefinite.checked = true;
+                            pendingDateInput.value = '';
+                            pendingDateInput.style.display = 'none';
+                        }
+                    }
+                } else {
+                    pendingModalTitle.textContent = 'Agregar Nuevo Pendiente';
+                    pendingIdInput.value = '';
+                    pendingCategoryInput.value = currentPendingCategory; // Set category for new pending
+                    pendingDateOptionSpecific.checked = true;
+                    pendingDateInput.value = formatToYYYYMMDD(new Date()); // Default to today
+                }
+                pendingModal.classList.add('active');
+            }
+
+            function closePendingModal() {
+                pendingModal.classList.remove('active');
+                currentEditId = null;
+            }
+
+            function handlePendingFormSubmit(e) {
+                e.preventDefault();
+                const text = pendingTextInput.value.trim();
+                const category = pendingCategoryInput.value;
+                const isSpecificDate = pendingDateOptionSpecific.checked;
+                const date = isSpecificDate ? pendingDateInput.value : null;
+
+                if (text === '') {
+                    showNotification('La descripción del pendiente no puede estar vacía', 'error');
+                    return;
+                }
+                if (isSpecificDate && date === '') {
+                    showNotification('Por favor, selecciona una fecha para el pendiente', 'error');
+                    return;
+                }
+
+                if (currentEditId) {
+                    const pendingIndex = allPendings.findIndex(p => p.id === currentEditId);
+                    if (pendingIndex !== -1) {
+                        allPendings[pendingIndex].text = text;
+                        allPendings[pendingIndex].date = date;
+                        allPendings[pendingIndex].category = category; // Ensure category is updated if needed (though not directly editable in modal)
+                        showNotification('Pendiente actualizado con éxito', 'success');
+                    }
+                } else {
+                    const newPending = { id: Date.now(), text: text, date: date, category: category };
+                    allPendings.push(newPending);
+                    showNotification('Pendiente añadido con éxito', 'success');
+                }
+                savePendings();
+                renderPendings(currentPendingCategory);
+                closePendingModal();
+            }
+
+            function deletePendingTask(id) {
+                allPendings = allPendings.filter(p => p.id !== id);
+                savePendings();
+                renderPendings(currentPendingCategory);
+                showNotification('Pendiente eliminado con éxito', 'success');
+            }
+
+            function checkUpcomingTasks() {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalize to start of day
+
+                allPendings.forEach(pending => {
+                    if (pending.date) {
+                        const taskDate = new Date(pending.date);
+                        taskDate.setHours(0, 0, 0, 0); // Normalize to start of day
+
+                        const diffTime = Math.abs(taskDate.getTime() - today.getTime());
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        // Only notify if the task is not in the past and within the next 7 days
+                        if (taskDate >= today && diffDays <= 7) {
+                            // Prevent multiple notifications for the same task on the same day
+                            const lastNotifiedKey = `notified_${pending.id}_${taskDate.toISOString().slice(0,10)}`;
+                            if (!localStorage.getItem(lastNotifiedKey)) {
+                                let message = `Pendiente: "${pending.text}"`;
+                                if (diffDays === 0) {
+                                    message += ` es para HOY!`;
+                                } else {
+                                    message += ` en ${diffDays} día(s).`;
+                                }
+                                showNotification(message, 'info');
+                                localStorage.setItem(lastNotifiedKey, 'true'); // Mark as notified
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Event Listeners para Pendientes
+            pendingCategoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.dataset.pendingCategory;
+                    pendingCategoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    pendingSectionContents.forEach(content => {
+                        if (content.classList.contains(`${category}-pendings-content`)) {
+                            content.style.display = 'block';
+                        } else {
+                            content.style.display = 'none';
+                        }
+                    });
+                    renderPendings(category); // Render tasks for the selected category
+                });
+            });
+
+            document.getElementById('add-personal-pending-btn').addEventListener('click', () => {
+                currentPendingCategory = 'personales';
+                openPendingModal();
+            });
+            document.getElementById('add-escolar-pending-btn').addEventListener('click', () => {
+                currentPendingCategory = 'escolares';
+                openPendingModal();
+            });
+            document.getElementById('add-trabajo-pending-btn').addEventListener('click', () => {
+                currentPendingCategory = 'trabajo';
+                openPendingModal();
+            });
+            document.getElementById('add-financiero-pending-btn').addEventListener('click', () => {
+                currentPendingCategory = 'financieros';
+                openPendingModal();
+            });
+
+            pendingModalCloseBtn.addEventListener('click', closePendingModal);
+            pendingModal.addEventListener('click', (e) => { if (e.target === pendingModal) closePendingModal(); });
+            pendingForm.addEventListener('submit', handlePendingFormSubmit);
+
+            // Toggle date input visibility based on radio button selection
+            document.querySelectorAll('input[name="pending-date-option"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'specific') {
+                        pendingDateInput.style.display = 'block';
+                        pendingDateInput.setAttribute('required', 'required');
+                        pendingDateInput.value = pendingDateInput.value || formatToYYYYMMDD(new Date()); // Set today if empty
+                    } else {
+                        pendingDateInput.style.display = 'none';
+                        pendingDateInput.removeAttribute('required');
+                        pendingDateInput.value = ''; // Clear date when indefinite
+                    }
+                });
+            });
+
+            // Initial load and render for Pendientes
+            loadPendings();
+            activateRoutineCategory('upper-body'); // Ensure this is called
+            activateFinanceCategory('debts'); // Ensure this is called
+            activatePendingCategory('personales'); // Activate default pending category
+            
+            // Run initial check for upcoming tasks
+            checkUpcomingTasks();
+            // Set interval to check for upcoming tasks every 5 minutes (300000 ms)
+            setInterval(checkUpcomingTasks, 300000);
+
+            function activatePendingCategory(category) {
+                pendingCategoryBtns.forEach(btn => {
+                    if (btn.dataset.pendingCategory === category) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                pendingSectionContents.forEach(content => {
+                    if (content.classList.contains(`${category}-pendings-content`)) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+                renderPendings(category);
+            }
         });
     </script>
 </body>
