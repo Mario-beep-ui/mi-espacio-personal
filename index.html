@@ -985,68 +985,7 @@
             top: -4px;
         }
 
-        /* Estilos para la sección de Pendientes */
-        .pending-list {
-            margin-top: 20px;
-        }
-
-        .pending-item {
-            background-color: #f8f8f8; /* Tono de gris muy bajo */
-            border: 1px solid #eee;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping for smaller screens */
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-
-        .pending-item-text {
-            flex-grow: 1;
-            font-size: 1rem;
-            color: #333;
-            margin-right: 10px;
-            word-break: break-word; /* Break long words */
-        }
-
-        .pending-item-date {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
-            flex-basis: 100%; /* Take full width on small screens */
-            text-align: right;
-        }
-        
-        .pending-item-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px; /* Space from text on small screens */
-            flex-basis: 100%; /* Take full width on small screens */
-            justify-content: flex-end;
-        }
-
-        /* Adjust for larger screens */
-        @media (min-width: 768px) {
-            .pending-item-date {
-                flex-basis: auto; /* Revert to auto width */
-                margin-top: 0;
-                margin-left: 15px;
-                text-align: left;
-            }
-            .pending-item-actions {
-                flex-basis: auto; /* Revert to auto width */
-                margin-top: 0;
-            }
-        }
-
-        .pending-item .action-btn {
-            width: 30px;
-            height: 30px;
-            font-size: 0.85rem;
-        }
-
+        /* Estilos para la sección de Pendientes (ahora es una tabla) */
         .pending-radio-group {
             display: flex;
             gap: 20px;
@@ -1769,8 +1708,19 @@
             <div class="pending-section-content personales-pendings-content">
                 <div class="pending-content">
                     <h3>Pendientes Personales</h3>
-                    <div class="pending-list" id="personal-pendings-list">
-                        <!-- Pendientes personales se cargarán aquí -->
+                    <div class="loans-container">
+                        <table class="loans-table">
+                            <thead>
+                                <tr>
+                                    <th>Pendiente</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="personal-pendings-list">
+                                <!-- Pendientes personales se cargarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
                     <button class="add-btn" id="add-personal-pending-btn" style="width: auto; margin-top: 20px;">
                         <i class="fas fa-plus-circle"></i>Agregar Pendiente Personal
@@ -1781,8 +1731,19 @@
             <div class="pending-section-content escolares-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes Escolares</h3>
-                    <div class="pending-list" id="escolar-pendings-list">
-                        <!-- Pendientes escolares se cargarán aquí -->
+                    <div class="loans-container">
+                        <table class="loans-table">
+                            <thead>
+                                <tr>
+                                    <th>Pendiente</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="escolar-pendings-list">
+                                <!-- Pendientes escolares se cargarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
                     <button class="add-btn" id="add-escolar-pending-btn" style="width: auto; margin-top: 20px;">
                         <i class="fas fa-plus-circle"></i>Agregar Pendiente Escolar
@@ -1793,8 +1754,19 @@
             <div class="pending-section-content trabajo-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes de Trabajo</h3>
-                    <div class="pending-list" id="trabajo-pendings-list">
-                        <!-- Pendientes de trabajo se cargarán aquí -->
+                    <div class="loans-container">
+                        <table class="loans-table">
+                            <thead>
+                                <tr>
+                                    <th>Pendiente</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trabajo-pendings-list">
+                                <!-- Pendientes de trabajo se cargarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
                     <button class="add-btn" id="add-trabajo-pending-btn" style="width: auto; margin-top: 20px;">
                         <i class="fas fa-plus-circle"></i>Agregar Pendiente de Trabajo
@@ -1805,8 +1777,19 @@
             <div class="pending-section-content financieros-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes Financieros</h3>
-                    <div class="pending-list" id="financiero-pendings-list">
-                        <!-- Pendientes financieros se cargarán aquí -->
+                    <div class="loans-container">
+                        <table class="loans-table">
+                            <thead>
+                                <tr>
+                                    <th>Pendiente</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financiero-pendings-list">
+                                <!-- Pendientes financieros se cargarán aquí -->
+                            </tbody>
+                        </table>
                     </div>
                     <button class="add-btn" id="add-financiero-pending-btn" style="width: auto; margin-top: 20px;">
                         <i class="fas fa-plus-circle"></i>Agregar Pendiente Financiero
@@ -2105,7 +2088,7 @@
     <div class="modal" id="pending-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="pending-modal-title">Agregar Nuevo Pendiente</h3>
+                <h3 id="pending-modal-title">Agregar Nuevo Pendiente (<span id="pending-modal-category-display"></span>)</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -2961,7 +2944,7 @@
                         const dateKey = formatToYYYYMMDD(date);
                         debtAmountsGroup.innerHTML += `
                             <div class="form-group">
-                                <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
+                                    <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
                                 <input type="number" id="amount-${dateKey}" class="form-control debt-amount-input" data-date="${dateKey}" value="0.00" step="0.01">
                             </div>
                         `;
@@ -3530,6 +3513,7 @@
             const pendingModal = document.getElementById('pending-modal');
             const pendingModalCloseBtn = pendingModal.querySelector('.close-modal');
             const pendingModalTitle = document.getElementById('pending-modal-title');
+            const pendingModalCategoryDisplay = document.getElementById('pending-modal-category-display'); // New element for category display
             const pendingForm = document.getElementById('pending-form');
             const pendingIdInput = document.getElementById('pending-id');
             const pendingCategoryInput = document.getElementById('pending-category-input');
@@ -3563,45 +3547,46 @@
 
             function renderPendings(category) {
                 currentPendingCategory = category;
-                const targetList = document.getElementById(`${category}-pendings-list`);
-                if (!targetList) return;
+                const targetListBody = document.getElementById(`${category}-pendings-list`);
+                if (!targetListBody) return;
 
-                targetList.innerHTML = '';
+                targetListBody.innerHTML = ''; // Clear existing rows
+
                 const filteredPendings = allPendings.filter(p => p.category === category);
 
                 if (filteredPendings.length === 0) {
-                    targetList.innerHTML = `<p style="text-align: center; padding: 20px; color: #777;">No hay pendientes en esta categoría.</p>`;
+                    targetListBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: #777;">No hay pendientes en esta categoría.</td></tr>`;
                     return;
                 }
 
                 filteredPendings.forEach(pending => {
-                    const pendingItem = document.createElement('div');
-                    pendingItem.classList.add('pending-item');
-                    pendingItem.dataset.id = pending.id;
+                    const row = document.createElement('tr');
+                    row.dataset.id = pending.id;
+                    row.style.backgroundColor = '#f8f8f8'; // Light grey background for rows
 
                     const dateDisplay = pending.date ? new Date(pending.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Indefinida';
 
-                    pendingItem.innerHTML = `
-                        <span class="pending-item-text">${pending.text}</span>
-                        <span class="pending-item-date">${dateDisplay}</span>
-                        <div class="pending-item-actions">
+                    row.innerHTML = `
+                        <td>${pending.text}</td>
+                        <td>${dateDisplay}</td>
+                        <td class="loan-actions">
                             <button class="action-btn edit-btn" data-id="${pending.id}"><i class="fas fa-edit"></i></button>
                             <button class="action-btn delete-btn" data-id="${pending.id}"><i class="fas fa-trash-alt"></i></button>
-                        </div>
+                        </td>
                     `;
-                    targetList.appendChild(pendingItem);
+                    targetListBody.appendChild(row);
                 });
                 addPendingItemEventListeners(category);
             }
 
             function addPendingItemEventListeners(category) {
-                const targetList = document.getElementById(`${category}-pendings-list`);
-                if (!targetList) return;
+                const targetListBody = document.getElementById(`${category}-pendings-list`);
+                if (!targetListBody) return;
 
-                targetList.querySelectorAll('.edit-btn').forEach(button => {
+                targetListBody.querySelectorAll('.edit-btn').forEach(button => {
                     button.onclick = () => openPendingModal(parseInt(button.dataset.id));
                 });
-                targetList.querySelectorAll('.delete-btn').forEach(button => {
+                targetListBody.querySelectorAll('.delete-btn').forEach(button => {
                     button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'pending');
                 });
             }
@@ -3627,6 +3612,7 @@
                             pendingDateInput.value = '';
                             pendingDateInput.style.display = 'none';
                         }
+                        pendingModalCategoryDisplay.textContent = pending.category.charAt(0).toUpperCase() + pending.category.slice(1);
                     }
                 } else {
                     pendingModalTitle.textContent = 'Agregar Nuevo Pendiente';
@@ -3634,6 +3620,7 @@
                     pendingCategoryInput.value = currentPendingCategory; // Set category for new pending
                     pendingDateOptionSpecific.checked = true;
                     pendingDateInput.value = formatToYYYYMMDD(new Date()); // Default to today
+                    pendingModalCategoryDisplay.textContent = currentPendingCategory.charAt(0).toUpperCase() + currentPendingCategory.slice(1);
                 }
                 pendingModal.classList.add('active');
             }
@@ -3646,7 +3633,7 @@
             function handlePendingFormSubmit(e) {
                 e.preventDefault();
                 const text = pendingTextInput.value.trim();
-                const category = pendingCategoryInput.value;
+                const category = pendingCategoryInput.value; // Get the category from the hidden input
                 const isSpecificDate = pendingDateOptionSpecific.checked;
                 const date = isSpecificDate ? pendingDateInput.value : null;
 
@@ -3673,7 +3660,7 @@
                     showNotification('Pendiente añadido con éxito', 'success');
                 }
                 savePendings();
-                renderPendings(currentPendingCategory);
+                renderPendings(currentPendingCategory); // Re-render the active category
                 closePendingModal();
             }
 
@@ -3693,11 +3680,11 @@
                         const taskDate = new Date(pending.date);
                         taskDate.setHours(0, 0, 0, 0); // Normalize to start of day
 
-                        const diffTime = Math.abs(taskDate.getTime() - today.getTime());
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        const diffTime = taskDate.getTime() - today.getTime(); // Calculate difference in milliseconds
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert to days, rounding up
 
-                        // Only notify if the task is not in the past and within the next 7 days
-                        if (taskDate >= today && diffDays <= 7) {
+                        // Only notify if the task is today or in the future and within the next 7 days
+                        if (diffDays >= 0 && diffDays <= 7) {
                             // Prevent multiple notifications for the same task on the same day
                             const lastNotifiedKey = `notified_${pending.id}_${taskDate.toISOString().slice(0,10)}`;
                             if (!localStorage.getItem(lastNotifiedKey)) {
@@ -3728,6 +3715,7 @@
                             content.style.display = 'none';
                         }
                     });
+                    currentPendingCategory = category; // Update the global variable
                     renderPendings(category); // Render tasks for the selected category
                 });
             });
