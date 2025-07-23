@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Espacio Personal de Mario</title>
+    <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS CDN para estilos responsivos y modernos -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Variables de colores y estilos */
         :root {
@@ -998,6 +1001,117 @@
             font-weight: normal;
         }
 
+        /* Estilos para el bloqueo de sección */
+        .section-locked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: var(--border-radius);
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .section-locked-overlay h2 {
+            color: var(--primary-gradient-end);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .section-locked-overlay .form-group {
+            max-width: 300px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .section-locked-overlay .form-control {
+            text-align: center;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .section-locked-overlay .btn-submit {
+            max-width: 250px;
+            margin-top: 10px;
+        }
+
+        /* Estilos personalizados para la calculadora de transporte */
+        .transport-calculator-main-container {
+            background-color: #ffffff; /* Fondo blanco para el contenedor principal */
+            border-radius: 1rem; /* Bordes redondeados */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Sombra */
+            padding: 2.5rem; /* Relleno interno */
+            max-width: 90%; /* Ancho máximo responsivo */
+            width: 950px; /* Ancho fijo para pantallas más grandes, ajustado para la nueva columna */
+            margin-top: 20px; /* Margen superior */
+        }
+        /* Estilo para el indicador del calendario en inputs de tipo fecha */
+        .transport-calculator-main-container input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg); /* Ajusta el color del icono del calendario */
+            cursor: pointer; /* Cursor de puntero */
+        }
+        /* Estilos personalizados para el modal de mensajes de la calculadora */
+        .transport-message-modal {
+            display: none; /* Oculto por defecto */
+            position: fixed; /* Posición fija para superponerse a todo */
+            z-index: 1000; /* Índice Z alto para estar encima de otros elementos */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Alto completo */
+            overflow: auto; /* Habilitar scroll si es necesario */
+            background-color: rgba(0,0,0,0.4); /* Fondo semi-transparente */
+            justify-content: center; /* Centrar contenido horizontalmente */
+            align-items: center; /* Centrar contenido verticalmente */
+        }
+        .transport-modal-content {
+            background-color: #fefefe; /* Fondo blanco para el contenido del modal */
+            margin: auto; /* Margen automático para centrar */
+            padding: 20px; /* Relleno interno */
+            border-radius: 0.75rem; /* Bordes redondeados */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* Sombra */
+            max-width: 400px; /* Ancho máximo */
+            width: 90%; /* Ancho responsivo */
+            text-align: center; /* Texto centrado */
+            position: relative; /* Posición relativa para el botón de cierre */
+        }
+        .transport-close-button {
+            color: #aaa; /* Color del botón de cierre */
+            float: right; /* Flotar a la derecha */
+            font-size: 28px; /* Tamaño de fuente */
+            font-weight: bold; /* Negrita */
+            position: absolute; /* Posición absoluta */
+            top: 10px; /* Distancia desde arriba */
+            right: 15px; /* Distancia desde la derecha */
+        }
+        .transport-close-button:hover,
+        .transport-close-button:focus {
+            color: black; /* Color al pasar el ratón o enfocar */
+            text-decoration: none; /* Sin subrayado */
+            cursor: pointer; /* Cursor de puntero */
+        }
+        /* Estilos para el botón principal de la calculadora */
+        .transport-button-primary {
+            background-color: #4F46E5; /* Color índigo 600 */
+            color: white; /* Texto blanco */
+            padding: 0.75rem 1.5rem; /* Relleno */
+            border-radius: 0.5rem; /* Bordes redondeados */
+            font-weight: 600; /* Peso de fuente seminegrita */
+            transition: background-color 0.3s ease; /* Transición suave al cambiar de color */
+        }
+        .transport-button-primary:hover {
+            background-color: #4338CA; /* Color índigo 700 al pasar el ratón */
+        }
+
+
         /* Media Queries para Responsividad */
         /* Modificaciones para el header en móviles */
         @media (max-width: 1024px) {
@@ -1073,6 +1187,13 @@
                 max-width: 100%;
                 width: 100%;
                 margin-left: 0 !important;
+            }
+
+            .transport-calculator-main-container {
+                padding: 1.5rem;
+            }
+            .transport-calculator-main-container h1 {
+                font-size: 2rem;
             }
         }
 
@@ -1172,6 +1293,20 @@
             .btn-submit {
                 padding: 14px;
             }
+
+            .transport-calculator-main-container h1 {
+                font-size: 1.8rem;
+            }
+            .transport-calculator-main-container .text-2xl {
+                font-size: 1.5rem;
+            }
+            .transport-calculator-main-container .text-lg {
+                font-size: 1rem;
+            }
+            .transport-calculator-main-container .button-primary {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -1195,7 +1330,7 @@
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
     <header class="site-header">
         <nav class="site-nav">
             <div class="site-logo">
@@ -1206,18 +1341,21 @@
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="site-nav-links desktop-nav" id="nav-links">
+                <!-- NAVEGACIÓN PRINCIPAL -->
                 <li><a href="#" class="nav-link active" data-target="home"><i class="fas fa-home"></i>Inicio</a></li>
                 <li><a href="#" class="nav-link" data-target="schedules"><i class="fas fa-calendar-alt"></i>Horarios</a></li>
+                <li><a href="#" class="nav-link" data-target="finanzas"><i class="fas fa-chart-line"></i>Finanzas</a></li>
                 <li><a href="#" class="nav-link" data-target="loans"><i class="fas fa-hand-holding-usd"></i>Préstamos Sam</a></li>
-                <li><a href="#" class="nav-link" data-target="projects"><i class="fas fa-folder-open"></i>Proyectos</a></li>
-                <li><a href="#" class="nav-link" data-target="cxc"><i class="fas fa-file-invoice-dollar"></i>CxC</a></li>
-                <li><a href="#" class="nav-link" data-target="exercise-routines"><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</a></li>
 
+                <!-- MENÚ "MÁS" -->
                 <li class="more-menu-container desktop-only">
                     <a href="#" id="more-menu-btn" class="nav-link">Más <i class="fas fa-chevron-down"></i></a>
                     <ul class="more-links-modal" id="more-links-modal">
+                        <li><a href="#" class="nav-link" data-target="projects"><i class="fas fa-folder-open"></i>Proyectos</a></li>
+                        <li><a href="#" class="nav-link" data-target="cxc"><i class="fas fa-file-invoice-dollar"></i>CxC</a></li>
+                        <li><a href="#" class="nav-link" data-target="exercise-routines"><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</a></li>
+                        <li><a href="#" class="nav-link" data-target="transport-calculator"><i class="fas fa-bus"></i>Calculadora Transporte</a></li>
                         <li><a href="#" class="nav-link" data-target="pendientes"><i class="fas fa-tasks"></i>Pendientes</a></li>
-                        <li><a href="#" class="nav-link" data-target="finanzas"><i class="fas fa-chart-line"></i>Finanzas</a></li>
                         <li><a href="#" class="nav-link" data-target="por-hacer-sam"><i class="fas fa-heart"></i>Por Hacer con Sam</a></li>
                         <li><a href="#" class="nav-link" data-target="gustos-sam"><i class="fas fa-gift"></i>Gustos Sam</a></li>
                         <li><a href="#" class="nav-link" data-target="compras"><i class="fas fa-shopping-cart"></i>Compras Generales</a></li>
@@ -1237,12 +1375,13 @@
             <ul class="mobile-nav-links" id="mobile-nav-links">
                 <li><a href="#" class="nav-link active" data-target="home"><i class="fas fa-home"></i>Inicio</a></li>
                 <li><a href="#" class="nav-link" data-target="schedules"><i class="fas fa-calendar-alt"></i>Horarios</a></li>
+                <li><a href="#" class="nav-link" data-target="finanzas"><i class="fas fa-chart-line"></i>Finanzas</a></li>
                 <li><a href="#" class="nav-link" data-target="loans"><i class="fas fa-hand-holding-usd"></i>Préstamos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="projects"><i class="fas fa-folder-open"></i>Proyectos</a></li>
                 <li><a href="#" class="nav-link" data-target="cxc"><i class="fas fa-file-invoice-dollar"></i>CxC</a></li>
                 <li><a href="#" class="nav-link" data-target="exercise-routines"><i class="fas fa-dumbbell"></i>Rutinas de Ejercicio</a></li>
+                <li><a href="#" class="nav-link" data-target="transport-calculator"><i class="fas fa-bus"></i>Calculadora Transporte</a></li>
                 <li><a href="#" class="nav-link" data-target="pendientes"><i class="fas fa-tasks"></i>Pendientes</a></li>
-                <li><a href="#" class="nav-link" data-target="finanzas"><i class="fas fa-chart-line"></i>Finanzas</a></li>
                 <li><a href="#" class="nav-link" data-target="por-hacer-sam"><i class="fas fa-heart"></i>Por Hacer con Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="gustos-sam"><i class="fas fa-gift"></i>Gustos Sam</a></li>
                 <li><a href="#" class="nav-link" data-target="compras"><i class="fas fa-shopping-cart"></i>Compras Generales</a></li>
@@ -1415,47 +1554,53 @@
                     
                     <div class="day-column">
                         <div class="day-title">MIÉRCOLES</div>
-                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        <div class="day-tasks">
+                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        </div>
                     </div>
                     
                     <div class="day-column">
                         <div class="day-title">JUEVES</div>
-                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        <div class="day-tasks">
+                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        </div>
                     </div>
                     
                     <div class="day-column">
                         <div class="day-title">VIERNES</div>
-                        <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
-                        <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
-                        <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
-                        <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
-                        <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
-                        <div class="task-item">- 20 MINUTOS PARA COMER</div>
-                        <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
-                        <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
-                        <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
-                        <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
-                        <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        <div class="day-tasks">
+                            <div class="task-item">- LEVANTARME A LAS 5:50 AM</div>
+                            <div class="task-item">- 5 MINUTOS PARA DESPERTAR</div>
+                            <div class="task-item">- 15 MINUTOS DE EJERCICIO</div>
+                            <div class="task-item">- ESTUDIAR PROGRAMACIÓN DE 6:10 AM A 8:45 AM</div>
+                            <div class="task-item">- ESTUDIAR INGLÉS DE 8:50 AM A 9:50 AM</div>
+                            <div class="task-item">- 20 MINUTOS PARA COMER</div>
+                            <div class="task-item">- ESTUDIAR MATEMÁTICAS DE 10:15 AM A 11:30 AM</div>
+                            <div class="task-item">- PREPARAR TODO PARA EL TRABAJO, BAÑARME</div>
+                            <div class="task-item">- SALIR A LAS 12:30 PM AL CAMIÓN</div>
+                            <div class="task-item">- REGRESAR A CASA A LAS 11:00 PM</div>
+                            <div class="task-item">- DORMIR A LAS 11:30 PM</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1482,34 +1627,51 @@
             <p>Registro de préstamos entre parejas</p>
         </div>
 
-        <div class="container">
-            <div class="summary-card">
-                <h2>Total prestado</h2>
-                <div class="total-amount">$0.00</div>
+        <!-- Contenedor principal de la sección de préstamos -->
+        <div class="container" id="loans-section-content">
+            <!-- Overlay de bloqueo -->
+            <div class="section-locked-overlay" id="loans-lock-overlay">
+                <h2>Sección Bloqueada</h2>
+                <p style="margin-bottom: 25px; color: #555;">Introduce el PIN para acceder a esta sección.</p>
+                <div class="form-group">
+                    <label for="pin-input">PIN:</label>
+                    <input type="password" id="pin-input" class="form-control" maxlength="4" placeholder="****">
+                </div>
+                <button class="btn-submit" id="unlock-loans-btn">
+                    <i class="fas fa-lock-open"></i> Desbloquear Sección
+                </button>
             </div>
 
-            <div class="loans-container">
-                <table class="loans-table">
-                    <thead>
-                        <tr>
-                            <th>Cantidad</th>
-                            <th>Concepto</th>
-                            <th>Fecha</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="loans-list">
-                        <!-- Datos se cargarán dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
+            <!-- Contenido real de la sección de préstamos (inicialmente oculto) -->
+            <div id="loans-content-wrapper" style="display: none;">
+                <div class="summary-card">
+                    <h2>Total prestado</h2>
+                    <div class="total-amount">$0.00</div>
+                </div>
 
-            <button class="add-btn" id="open-modal">
-                <i class="fas fa-plus-circle"></i>Agregar préstamo Sam
-            </button>
+                <div class="loans-container">
+                    <table class="loans-table">
+                        <thead>
+                            <tr>
+                                <th>Cantidad</th>
+                                <th>Concepto</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loans-list">
+                            <!-- Datos se cargarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="storage-info">
-                <i class="fas fa-database"></i> Datos guardados en tu navegador
+                <button class="add-btn" id="open-modal">
+                    <i class="fas fa-plus-circle"></i>Agregar préstamo Sam
+                </button>
+
+                <div class="storage-info">
+                    <i class="fas fa-database"></i> Datos guardados en tu navegador
+                </div>
             </div>
         </div>
     </section>
@@ -1638,7 +1800,7 @@
                         </li>
                         <li class="exercise-item">
                             <h4>Bicicletas (Bicycle Crunches)</h4>
-                            <p><strong>Cómo hacerlas:</strong> Acuéstate boca arriba con las manos detrás de la cabeza. Lleva una rodilla hacia el pecho mientras extiendes la otra pierna, y al mismo tiempo, lleva el codo opuesto hacia la rodilla que se flexiona. Alterna los lados, como si pedalearas una bicicleta.</p>
+                            <p><strong>Cómo hacerlas:</strong> Acuéstate boca arriba con las manos detrás de la cabeza. Lleva una rodilla hacia el pecho mientras extiendes la otra pierna, y al mismo tiempo, lleva el codo opuesto hacia la rodilla que se flexiona. Alterna los lados, como si pedaleara una bicicleta.</p>
                             <p><strong>Enfoque:</strong> Abdomen superior e inferior, oblicuos.</p>
                         </li>
                     </ul>
@@ -1705,6 +1867,7 @@
                 <button class="pending-btn" data-pending-category="financieros">Financieros</button>
             </div>
 
+            <!-- Sección de Pendientes Personales -->
             <div class="pending-section-content personales-pendings-content">
                 <div class="pending-content">
                     <h3>Pendientes Personales</h3>
@@ -1717,7 +1880,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="personal-pendings-list">
+                            <tbody id="personales-pendings-list">
                                 <!-- Pendientes personales se cargarán aquí -->
                             </tbody>
                         </table>
@@ -1728,6 +1891,7 @@
                 </div>
             </div>
 
+            <!-- Sección de Pendientes Escolares -->
             <div class="pending-section-content escolares-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes Escolares</h3>
@@ -1740,7 +1904,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="escolar-pendings-list">
+                            <tbody id="escolares-pendings-list">
                                 <!-- Pendientes escolares se cargarán aquí -->
                             </tbody>
                         </table>
@@ -1751,6 +1915,7 @@
                 </div>
             </div>
 
+            <!-- Sección de Pendientes de Trabajo -->
             <div class="pending-section-content trabajo-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes de Trabajo</h3>
@@ -1774,6 +1939,7 @@
                 </div>
             </div>
 
+            <!-- Sección de Pendientes Financieros -->
             <div class="pending-section-content financieros-pendings-content" style="display: none;">
                 <div class="pending-content">
                     <h3>Pendientes Financieros</h3>
@@ -1786,7 +1952,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="financiero-pendings-list">
+                            <tbody id="financieros-pendings-list">
                                 <!-- Pendientes financieros se cargarán aquí -->
                             </tbody>
                         </table>
@@ -1849,7 +2015,7 @@
             <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                 <button class="add-btn" id="add-debt-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Deuda</button>
                 <button class="add-btn" id="edit-debt-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Deudas</button>
-                <button class="add-btn delete-selected-btn" id="delete-selected-debts-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionadas</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-debts-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b); display: none;"><i class="fas fa-trash-alt"></i>Eliminar Seleccionadas</button>
             </div>
         </div>
 
@@ -1879,7 +2045,7 @@
             <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                 <button class="add-btn" id="add-gasto-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Gasto</button>
                 <button class="add-btn" id="edit-gasto-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Gastos</button>
-                <button class="add-btn delete-selected-btn" id="delete-selected-gastos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionados</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-gastos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b); display: none;"><i class="fas fa-trash-alt"></i>Eliminar Seleccionadas</button>
             </div>
         </div>
 
@@ -1908,7 +2074,64 @@
             <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
                 <button class="add-btn" id="add-pago-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus-circle"></i>Añadir Pago</button>
                 <button class="add-btn" id="edit-pago-mode-btn" style="width: auto; padding: 10px 20px;"><i class="fas fa-edit"></i>Editar Pagos</button>
-                <button class="add-btn delete-selected-btn" id="delete-selected-pagos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b);"><i class="fas fa-trash-alt"></i>Eliminar Seleccionados</button>
+                <button class="add-btn delete-selected-btn" id="delete-selected-pagos-btn" style="width: auto; padding: 10px 20px; background: linear-gradient(135deg, var(--error), #c0392b); display: none;"><i class="fas fa-trash-alt"></i>Eliminar Seleccionadas</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="transport-calculator" class="section">
+        <div class="espacio-header">
+            <h1><i class="fas fa-bus"></i>Calculadora de Gastos de Transporte Semanal</h1>
+            <p>Calcula tus gastos de transporte para un período específico.</p>
+        </div>
+        <div class="transport-calculator-main-container mx-auto p-6 bg-white rounded-xl shadow-xl space-y-6">
+            <h1 class="text-3xl font-extrabold text-center text-indigo-700 mb-6">Calculadora de Gastos de Transporte Semanal</h1>
+
+            <!-- Sección de selección de rango de fechas -->
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                <div class="flex flex-col items-center">
+                    <label for="transportStartDate" class="text-lg font-medium text-gray-700 mb-2">Fecha de Inicio:</label>
+                    <input type="date" id="transportStartDate" class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg">
+                </div>
+                <div class="flex flex-col items-center">
+                    <label for="transportEndDate" class="text-lg font-medium text-gray-700 mb-2">Fecha de Fin:</label>
+                    <input type="date" id="transportEndDate" class="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg">
+                </div>
+            </div>
+
+            <!-- Tabla de horario semanal -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    <thead class="bg-indigo-600 text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider rounded-tl-lg">Día</th>
+                            <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Fecha</th>
+                            <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Visito a mi novia</th>
+                            <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider">Día de Descanso</th>
+                            <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wider rounded-tr-lg">Solo 2 Pasajes (20 MXN)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transportScheduleBody" class="divide-y divide-gray-200">
+                        <!-- Las filas se generarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Botón de cálculo y resultado -->
+            <div class="flex flex-col items-center mt-8 space-y-4">
+                <button id="transportCalculateBtn" class="transport-button-primary text-xl px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out">
+                    Calcular Gastos Totales
+                </button>
+                <p class="text-2xl font-bold text-gray-800">Total en el Periodo: <span id="transportTotalExpense" class="text-indigo-700">0.00</span> MXN</p>
+            </div>
+        </div>
+
+        <!-- Caja de mensaje personalizada (Modal) para la calculadora de transporte -->
+        <div id="transportMessageModal" class="transport-message-modal">
+            <div class="transport-modal-content">
+                <span class="transport-close-button" id="transportCloseModalBtn">&times;</span>
+                <p id="transportModalMessage" class="text-lg text-gray-800"></p>
+                <button id="transportModalOkBtn" class="mt-4 transport-button-primary">OK</button>
             </div>
         </div>
     </section>
@@ -2088,6 +2311,7 @@
     <div class="modal" id="pending-modal">
         <div class="modal-content">
             <div class="modal-header">
+                <!-- Se muestra la categoría del pendiente aquí -->
                 <h3 id="pending-modal-title">Agregar Nuevo Pendiente (<span id="pending-modal-category-display"></span>)</h3>
                 <button class="close-modal">&times;</button>
             </div>
@@ -2242,22 +2466,28 @@
                     targetSection.classList.add('active');
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                // Lógica de bloqueo para la sección de Préstamos Sam
+                if (sectionId === 'loans') {
+                    checkLoansLockStatus();
+                }
             }
 
             function updateActiveLink(activeLink) {
-                // Actualizar enlaces en escritorio
-                navItems.forEach(i => i.classList.remove('active'));
-                
-                // Actualizar enlaces en móvil
-                mobileNavLinks.forEach(i => i.classList.remove('active'));
+                // Quitar 'active' de todos los links (escritorio y móvil)
+                document.querySelectorAll('.nav-link').forEach(i => i.classList.remove('active'));
                 
                 if (activeLink) {
-                    // If the link is inside the "More" modal, activate the "More" button
+                    const target = activeLink.dataset.target;
+                    
+                    // Activar el link correspondiente en el menú de escritorio y móvil
+                    document.querySelectorAll(`.nav-link[data-target="${target}"]`).forEach(link => {
+                        link.classList.add('active');
+                    });
+                    
+                    // Si el link activado está dentro del modal "Más", también activar el botón "Más"
                     if (activeLink.closest('.more-links-modal')) {
                         if(moreMenuBtn) moreMenuBtn.classList.add('active');
-                    } else {
-                        // If it's a visible link, activate itself
-                        activeLink.classList.add('active');
                     }
                 }
             }
@@ -2293,6 +2523,37 @@
             const loanConceptInput = document.getElementById('loan-concept');
             const notification = document.getElementById('notification');
             const notificationText = document.getElementById('notification-text');
+
+            // Elementos de bloqueo de préstamos
+            const loansSectionContent = document.getElementById('loans-section-content');
+            const loansLockOverlay = document.getElementById('loans-lock-overlay');
+            const loansContentWrapper = document.getElementById('loans-content-wrapper');
+            const pinInput = document.getElementById('pin-input');
+            const unlockLoansBtn = document.getElementById('unlock-loans-btn');
+            const CORRECT_PIN = "2003"; // PIN para desbloquear
+
+            function checkLoansLockStatus() {
+                const isUnlocked = localStorage.getItem('loansUnlocked') === 'true';
+                if (isUnlocked) {
+                    loansLockOverlay.style.display = 'none';
+                    loansContentWrapper.style.display = 'block';
+                } else {
+                    loansLockOverlay.style.display = 'flex'; // Usar flex para centrar contenido
+                    loansContentWrapper.style.display = 'none';
+                    pinInput.value = ''; // Limpiar el input de PIN
+                }
+            }
+
+            unlockLoansBtn.addEventListener('click', () => {
+                if (pinInput.value === CORRECT_PIN) {
+                    localStorage.setItem('loansUnlocked', 'true');
+                    checkLoansLockStatus();
+                    showNotification('Sección "Préstamos Sam" desbloqueada', 'success');
+                } else {
+                    showNotification('PIN incorrecto. Intenta de nuevo.', 'error');
+                    pinInput.value = ''; // Limpiar el input
+                }
+            });
             
             let loans = [];
             let currentEditId = null;
@@ -2729,22 +2990,25 @@
                     renderCxCs();
                     showNotification('Cuenta eliminada con éxito', 'success');
                 } else if (currentDeleteTarget === 'debt') {
-                    // No multiple delete for debts via this modal, it's handled by checkbox
-                    // This path is for single debt deletion from a future edit button, if implemented
-                    debts = debts.filter(debt => debt.id !== currentDeleteId);
-                    saveDebts();
-                    renderDebts();
-                    showNotification('Deuda eliminada con éxito', 'success');
+                    deleteSelectedDebts();
                 } else if (currentDeleteTarget === 'gasto') {
-                    gastos = gastos.filter(gasto => gasto.id !== currentDeleteId);
+                     if (currentDeleteId) { // Single delete
+                        gastos = gastos.filter(gasto => gasto.id !== currentDeleteId);
+                    } else { // Multiple delete
+                        deleteSelectedGastos();
+                    }
                     saveGastos();
                     renderGastos();
-                    showNotification('Gasto eliminado con éxito', 'success');
+                    showNotification('Gasto(s) eliminado(s) con éxito', 'success');
                 } else if (currentDeleteTarget === 'pago') {
-                    pagos = pagos.filter(pago => pago.id !== currentDeleteId);
+                    if (currentDeleteId) { // Single delete
+                        pagos = pagos.filter(pago => pago.id !== currentDeleteId);
+                    } else { // Multiple delete
+                        deleteSelectedPagos();
+                    }
                     savePagos();
                     renderPagos();
-                    showNotification('Fecha de pago eliminada con éxito', 'success');
+                    showNotification('Fecha(s) de pago eliminada(s) con éxito', 'success');
                 } else if (currentDeleteTarget === 'pending') {
                     deletePendingTask(currentDeleteId);
                 }
@@ -2771,11 +3035,15 @@
             function getFridaysInPeriod(startDate, endDate) {
                 const dates = [];
                 let currentDate = new Date(startDate);
-                currentDate.setDate(currentDate.getDate() + (5 + 7 - currentDate.getDay()) % 7); // Go to first Friday
+                // Ajustar para que la fecha de inicio no se vea afectada por la zona horaria
+                currentDate.setUTCHours(0, 0, 0, 0);
+                
+                // Ir al primer viernes en o después de la fecha de inicio
+                currentDate.setDate(currentDate.getDate() + (5 - currentDate.getDay() + 7) % 7);
 
                 while (currentDate <= endDate) {
                     dates.push(new Date(currentDate));
-                    currentDate.setDate(currentDate.getDate() + 7); // Add 7 days for next Friday
+                    currentDate.setDate(currentDate.getDate() + 7); // Añadir 7 días para el próximo viernes
                 }
                 return dates;
             }
@@ -2795,28 +3063,27 @@
             function loadDebts() {
                 try {
                     const savedDebts = localStorage.getItem('deudas');
-                    // If there are saved debts, parse them. Otherwise, use initial debt names and initialize amounts.
-                    debts = savedDebts ? JSON.parse(savedDebts) : initialDebtNames.map(name => ({
-                        id: Date.now() + Math.random(),
-                        name: name,
-                        amounts: {} // Amounts will be keyed by date (YYYY-MM-DD)
-                    }));
-                    console.log("Deudas cargadas:", debts); // Debug log
+                    if (savedDebts) {
+                        debts = JSON.parse(savedDebts);
+                    } else {
+                        // Si no hay datos guardados, inicializar con los nombres por defecto
+                        debts = initialDebtNames.map((name, index) => ({
+                            id: Date.now() + index, // Usar un ID numérico único
+                            name: name,
+                            amounts: {} // Los montos estarán indexados por fecha (YYYY-MM-DD)
+                        }));
+                    }
+                    console.log("Deudas cargadas:", debts);
                 } catch (e) {
                     console.error("Error al cargar deudas de localStorage", e);
-                    // Fallback to initial data if loading fails
-                    debts = initialDebtNames.map(name => ({
-                        id: Date.now() + Math.random(),
-                        name: name,
-                        amounts: {}
-                    }));
+                    debts = [];
                 }
             }
 
             function saveDebts() {
                 try {
                     localStorage.setItem('deudas', JSON.stringify(debts));
-                    console.log("Deudas guardadas:", debts); // Debug log
+                    console.log("Deudas guardadas:", debts);
                 } catch (e) {
                     console.error("Error al guardar deudas en localStorage", e);
                 }
@@ -2824,54 +3091,63 @@
 
             function calculateTotalDebts() {
                 const totalByDate = {};
+                let overallTotal = 0;
+
+                // Inicializar totales por fecha
                 currentDebtDates.forEach(date => {
                     const dateKey = formatToYYYYMMDD(date);
                     totalByDate[dateKey] = 0;
                 });
 
+                // Sumar las deudas
                 debts.forEach(debt => {
-                    currentDebtDates.forEach(date => {
-                        const dateKey = formatToYYYYMMDD(date);
-                        // Always read from the 'amounts' object in the debt array,
-                        // as the input listener ensures this is up-to-date.
-                        const amount = debt.amounts[dateKey] || 0;
-                        totalByDate[dateKey] += amount;
+                    Object.keys(debt.amounts).forEach(dateKey => {
+                        if (totalByDate.hasOwnProperty(dateKey)) {
+                            const amount = parseFloat(debt.amounts[dateKey]) || 0;
+                            totalByDate[dateKey] += amount;
+                        }
                     });
                 });
 
-                // Clear existing tfoot content
+                // Limpiar el contenido existente del pie de la tabla
                 debtsTotalRow.innerHTML = ''; 
                 
-                // Create the new total row structure
-                const totalRowContent = document.createElement('tr');
-                totalRowContent.classList.add('total-row'); // Add class for styling
-                
-                totalRowContent.innerHTML = `<td><strong>Total</strong></td>`; // First cell for "Total" label
+                const totalRow = document.createElement('tr');
+                let totalRowHTML = `<td><strong>Total</strong></td>`;
                 
                 currentDebtDates.forEach(date => {
                     const dateKey = formatToYYYYMMDD(date);
-                    totalRowContent.innerHTML += `<td><strong>$${totalByDate[dateKey].toFixed(2)}</strong></td>`; // Add cells for each date total
+                    const totalForDate = totalByDate[dateKey] || 0;
+                    totalRowHTML += `<td><strong>$${totalForDate.toFixed(2)}</strong></td>`;
+                    overallTotal += totalForDate;
                 });
                 
-                debtsTotalRow.appendChild(totalRowContent); // Append the new row to tfoot
+                if (isEditModeDebts) {
+                    totalRowHTML += '<td></td>'; // Celda vacía para la columna de eliminar
+                }
+                
+                totalRow.innerHTML = totalRowHTML;
+                debtsTotalRow.appendChild(totalRow);
 
-                // Update the overall total debts display
-                const overallTotal = Object.values(totalByDate).reduce((sum, val) => sum + val, 0);
+                // Actualizar el total general
                 totalDeudasDisplay.textContent = `$${overallTotal.toFixed(2)}`;
             }
 
             function renderDebts() {
+                // Renderizar encabezados de fecha
                 debtDatesRow.innerHTML = '<th>Deuda</th>';
                 currentDebtDates.forEach(date => {
                     debtDatesRow.innerHTML += `<th>${formatToDDMonYY(date)}</th>`;
                 });
                 if (isEditModeDebts) {
-                    debtDatesRow.innerHTML += '<th>Eliminar</th>'; // Add delete column in edit mode
+                    debtDatesRow.innerHTML += '<th>Eliminar</th>';
                 }
 
+                // Renderizar filas de deudas
                 debtsList.innerHTML = '';
                 if (debts.length === 0) {
-                    debtsList.innerHTML = `<tr><td colspan="${currentDebtDates.length + (isEditModeDebts ? 2 : 1)}" style="text-align: center; padding: 30px;">No hay deudas registradas</td></tr>`;
+                    const colspan = currentDebtDates.length + (isEditModeDebts ? 2 : 1);
+                    debtsList.innerHTML = `<tr><td colspan="${colspan}" style="text-align: center; padding: 30px;">No hay deudas registradas</td></tr>`;
                     calculateTotalDebts();
                     return;
                 }
@@ -2883,11 +3159,7 @@
                     currentDebtDates.forEach(date => {
                         const dateKey = formatToYYYYMMDD(date);
                         const amount = debt.amounts[dateKey] || 0;
-                        if (isEditModeDebts) {
-                            rowContent += `<td><input type="number" class="form-control amount-input" data-date="${dateKey}" value="${amount.toFixed(2)}" step="0.01"></td>`;
-                        } else {
-                            rowContent += `<td>$${amount.toFixed(2)}</td>`;
-                        }
+                        rowContent += `<td><input type="number" class="form-control amount-input" data-date="${dateKey}" value="${amount.toFixed(2)}" step="0.01" ${!isEditModeDebts ? 'disabled' : ''}></td>`;
                     });
                     if (isEditModeDebts) {
                         rowContent += `<td><input type="checkbox" class="debt-checkbox" data-id="${debt.id}"></td>`;
@@ -2895,29 +3167,30 @@
                     row.innerHTML = rowContent;
                     debtsList.appendChild(row);
                 });
-                calculateTotalDebts(); // Calculate totals after rendering rows
-
-                // Add input event listeners if in edit mode
-                if (isEditModeDebts) {
-                    debtsList.querySelectorAll('.amount-input').forEach(input => {
-                        input.addEventListener('input', function() {
-                            const debtId = parseInt(this.closest('tr').dataset.id);
-                            const dateKey = this.dataset.date;
-                            const newAmount = parseFloat(this.value) || 0;
-                            
-                            const debtIndex = debts.findIndex(d => d.id === debtId);
-                            if (debtIndex !== -1) {
-                                debts[debtIndex].amounts[dateKey] = newAmount;
-                            }
-                            calculateTotalDebts(); // Recalculate totals on input change
-                        });
+                
+                addDebtInputListeners();
+                calculateTotalDebts();
+            }
+            
+            function addDebtInputListeners() {
+                debtsList.querySelectorAll('.amount-input').forEach(input => {
+                    input.addEventListener('input', function() {
+                        const debtId = parseInt(this.closest('tr').dataset.id);
+                        const dateKey = this.dataset.date;
+                        const newAmount = parseFloat(this.value) || 0;
+                        
+                        const debtIndex = debts.findIndex(d => d.id === debtId);
+                        if (debtIndex !== -1) {
+                            debts[debtIndex].amounts[dateKey] = newAmount;
+                        }
+                        calculateTotalDebts();
                     });
-                }
+                });
             }
 
             function openDebtModal(debtId = null) {
                 currentEditId = debtId;
-                debtAmountsGroup.innerHTML = ''; // Clear previous amount inputs
+                debtAmountsGroup.innerHTML = '';
 
                 if (debtId) {
                     debtModalTitle.textContent = 'Editar Deuda';
@@ -2925,30 +3198,12 @@
                     if (debt) {
                         debtIdInput.value = debt.id;
                         debtNameInput.value = debt.name;
-                        currentDebtDates.forEach(date => {
-                            const dateKey = formatToYYYYMMDD(date);
-                            const amount = debt.amounts[dateKey] || 0;
-                            debtAmountsGroup.innerHTML += `
-                                <div class="form-group">
-                                    <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
-                                    <input type="number" id="amount-${dateKey}" class="form-control debt-amount-input" data-date="${dateKey}" value="${amount.toFixed(2)}" step="0.01">
-                                </div>
-                            `;
-                        });
+                        // No es necesario poblar montos aquí, ya que la edición se hace en línea
                     }
                 } else {
                     debtModalTitle.textContent = 'Añadir Nueva Deuda';
                     debtForm.reset();
                     debtIdInput.value = '';
-                    currentDebtDates.forEach(date => {
-                        const dateKey = formatToYYYYMMDD(date);
-                        debtAmountsGroup.innerHTML += `
-                            <div class="form-group">
-                                    <label for="amount-${dateKey}">${formatToDDMonYY(date)} ($)</label>
-                                <input type="number" id="amount-${dateKey}" class="form-control debt-amount-input" data-date="${dateKey}" value="0.00" step="0.01">
-                            </div>
-                        `;
-                    });
                 }
                 debtModal.classList.add('active');
             }
@@ -2966,25 +3221,20 @@
                     return;
                 }
 
-                const amounts = {};
-                document.querySelectorAll('.debt-amount-input').forEach(input => {
-                    const dateKey = input.dataset.date;
-                    amounts[dateKey] = parseFloat(input.value) || 0;
-                });
-
                 if (currentEditId) {
+                    // La edición de nombre se maneja aquí
                     const debtIndex = debts.findIndex(d => d.id === currentEditId);
                     if (debtIndex !== -1) {
                         debts[debtIndex].name = debtName;
-                        debts[debtIndex].amounts = amounts;
                         showNotification('Deuda actualizada con éxito', 'success');
                     }
                 } else {
-                    const newDebt = { id: Date.now(), name: debtName, amounts: amounts };
+                    // Añadir nueva deuda
+                    const newDebt = { id: Date.now(), name: debtName, amounts: {} };
                     debts.push(newDebt);
                     showNotification('Deuda añadida con éxito', 'success');
                 }
-                saveDebts(); // Save to localStorage after adding/updating
+                saveDebts();
                 renderDebts();
                 closeDebtModal();
             }
@@ -2992,30 +3242,19 @@
             function toggleEditModeDebts() {
                 isEditModeDebts = !isEditModeDebts;
                 if (isEditModeDebts) {
-                    editDebtModeBtn.textContent = 'Guardar Cambios';
-                    editDebtModeBtn.classList.add('active'); // Visual feedback for active edit mode
-                    addDebtBtn.style.display = 'none'; // Hide add button in edit mode
-                    deleteSelectedDebtsBtn.style.display = 'inline-flex'; // Show delete button
+                    editDebtModeBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
+                    editDebtModeBtn.classList.add('active');
+                    addDebtBtn.style.display = 'none';
+                    deleteSelectedDebtsBtn.style.display = 'inline-flex';
                 } else {
-                    // When exiting edit mode, explicitly save all current input values
-                    debtsList.querySelectorAll('tr').forEach(rowElement => {
-                        const debtId = parseInt(rowElement.dataset.id);
-                        const debt = debts.find(d => d.id === debtId);
-                        if (debt) {
-                            rowElement.querySelectorAll('.amount-input').forEach(inputElement => {
-                                const dateKey = inputElement.dataset.date;
-                                debt.amounts[dateKey] = parseFloat(inputElement.value) || 0;
-                            });
-                        }
-                    });
-                    saveDebts(); // Save the updated debts array
-                    editDebtModeBtn.textContent = 'Editar Deudas';
+                    saveDebts(); // Guardar todos los cambios al salir del modo edición
+                    editDebtModeBtn.innerHTML = '<i class="fas fa-edit"></i> Editar Deudas';
                     editDebtModeBtn.classList.remove('active');
                     addDebtBtn.style.display = 'inline-flex';
                     deleteSelectedDebtsBtn.style.display = 'none';
                     showNotification('Cambios en deudas guardados', 'success');
                 }
-                renderDebts(); // Re-render table to reflect edit mode (either with inputs or display values)
+                renderDebts();
             }
 
             function deleteSelectedDebts() {
@@ -3023,34 +3262,32 @@
                                             .map(checkbox => parseInt(checkbox.dataset.id));
                 if (selectedDebtIds.length > 0) {
                     debts = debts.filter(debt => !selectedDebtIds.includes(debt.id));
-                    saveDebts(); // Save to localStorage after deletion
+                    saveDebts();
                     renderDebts();
                     showNotification('Deudas seleccionadas eliminadas', 'success');
                 } else {
                     showNotification('Ninguna deuda seleccionada para eliminar', 'info');
                 }
-                closeConfirmDeleteModal();
             }
 
             // Event Listeners para Deudas
             generateDebtDatesBtn.addEventListener('click', () => {
-                const startDate = new Date(startDateDebtsInput.value);
-                const endDate = new Date(endDateDebtsInput.value);
+                const startDateStr = startDateDebtsInput.value;
+                const endDateStr = endDateDebtsInput.value;
 
-                if (isNaN(startDate) || isNaN(endDate) || startDate > endDate) {
+                if (!startDateStr || !endDateStr) {
                     showNotification('Por favor, selecciona un rango de fechas válido.', 'error');
                     return;
                 }
 
-                const today = new Date(); // Define today here for consistency
-                const threeMonthsLater = new Date();
-                threeMonthsLater.setMonth(today.getMonth() + 3); 
+                const startDate = new Date(startDateStr);
+                const endDate = new Date(endDateStr);
 
-                if (endDate > threeMonthsLater) {
-                    showNotification('El período no puede exceder 3 meses a partir de la fecha actual.', 'error');
+                if (isNaN(startDate.getTime()) || isNaN(endDate.getTime()) || startDate > endDate) {
+                    showNotification('Por favor, selecciona un rango de fechas válido.', 'error');
                     return;
                 }
-
+                
                 currentDebtDates = getFridaysInPeriod(startDate, endDate);
                 renderDebts();
             });
@@ -3063,22 +3300,25 @@
             deleteSelectedDebtsBtn.addEventListener('click', () => {
                 const selectedCount = document.querySelectorAll('.debt-checkbox:checked').length;
                 if (selectedCount > 0) {
-                    showConfirmDeleteModal(null, 'debt'); // Pass null for ID to indicate multiple deletion
+                    showConfirmDeleteModal(null, 'debt');
                 } else {
                     showNotification('Ninguna deuda seleccionada para eliminar', 'info');
                 }
             });
 
-            // Set default dates for Debt section (current date to 3 months from now)
-            const today = new Date();
-            const threeMonthsFromNow = new Date();
-            threeMonthsFromNow.setMonth(today.getMonth() + 3);
-            startDateDebtsInput.value = formatToYYYYMMDD(today);
-            endDateDebtsInput.value = formatToYYYYMMDD(threeMonthsFromNow);
-            // Automatically generate dates on load
-            currentDebtDates = getFridaysInPeriod(new Date(startDateDebtsInput.value), new Date(endDateDebtsInput.value));
-            loadDebts(); // Load debts from localStorage first
-            renderDebts();
+            // Carga inicial de Deudas
+            function initializeDebtsSection() {
+                const today = new Date();
+                const threeMonthsFromNow = new Date();
+                threeMonthsFromNow.setMonth(today.getMonth() + 3);
+                startDateDebtsInput.value = formatToYYYYMMDD(today);
+                endDateDebtsInput.value = formatToYYYYMMDD(threeMonthsFromNow);
+                
+                loadDebts();
+                generateDebtDatesBtn.click(); // Generar fechas y renderizar la tabla al cargar
+            }
+            
+            initializeDebtsSection();
 
 
             // --- Lógica para Gastos Personales ---
@@ -3104,6 +3344,7 @@
             }
 
             function calculateTotalGastos() {
+                // Corrected syntax: (sum, gasto) =>
                 const total = gastos.reduce((sum, gasto) => sum + parseFloat(gasto.amount), 0);
                 totalGastosDisplay.textContent = `$${total.toFixed(2)}`;
             }
@@ -3115,6 +3356,10 @@
                     calculateTotalGastos();
                     return;
                 }
+
+                // Ordenar gastos por fecha (más reciente primero)
+                gastos.sort((a, b) => new Date(b.date) - new Date(a.date));
+
                 gastos.forEach(gasto => {
                     const row = document.createElement('tr');
                     row.dataset.id = gasto.id;
@@ -3125,7 +3370,7 @@
                     `;
                     if (isEditModeGastos) {
                         rowContent = `
-                            <td><input type="text" class="form-control" value="${gasto.name}" data-field="name"></td>
+                            <td><input type="text" class="form-control" value="${gasto.name}" data-field="name" disabled></td>
                             <td><input type="number" class="form-control amount-input" value="${parseFloat(gasto.amount).toFixed(2)}" step="0.01" data-field="amount"></td>
                             <td><input type="date" class="form-control" value="${gasto.date}" data-field="date"></td>
                             <td><input type="checkbox" class="gasto-checkbox" data-id="${gasto.id}"></td>
@@ -3213,12 +3458,12 @@
             function toggleEditModeGastos() {
                 isEditModeGastos = !isEditModeGastos;
                 if (isEditModeGastos) {
-                    editGastoModeBtn.textContent = 'Guardar Cambios';
+                    editGastoModeBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
                     editGastoModeBtn.classList.add('active');
                     addGastoBtn.style.display = 'none';
                     deleteSelectedGastosBtn.style.display = 'inline-flex';
                 } else {
-                    editGastoModeBtn.textContent = 'Editar Gastos';
+                    editGastoModeBtn.innerHTML = '<i class="fas fa-edit"></i> Editar Gastos';
                     editGastoModeBtn.classList.remove('active');
                     addGastoBtn.style.display = 'inline-flex';
                     deleteSelectedGastosBtn.style.display = 'none';
@@ -3227,7 +3472,6 @@
                         const gastoId = parseInt(row.dataset.id);
                         const gastoIndex = gastos.findIndex(g => g.id === gastoId);
                         if (gastoIndex !== -1) {
-                            gastos[gastoIndex].name = row.querySelector('[data-field="name"]').value;
                             gastos[gastoIndex].amount = parseFloat(row.querySelector('[data-field="amount"]').value) || 0;
                             gastos[gastoIndex].date = row.querySelector('[data-field="date"]').value;
                         }
@@ -3243,13 +3487,7 @@
                                             .map(checkbox => parseInt(checkbox.dataset.id));
                 if (selectedGastoIds.length > 0) {
                     gastos = gastos.filter(gasto => !selectedGastoIds.includes(gasto.id));
-                    saveGastos();
-                    renderGastos();
-                    showNotification('Gastos seleccionados eliminados', 'success');
-                } else {
-                    showNotification('Ningún gasto seleccionado para eliminar', 'info');
                 }
-                closeConfirmDeleteModal();
             }
 
             // Event Listeners para Gastos Personales
@@ -3389,12 +3627,12 @@
             function toggleEditModePagos() {
                 isEditModePagos = !isEditModePagos;
                 if (isEditModePagos) {
-                    editPagoModeBtn.textContent = 'Guardar Cambios';
+                    editPagoModeBtn.innerHTML = '<i class="fas fa-save"></i> Guardar Cambios';
                     editPagoModeBtn.classList.add('active');
                     addPagoBtn.style.display = 'none';
                     deleteSelectedPagosBtn.style.display = 'inline-flex';
                 } else {
-                    editPagoModeBtn.textContent = 'Editar Pagos';
+                    editPagoModeBtn.innerHTML = '<i class="fas fa-edit"></i> Editar Pagos';
                     editPagoModeBtn.classList.remove('active');
                     addPagoBtn.style.display = 'inline-flex';
                     deleteSelectedPagosBtn.style.display = 'none';
@@ -3418,13 +3656,7 @@
                                             .map(checkbox => parseInt(checkbox.dataset.id));
                 if (selectedPagoIds.length > 0) {
                     pagos = pagos.filter(pago => !selectedPagoIds.includes(pago.id));
-                    savePagos();
-                    renderPagos();
-                    showNotification('Fechas de pago seleccionadas eliminadas', 'success');
-                } else {
-                    showNotification('Ninguna fecha de pago seleccionada para eliminar', 'info');
                 }
-                closeConfirmDeleteModal();
             }
 
             // Event Listeners para Fechas de Pago
@@ -3529,9 +3761,9 @@
                 try {
                     const savedPendings = localStorage.getItem('allPendings');
                     allPendings = savedPendings ? JSON.parse(savedPendings) : [];
-                    console.log("Pendientes cargados:", allPendings);
+                    console.log("DEBUG: Pendientes cargados:", allPendings);
                 } catch (e) {
-                    console.error("Error al cargar pendientes de localStorage", e);
+                    console.error("ERROR: Error al cargar pendientes de localStorage", e);
                     allPendings = [];
                 }
             }
@@ -3539,20 +3771,25 @@
             function savePendings() {
                 try {
                     localStorage.setItem('allPendings', JSON.stringify(allPendings));
-                    console.log("Pendientes guardados:", allPendings);
+                    console.log("DEBUG: Pendientes guardados:", allPendings);
                 } catch (e) {
-                    console.error("Error al guardar pendientes en localStorage", e);
+                    console.error("ERROR: Error al guardar pendientes en localStorage", e);
                 }
             }
 
             function renderPendings(category) {
+                console.log(`DEBUG: Renderizando pendientes para categoría: ${category}`);
                 currentPendingCategory = category;
                 const targetListBody = document.getElementById(`${category}-pendings-list`);
-                if (!targetListBody) return;
+                if (!targetListBody) {
+                    console.error(`ERROR: No se encontró el tbody con ID: ${category}-pendings-list`);
+                    return;
+                }
 
                 targetListBody.innerHTML = ''; // Clear existing rows
 
                 const filteredPendings = allPendings.filter(p => p.category === category);
+                console.log(`DEBUG: Pendientes filtrados para ${category}:`, filteredPendings);
 
                 if (filteredPendings.length === 0) {
                     targetListBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 30px; color: #777;">No hay pendientes en esta categoría.</td></tr>`;
@@ -3592,6 +3829,7 @@
             }
 
             function openPendingModal(pendingId = null) {
+                console.log(`DEBUG: Abriendo modal para pendiente ID: ${pendingId}, categoría actual: ${currentPendingCategory}`);
                 currentEditId = pendingId;
                 pendingForm.reset();
                 pendingDateInput.style.display = 'block'; // Default to specific date
@@ -3612,7 +3850,10 @@
                             pendingDateInput.value = '';
                             pendingDateInput.style.display = 'none';
                         }
+                        // Update the display in the modal header
                         pendingModalCategoryDisplay.textContent = pending.category.charAt(0).toUpperCase() + pending.category.slice(1);
+                    } else {
+                        console.error(`ERROR: No se encontró el pendiente con ID: ${pendingId}`);
                     }
                 } else {
                     pendingModalTitle.textContent = 'Agregar Nuevo Pendiente';
@@ -3620,6 +3861,7 @@
                     pendingCategoryInput.value = currentPendingCategory; // Set category for new pending
                     pendingDateOptionSpecific.checked = true;
                     pendingDateInput.value = formatToYYYYMMDD(new Date()); // Default to today
+                    // Update the display in the modal header
                     pendingModalCategoryDisplay.textContent = currentPendingCategory.charAt(0).toUpperCase() + currentPendingCategory.slice(1);
                 }
                 pendingModal.classList.add('active');
@@ -3637,6 +3879,8 @@
                 const isSpecificDate = pendingDateOptionSpecific.checked;
                 const date = isSpecificDate ? pendingDateInput.value : null;
 
+                console.log(`DEBUG: Intentando guardar pendiente. Categoría: ${category}, Texto: "${text}", Fecha: ${date}`);
+
                 if (text === '') {
                     showNotification('La descripción del pendiente no puede estar vacía', 'error');
                     return;
@@ -3653,11 +3897,15 @@
                         allPendings[pendingIndex].date = date;
                         allPendings[pendingIndex].category = category; // Ensure category is updated if needed (though not directly editable in modal)
                         showNotification('Pendiente actualizado con éxito', 'success');
+                        console.log("DEBUG: Pendiente actualizado:", allPendings[pendingIndex]);
+                    } else {
+                        console.error(`ERROR: No se encontró el pendiente para actualizar con ID: ${currentEditId}`);
                     }
                 } else {
                     const newPending = { id: Date.now(), text: text, date: date, category: category };
                     allPendings.push(newPending);
                     showNotification('Pendiente añadido con éxito', 'success');
+                    console.log("DEBUG: Nuevo pendiente añadido:", newPending);
                 }
                 savePendings();
                 renderPendings(currentPendingCategory); // Re-render the active category
@@ -3665,10 +3913,17 @@
             }
 
             function deletePendingTask(id) {
+                console.log(`DEBUG: Intentando eliminar pendiente con ID: ${id}`);
+                const initialLength = allPendings.length;
                 allPendings = allPendings.filter(p => p.id !== id);
+                if (allPendings.length < initialLength) {
+                    showNotification('Pendiente eliminado con éxito', 'success');
+                    console.log(`DEBUG: Pendiente ID ${id} eliminado.`);
+                } else {
+                    console.warn(`ADVERTENCIA: No se encontró el pendiente con ID: ${id} para eliminar.`);
+                }
                 savePendings();
                 renderPendings(currentPendingCategory);
-                showNotification('Pendiente eliminado con éxito', 'success');
             }
 
             function checkUpcomingTasks() {
@@ -3706,6 +3961,7 @@
             pendingCategoryBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const category = this.dataset.pendingCategory;
+                    console.log(`DEBUG: Botón de categoría clicado: ${category}`);
                     pendingCategoryBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     pendingSectionContents.forEach(content => {
@@ -3720,6 +3976,7 @@
                 });
             });
 
+            // Botones para añadir pendientes por categoría
             document.getElementById('add-personal-pending-btn').addEventListener('click', () => {
                 currentPendingCategory = 'personales';
                 openPendingModal();
@@ -3768,6 +4025,7 @@
             setInterval(checkUpcomingTasks, 300000);
 
             function activatePendingCategory(category) {
+                console.log(`DEBUG: Activando categoría de pendientes: ${category}`);
                 pendingCategoryBtns.forEach(btn => {
                     if (btn.dataset.pendingCategory === category) {
                         btn.classList.add('active');
@@ -3785,7 +4043,150 @@
                 });
                 renderPendings(category);
             }
+
+            // --- Lógica para la Calculadora de Gastos de Transporte Semanal ---
+            const transportStartDateInput = document.getElementById('transportStartDate');
+            const transportEndDateInput = document.getElementById('transportEndDate');
+            const transportScheduleBody = document.getElementById('transportScheduleBody');
+            const transportCalculateBtn = document.getElementById('transportCalculateBtn');
+            const transportTotalExpenseSpan = document.getElementById('transportTotalExpense');
+            const transportMessageModal = document.getElementById('transportMessageModal');
+            const transportModalMessage = document.getElementById('transportModalMessage');
+            const transportCloseModalBtn = document.getElementById('transportCloseModalBtn');
+            const transportModalOkBtn = document.getElementById('transportModalOkBtn');
+
+            // Función para mostrar la caja de mensaje personalizada de la calculadora
+            function showTransportMessageBox(message) {
+                transportModalMessage.textContent = message;
+                transportMessageModal.style.display = 'flex';
+            }
+
+            // Event listeners para cerrar la caja de mensaje de la calculadora
+            transportCloseModalBtn.addEventListener('click', () => {
+                transportMessageModal.style.display = 'none';
+            });
+            transportModalOkBtn.addEventListener('click', () => {
+                transportMessageModal.style.display = 'none';
+            });
+            transportMessageModal.addEventListener('click', (event) => {
+                if (event.target == transportMessageModal) {
+                    transportMessageModal.style.display = 'none';
+                }
+            });
+
+            // Función para formatear una fecha a YYYY-MM-DD para el input type="date"
+            function formatTransportDateForInput(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // Función para formatear una fecha para mostrarla (ej. "Viernes, 21 de Julio de 2025")
+            function formatTransportDisplayDate(date) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                return date.toLocaleDateString('es-ES', options);
+            }
+
+            // Función para poblar la tabla del horario semanal de la calculadora
+            function populateTransportSchedule() {
+                transportScheduleBody.innerHTML = '';
+                const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+                const start = new Date(transportStartDateInput.value + 'T00:00:00');
+                const end = new Date(transportEndDateInput.value + 'T00:00:00');
+
+                if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+                    return;
+                }
+
+                if (start > end) {
+                    showTransportMessageBox('La fecha de inicio no puede ser posterior a la fecha de fin.');
+                    return;
+                }
+
+                let currentDate = new Date(start);
+                while (currentDate <= end) {
+                    const row = document.createElement('tr');
+                    row.classList.add('hover:bg-gray-50');
+
+                    const dayOfWeek = dayNames[currentDate.getDay()];
+                    const displayDate = formatTransportDisplayDate(currentDate);
+                    const dateId = formatTransportDateForInput(currentDate);
+
+                    row.innerHTML = `
+                        <td class="py-3 px-4 text-sm text-gray-800 capitalize">${dayOfWeek}</td>
+                        <td class="py-3 px-4 text-sm text-gray-600">${displayDate}</td>
+                        <td class="py-3 px-4 text-sm text-gray-800">
+                            <input type="checkbox" id="visit-${dateId}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500" data-date="${dateId}">
+                            <label for="visit-${dateId}" class="ml-2 text-gray-700 sr-only">Visitar novia</label>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-gray-800">
+                            <input type="checkbox" id="rest-${dateId}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500" data-date="${dateId}">
+                            <label for="rest-${dateId}" class="ml-2 text-gray-700 sr-only">Día de descanso</label>
+                        </td>
+                        <td class="py-3 px-4 text-sm text-gray-800">
+                            <input type="checkbox" id="two-tickets-${dateId}" class="form-checkbox h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500" data-date="${dateId}">
+                            <label for="two-tickets-${dateId}" class="ml-2 text-gray-700 sr-only">Solo 2 Pasajes</label>
+                        </td>
+                    `;
+                    transportScheduleBody.appendChild(row);
+
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            }
+
+            // Configuración inicial de la calculadora: Establecer la fecha actual como inicio y fin por defecto
+            const transportToday = new Date();
+            const transportNextFriday = new Date(transportToday);
+            transportNextFriday.setDate(transportToday.getDate() + (5 + 7 - transportToday.getDay()) % 7);
+
+            transportStartDateInput.value = formatTransportDateForInput(transportToday);
+            transportEndDateInput.value = formatTransportDateForInput(transportNextFriday);
+            populateTransportSchedule();
+
+            // Event listeners para el cambio de fechas de inicio y fin de la calculadora
+            transportStartDateInput.addEventListener('change', populateTransportSchedule);
+            transportEndDateInput.addEventListener('change', populateTransportSchedule);
+
+            // Event listener para el botón de cálculo de la calculadora
+            transportCalculateBtn.addEventListener('click', () => {
+                let totalExpense = 0;
+                const rows = transportScheduleBody.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const visitCheckbox = row.querySelector('[id^="visit-"]');
+                    const restCheckbox = row.querySelector('[id^="rest-"]');
+                    const twoTicketsCheckbox = row.querySelector('[id^="two-tickets-"]');
+
+                    const isVisiting = visitCheckbox ? visitCheckbox.checked : false;
+                    const isRestDay = restCheckbox ? restCheckbox.checked : false;
+                    const usesTwoTickets = twoTicketsCheckbox ? twoTicketsCheckbox.checked : false;
+
+                    let dailyCost = 0;
+
+                    if (usesTwoTickets) {
+                        dailyCost = 20;
+                    } else if (isRestDay) {
+                        if (isVisiting) {
+                            dailyCost = 20;
+                        } else {
+                            dailyCost = 0;
+                        }
+                    } else {
+                        if (isVisiting) {
+                            dailyCost = 60;
+                        } else {
+                            dailyCost = 40;
+                        }
+                    }
+                    totalExpense += dailyCost;
+                });
+
+                transportTotalExpenseSpan.textContent = totalExpense.toFixed(2);
+            });
         });
     </script>
 </body>
 </html>
+
