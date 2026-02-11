@@ -1475,7 +1475,53 @@ html, body {
     .site-inner, .wrap, .page, .content { width: calc(100% - (var(--page-gutter) * 2)) !important; }
 }
 
-</style>
+
+        .action-btn.hide {
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        .action-btn.hide:hover {
+            background-color: #8e44ad;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.add-to-main {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .action-btn.add-to-main:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .hidden-section-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            margin-left: auto;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .hidden-section-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+        }
+
+        .hidden-section-btn i {
+            margin-right: 8px;
+        }
+
+    </style>
 </head>
 <body class="bg-gray-100 p-4 sm:p-6 md:p-8">
     <header class="site-header">
@@ -2013,8 +2059,12 @@ html, body {
                 <button class="pending-btn" data-pending-category="trabajo">Trabajo</button>
                 <button class="pending-btn" data-pending-category="financieros">Financieros</button>
             </div>
+            <button class="hidden-section-btn" id="open-hidden-section-btn">
+                <i class="fas fa-eye-slash"></i> Sección Oculta
+            </button>
 
-            <!-- Sección de Pendientes Personales -->
+
+        <!-- Sección de Pendientes Personales -->
             <div class="pending-section-content personales-pendings-content">
                 <div class="pending-content">
                     <h3>Pendientes Personales</h3>
@@ -2283,16 +2333,374 @@ html, body {
         </div>
     </section>
 
-    <section id="por-hacer-sam" class="section">
-        <div class="espacio-header">
-            <h1><i class="fas fa-heart"></i>Por Hacer con Mi novia</h1>
-            <p>Planes y actividades para hacer juntos</p>
+    
+<section id="por-hacer-sam" class="section">
+    <div class="espacio-header">
+        <h1><i class="fas fa-heart"></i>Por Hacer con Mi novia</h1>
+        <p>Planes y actividades para hacer juntos</p>
+    </div>
+
+    <div class="pending-section">
+        <div style="overflow-x:auto;">
+            <table class="loans-table" style="min-width:600px;">
+                <thead>
+                    <tr>
+                        <th>Pendiente</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="novia-main-body">
+                    <!-- filas generadas dinámicamente -->
+                </tbody>
+            </table>
         </div>
-        <div class="proximamente-container">
-            <h2>Próximamente...</h2>
-            <p>Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+
+        <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+            <button id="open-novia-add" class="add-btn" style="max-width:220px;">
+                <i class="fas fa-plus-circle"></i> Añadir pendiente
+            </button>
+            <button id="open-novia-hidden" class="add-btn" style="background: #6b7280; box-shadow:none; max-width:220px;">
+                <i class="fas fa-eye-slash"></i> Sección oculta
+            </button>
         </div>
-    </section>
+    </div>
+
+    <!-- Modal: Añadir / Editar pendiente para sección principal -->
+    <div class="modal" id="novia-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="novia-modal-title">Agregar pendiente</h3>
+                <button class="close-modal" data-close="novia-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="novia-form">
+                    <input type="hidden" id="novia-id">
+                    <div class="form-group">
+                        <label for="novia-name">Pendiente</label>
+                        <input type="text" id="novia-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha</label>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <label style="display:flex; align-items:center; gap:6px;">
+                                <input type="radio" name="novia-date-option" value="date" checked> Fecha
+                            </label>
+                            <label style="display:flex; align-items:center; gap:6px;">
+                                <input type="radio" name="novia-date-option" value="indefinite"> Indefinida
+                            </label>
+                        </div>
+                        <input type="date" id="novia-date-input" class="form-control" style="margin-top:8px;">
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="btn-submit">Guardar</button>
+                        <button type="button" class="btn-submit" data-close="novia-modal" style="background:#ccc; color:#333;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Sección oculta (lista de cosas) -->
+    <div class="modal" id="novia-hidden-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Sección oculta - Cosas por hacer</h3>
+                <button class="close-modal" data-close="novia-hidden-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="novia-hidden-list" style="display:flex; flex-direction:column; gap:10px; max-height:60vh; overflow:auto;">
+                    <!-- items ocultos generados dinámicamente -->
+                </div>
+                <div style="margin-top:14px; display:flex; gap:8px; justify-content:flex-end;">
+                    <button id="novia-hidden-add-sample" class="btn-submit" style="background:#4a6bff;">Añadir ejemplo</button>
+                    <button class="btn-submit" data-close="novia-hidden-modal" style="background:#ccc; color:#333;">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Storage keys
+    const MAIN_KEY = 'noviaMainList_v1';
+    const HIDDEN_KEY = 'noviaHiddenList_v1';
+
+    // Elements
+    const mainBody = document.getElementById('novia-main-body');
+    const hiddenModal = document.getElementById('novia-hidden-modal');
+    const noviaModal = document.getElementById('novia-modal');
+    const noviaForm = document.getElementById('novia-form');
+    const noviaIdInput = document.getElementById('novia-id');
+    const noviaNameInput = document.getElementById('novia-name');
+    const noviaDateInput = document.getElementById('novia-date-input');
+
+    // Helpers
+    function readStorage(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; } }
+    function writeStorage(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+
+    // Data
+    let mainList = readStorage(MAIN_KEY);
+    let hiddenList = readStorage(HIDDEN_KEY);
+
+    // Render main table
+    function renderMain(){
+        mainBody.innerHTML = '';
+        if(mainList.length === 0){
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="3" style="padding:18px; color:#6c757d;">No hay pendientes. Añade uno 😎</td>';
+            mainBody.appendChild(tr);
+            return;
+        }
+        mainList.forEach(item => {
+            const tr = document.createElement('tr');
+            const dateText = item.indefinite ? 'Indefinida' : (item.date || '');
+            tr.innerHTML = `
+                <td style="padding:12px;">${escapeHtml(item.name)}</td>
+                <td style="padding:12px;">${escapeHtml(dateText)}</td>
+                <td style="padding:12px; text-align:right;">
+                    <button class="action-btn edit-novia" data-id="${item.id}" title="Editar"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-novia" data-id="${item.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            mainBody.appendChild(tr);
+        });
+    }
+
+    // Render hidden list inside modal
+    function renderHidden(){
+        const container = document.getElementById('novia-hidden-list');
+        container.innerHTML = '';
+        if(hiddenList.length === 0){
+            const el = document.createElement('div');
+            el.style.padding = '12px';
+            el.style.color = '#6c757d';
+            el.textContent = 'No hay elementos ocultos.';
+            container.appendChild(el);
+            return;
+        }
+        hiddenList.forEach(item => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.justifyContent = 'space-between';
+            row.style.alignItems = 'center';
+            row.style.padding = '8px';
+            row.style.borderRadius = '8px';
+            row.style.border = '1px solid #eee';
+            row.innerHTML = `
+                <div style="flex:1;">
+                    <div style="font-weight:600;">${escapeHtml(item.name)}</div>
+                    <div style="font-size:0.9rem; color:#6c757d;">${item.indefinite ? 'Indefinida' : (item.date || '')}</div>
+                </div>
+                <div style="display:flex; gap:8px; margin-left:12px;">
+                    <button class="action-btn edit-hidden" data-id="${item.id}" title="Editar"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-hidden" data-id="${item.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                    <button class="btn-submit add-to-main" data-id="${item.id}" style="background:#2ecc71; padding:8px 12px; border-radius:8px;">Añadir</button>
+                </div>
+            `;
+            container.appendChild(row);
+        });
+    }
+
+    // Utility to escape HTML
+    function escapeHtml(str){
+        if(!str && str !== 0) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+    }
+
+    // Open / Close modals (simple)
+    function openModal(id){ document.getElementById(id).classList.add('active'); }
+    function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+
+    // Generate simple id
+    function genId(){ return Date.now().toString(36) + Math.floor(Math.random()*1000).toString(36); }
+
+    // Add/edit handlers
+    document.getElementById('open-novia-add').addEventListener('click', () => {
+        noviaForm.reset();
+        noviaIdInput.value = '';
+        document.getElementById('novia-modal-title').textContent = 'Agregar pendiente';
+        noviaDateInput.disabled = false;
+        openModal('novia-modal');
+    });
+
+    // Show hidden modal
+    document.getElementById('open-novia-hidden').addEventListener('click', () => {
+        renderHidden();
+        openModal('novia-hidden-modal');
+    });
+
+    // Close buttons inside our modals
+    document.querySelectorAll('.close-modal[data-close]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.getAttribute('data-close');
+            closeModal(id);
+        });
+    });
+
+    // Radio toggle for date option inside novia-form (delegation)
+    noviaForm.addEventListener('change', function(e){
+        const r = noviaForm.querySelector('input[name="novia-date-option"]:checked').value;
+        noviaDateInput.disabled = (r === 'indefinite');
+    });
+
+    // Submit add/edit
+    noviaForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = noviaIdInput.value || genId();
+        const name = noviaNameInput.value.trim();
+        const dateOption = noviaForm.querySelector('input[name="novia-date-option"]:checked').value;
+        const date = dateOption === 'indefinite' ? '' : noviaDateInput.value;
+        const indefinite = dateOption === 'indefinite';
+
+        if(!name) return alert('Escribe una descripción del pendiente.');
+
+        const existingIndex = mainList.findIndex(x => x.id === id);
+        const payload = { id, name, date, indefinite };
+
+        if(existingIndex >= 0){
+            mainList[existingIndex] = payload;
+        } else {
+            mainList.push(payload);
+        }
+        writeStorage(MAIN_KEY, mainList);
+        renderMain();
+        closeModal('novia-modal');
+        showNotification('Guardado');
+    });
+
+    // Delegated actions for main table (edit / delete)
+    mainBody.addEventListener('click', function(e){
+        const editBtn = e.target.closest('.edit-novia');
+        const delBtn = e.target.closest('.delete-novia');
+        if(editBtn){
+            const id = editBtn.getAttribute('data-id');
+            const item = mainList.find(x => x.id === id);
+            if(!item) return;
+            noviaIdInput.value = item.id;
+            noviaNameInput.value = item.name;
+            if(item.indefinite){
+                noviaForm.querySelector('input[name="novia-date-option"][value="indefinite"]').checked = true;
+                noviaDateInput.value = '';
+                noviaDateInput.disabled = true;
+            } else {
+                noviaForm.querySelector('input[name="novia-date-option"][value="date"]').checked = true;
+                noviaDateInput.value = item.date || '';
+                noviaDateInput.disabled = false;
+            }
+            document.getElementById('novia-modal-title').textContent = 'Editar pendiente';
+            openModal('novia-modal');
+        }
+        if(delBtn){
+            const id = delBtn.getAttribute('data-id');
+            if(!confirm('¿Eliminar este pendiente?')) return;
+            mainList = mainList.filter(x => x.id !== id);
+            writeStorage(MAIN_KEY, mainList);
+            renderMain();
+            showNotification('Eliminado');
+        }
+    });
+
+    // Delegated actions inside hidden modal
+    document.getElementById('novia-hidden-list').addEventListener('click', function(e){
+        const editBtn = e.target.closest('.edit-hidden');
+        const delBtn = e.target.closest('.delete-hidden');
+        const addBtn = e.target.closest('.add-to-main');
+        if(editBtn){
+            const id = editBtn.getAttribute('data-id');
+            const item = hiddenList.find(x => x.id === id);
+            if(!item) return;
+            // Prefill modal for editing but will edit in hidden list context
+            noviaIdInput.value = item.id;
+            noviaNameInput.value = item.name;
+            if(item.indefinite){
+                noviaForm.querySelector('input[name="novia-date-option"][value="indefinite"]').checked = true;
+                noviaDateInput.value = '';
+                noviaDateInput.disabled = true;
+            } else {
+                noviaForm.querySelector('input[name="novia-date-option"][value="date"]').checked = true;
+                noviaDateInput.value = item.date || '';
+                noviaDateInput.disabled = false;
+            }
+            document.getElementById('novia-modal-title').textContent = 'Editar (oculto)';
+            openModal('novia-modal');
+            // When saved, we must update hiddenList instead of mainList. To handle that, set a flag:
+            noviaForm.setAttribute('data-editing-hidden', '1');
+        }
+        if(delBtn){
+            const id = delBtn.getAttribute('data-id');
+            if(!confirm('¿Eliminar este elemento oculto?')) return;
+            hiddenList = hiddenList.filter(x => x.id !== id);
+            writeStorage(HIDDEN_KEY, hiddenList);
+            renderHidden();
+            showNotification('Eliminado');
+        }
+        if(addBtn){
+            const id = addBtn.getAttribute('data-id');
+            const idx = hiddenList.findIndex(x => x.id === id);
+            if(idx === -1) return;
+            const item = hiddenList.splice(idx,1)[0];
+            // push to main
+            mainList.push(item);
+            writeStorage(HIDDEN_KEY, hiddenList);
+            writeStorage(MAIN_KEY, mainList);
+            renderHidden();
+            renderMain();
+            showNotification('Añadido a la tabla principal');
+        }
+    });
+
+    // When novia-modal is submitted while editing a hidden item, update hidden list instead
+    // We check the data-editing-hidden attribute set earlier.
+    noviaForm.addEventListener('submit', function(e){
+        // This listener already handles main add/edit; we must handle hidden-edit case
+        const isHiddenEdit = noviaForm.getAttribute('data-editing-hidden') === '1';
+        if(isHiddenEdit){
+            // handled after main handler: move updated item to hiddenList
+            const id = noviaIdInput.value;
+            const index = hiddenList.findIndex(x => x.id === id);
+            if(index >= 0){
+                hiddenList[index].name = noviaNameInput.value.trim();
+                hiddenList[index].date = noviaForm.querySelector('input[name="novia-date-option"]:checked').value === 'indefinite' ? '' : noviaDateInput.value;
+                hiddenList[index].indefinite = noviaForm.querySelector('input[name="novia-date-option"]:checked').value === 'indefinite';
+                writeStorage(HIDDEN_KEY, hiddenList);
+                renderHidden();
+            }
+            noviaForm.removeAttribute('data-editing-hidden');
+        }
+    }, true);
+
+    // Simple notification
+    function showNotification(text){
+        const n = document.getElementById('notification');
+        if(!n) return;
+        n.classList.add('show');
+        document.getElementById('notification-text').textContent = text;
+        setTimeout(()=> n.classList.remove('show'), 2000);
+    }
+
+    // Add example hidden
+    document.getElementById('novia-hidden-add-sample').addEventListener('click', function(){
+        const id = genId();
+        hiddenList.push({ id, name: 'Plan sorpresa', date: '', indefinite: true });
+        writeStorage(HIDDEN_KEY, hiddenList);
+        renderHidden();
+        showNotification('Elemento oculto añadido');
+    });
+
+    // Close modal when clicking background close (already implemented site-wide by .close-modal earlier)
+    // Initialize render
+    renderMain();
+});
+</script>
+
 
     <section id="gustos-sam" class="section">
         <div class="espacio-header">
@@ -3902,6 +4310,14 @@ html, body {
             const pendingDateInput = document.getElementById('pending-date-input');
 
             let allPendings = [];
+            let hiddenPendings = {
+                personales: [],
+                escolares: [],
+                trabajo: [],
+                financieros: []
+            };
+            let currentHiddenCategory = 'personales';
+            let isAddingToHidden = false;
             let currentPendingCategory = 'personales'; // Default category
 
             function loadPendings() {
@@ -3956,6 +4372,7 @@ html, body {
                         <td class="loan-actions">
                             <button class="action-btn edit-btn" data-id="${pending.id}"><i class="fas fa-edit"></i></button>
                             <button class="action-btn delete-btn" data-id="${pending.id}"><i class="fas fa-trash-alt"></i></button>
+                                <button class="action-btn hide" data-id="${pending.id}" style="background: #9b59b6;"><i class="fas fa-eye-slash"></i> Ocultar</button>
                         </td>
                     `;
                     targetListBody.appendChild(row);
@@ -3972,6 +4389,9 @@ html, body {
                 });
                 targetListBody.querySelectorAll('.delete-btn').forEach(button => {
                     button.onclick = () => showConfirmDeleteModal(parseInt(button.dataset.id), 'pending');
+                });
+                targetListBody.querySelectorAll('.hide').forEach(button => {
+                    button.onclick = () => hidePendingToHidden(parseInt(button.dataset.id));
                 });
             }
 
@@ -4017,16 +4437,17 @@ html, body {
             function closePendingModal() {
                 pendingModal.classList.remove('active');
                 currentEditId = null;
+                isAddingToHidden = false;
             }
 
             function handlePendingFormSubmit(e) {
                 e.preventDefault();
                 const text = pendingTextInput.value.trim();
-                const category = pendingCategoryInput.value; // Get the category from the hidden input
+                const category = pendingCategoryInput.value;
                 const isSpecificDate = pendingDateOptionSpecific.checked;
                 const date = isSpecificDate ? pendingDateInput.value : null;
 
-                console.log(`DEBUG: Intentando guardar pendiente. Categoría: ${category}, Texto: "${text}", Fecha: ${date}`);
+                console.log(`DEBUG: Intentando guardar pendiente. Categoría: ${category}, Texto: "${text}", Fecha: ${date}, isAddingToHidden: ${isAddingToHidden}`);
 
                 if (text === '') {
                     showNotification('La descripción del pendiente no puede estar vacía', 'error');
@@ -4042,23 +4463,37 @@ html, body {
                     if (pendingIndex !== -1) {
                         allPendings[pendingIndex].text = text;
                         allPendings[pendingIndex].date = date;
-                        allPendings[pendingIndex].category = category; // Ensure category is updated if needed (though not directly editable in modal)
+                        allPendings[pendingIndex].category = category;
                         showNotification('Pendiente actualizado con éxito', 'success');
                         console.log("DEBUG: Pendiente actualizado:", allPendings[pendingIndex]);
                     } else {
                         console.error(`ERROR: No se encontró el pendiente para actualizar con ID: ${currentEditId}`);
                     }
                 } else {
-                    const newPending = { id: Date.now(), text: text, date: date, category: category };
-                    allPendings.push(newPending);
-                    showNotification('Pendiente añadido con éxito', 'success');
-                    console.log("DEBUG: Nuevo pendiente añadido:", newPending);
+                    if (isAddingToHidden) {
+                        const newHiddenPending = { text: text, date: date };
+                        if (!hiddenPendings[category]) {
+                            hiddenPendings[category] = [];
+                        }
+                        hiddenPendings[category].push(newHiddenPending);
+                        showNotification('Pendiente oculto añadido con éxito', 'success');
+                        console.log("DEBUG: Nuevo pendiente oculto añadido:", newHiddenPending);
+                    } else {
+                        const newPending = { id: Date.now(), text: text, date: date, category: category };
+                        allPendings.push(newPending);
+                        showNotification('Pendiente añadido con éxito', 'success');
+                        console.log("DEBUG: Nuevo pendiente añadido:", newPending);
+                    }
                 }
                 savePendings();
-                renderPendings(currentPendingCategory); // Re-render the active category
+                renderPendings(currentPendingCategory);
+                if (isAddingToHidden) {
+                    renderHiddenPendings(category);
+                }
                 closePendingModal();
             }
 
+            
             function deletePendingTask(id) {
                 console.log(`DEBUG: Intentando eliminar pendiente con ID: ${id}`);
                 const initialLength = allPendings.length;
@@ -4332,6 +4767,201 @@ html, body {
 
                 transportTotalExpenseSpan.textContent = totalExpense.toFixed(2);
             });
+
+            // ========== FUNCIONES PARA SECCIÓN OCULTA ==========
+            
+            // Renderizar pendientes ocultos
+            function renderHiddenPendings(category) {
+                const tbody = document.getElementById(`hidden-${category}-list`);
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                const categoryPendings = hiddenPendings[category] || [];
+
+                if (categoryPendings.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 30px; color: #777;">No hay pendientes ocultos en esta categoría.</td></tr>';
+                    return;
+                }
+
+                categoryPendings.forEach((pending, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.index = index;
+                    const dateDisplay = pending.date ? new Date(pending.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Indefinida';
+
+                    row.innerHTML = `
+                        <td>${pending.text}</td>
+                        <td>${dateDisplay}</td>
+                        <td class="loan-actions">
+                            <button class="action-btn add-to-main" data-index="${index}" data-category="${category}" style="background: #3498db; margin-right: 5px;">
+                                <i class="fas fa-plus"></i> Añadir
+                            </button>
+                            <button class="action-btn delete-btn" data-index="${index}" data-category="${category}">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+                // Agregar event listeners
+                addHiddenPendingEventListeners(category);
+            }
+
+            // Event listeners para botones de pendientes ocultos
+            function addHiddenPendingEventListeners(category) {
+                const tbody = document.getElementById(`hidden-${category}-list`);
+                if (!tbody) return;
+
+                // Botón "Añadir" - mover a tabla principal
+                tbody.querySelectorAll('.add-to-main').forEach(button => {
+                    button.onclick = () => {
+                        const index = parseInt(button.dataset.index);
+                        const category = button.dataset.category;
+                        addToMainTable(category, index);
+                    };
+                });
+
+                // Botón "Eliminar"
+                tbody.querySelectorAll('.delete-btn').forEach(button => {
+                    button.onclick = () => {
+                        const index = parseInt(button.dataset.index);
+                        const category = button.dataset.category;
+                        deleteHiddenPending(category, index);
+                    };
+                });
+            }
+
+            // Añadir pendiente de sección oculta a tabla principal
+            function addToMainTable(category, index) {
+                const pending = hiddenPendings[category][index];
+                
+                // Agregar a tabla principal con nuevo ID
+                const newPending = {
+                    id: Date.now(),
+                    text: pending.text,
+                    date: pending.date,
+                    category: category
+                };
+                
+                allPendings.push(newPending);
+                
+                // Eliminar de sección oculta
+                hiddenPendings[category].splice(index, 1);
+                
+                savePendings();
+                renderPendings(currentPendingCategory);
+                renderHiddenPendings(category);
+                showNotification('Pendiente añadido a la tabla principal', 'success');
+            }
+
+            // Ocultar pendiente (mover de tabla principal a sección oculta)
+            function hidePendingToHidden(id) {
+                const pending = allPendings.find(p => p.id === id);
+                if (!pending) {
+                    console.error('Pendiente no encontrado');
+                    return;
+                }
+
+                // Agregar a sección oculta
+                const hiddenPending = {
+                    text: pending.text,
+                    date: pending.date
+                };
+                
+                if (!hiddenPendings[pending.category]) {
+                    hiddenPendings[pending.category] = [];
+                }
+                
+                hiddenPendings[pending.category].push(hiddenPending);
+                
+                // Eliminar de tabla principal
+                allPendings = allPendings.filter(p => p.id !== id);
+                
+                savePendings();
+                renderPendings(currentPendingCategory);
+                renderHiddenPendings(pending.category);
+                showNotification('Pendiente movido a la sección oculta', 'success');
+            }
+
+            // Eliminar pendiente oculto
+            function deleteHiddenPending(category, index) {
+                if (confirm('¿Estás seguro de que deseas eliminar este pendiente oculto?')) {
+                    hiddenPendings[category].splice(index, 1);
+                    savePendings();
+                    renderHiddenPendings(category);
+                    showNotification('Pendiente oculto eliminado', 'success');
+                }
+            }
+
+            // Activar categoría en sección oculta
+            function activateHiddenCategory(category) {
+                currentHiddenCategory = category;
+                
+                // Actualizar botones
+                document.querySelectorAll('[data-hidden-category]').forEach(btn => {
+                    if (btn.dataset.hiddenCategory === category) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                // Mostrar/ocultar contenidos
+                const contents = ['personales', 'escolares', 'trabajo', 'financieros'];
+                contents.forEach(cat => {
+                    const content = document.querySelector(`.hidden-${cat}-content`);
+                    if (content) {
+                        content.style.display = (cat === category) ? 'block' : 'none';
+                    }
+                });
+                
+                renderHiddenPendings(category);
+            }
+
+            // Event listeners para sección oculta
+            const openHiddenSectionBtn = document.getElementById('open-hidden-section-btn');
+            const hiddenSectionModal = document.getElementById('hidden-section-modal');
+            const hiddenSectionModalClose = document.getElementById('hidden-section-modal-close');
+
+            if (openHiddenSectionBtn) {
+                openHiddenSectionBtn.addEventListener('click', () => {
+                    hiddenSectionModal.style.display = 'block';
+                    activateHiddenCategory(currentHiddenCategory);
+                });
+            }
+
+            if (hiddenSectionModalClose) {
+                hiddenSectionModalClose.addEventListener('click', () => {
+                    hiddenSectionModal.style.display = 'none';
+                });
+            }
+
+            if (hiddenSectionModal) {
+                hiddenSectionModal.addEventListener('click', (e) => {
+                    if (e.target === hiddenSectionModal) {
+                        hiddenSectionModal.style.display = 'none';
+                    }
+                });
+            }
+
+            // Botones de categoría dentro del modal oculto
+            document.querySelectorAll('[data-hidden-category]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.classList.contains('pending-btn')) {
+                        activateHiddenCategory(btn.dataset.hiddenCategory);
+                    } else if (btn.classList.contains('add-btn')) {
+                        // Botón "Nuevo" en sección oculta
+                        currentPendingCategory = btn.dataset.hiddenCategory;
+                        isAddingToHidden = true;
+                        pendingModalTitle.textContent = 'Nuevo Pendiente Oculto';
+                        pendingModalCategoryDisplay.textContent = currentPendingCategory.charAt(0).toUpperCase() + currentPendingCategory.slice(1);
+                        openPendingModal();
+                    }
+                });
+            });
+
+
+
         });
     </script>
 </body>
