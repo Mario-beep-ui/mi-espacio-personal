@@ -2702,16 +2702,183 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-    <section id="gustos-sam" class="section">
-        <div class="espacio-header">
-            <h1><i class="fas fa-gift"></i>Gustos de Mi novia</h1>
-            <p>Recordatorios de cosas que le gustan a Mi novia</p>
+    
+<section id="gustos-sam" class="section">
+    <div class="espacio-header">
+        <h1><i class="fas fa-gift"></i>Gustos de Mi novia</h1>
+        <p>Recordatorios de cosas que le gustan a Mi novia</p>
+    </div>
+
+    <div class="pending-section">
+        <div style="overflow-x:auto;">
+            <table class="loans-table" style="min-width:600px;">
+                <thead>
+                    <tr>
+                        <th>Qué le gusta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="gustos-main-body">
+                    <!-- filas generadas dinámicamente -->
+                </tbody>
+            </table>
         </div>
-        <div class="proximamente-container">
-            <h2>Próximamente...</h2>
-            <p>Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+
+        <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+            <button id="open-gusto-add" class="add-btn" style="max-width:220px;">
+                <i class="fas fa-plus-circle"></i> Añadir gusto
+            </button>
         </div>
-    </section>
+    </div>
+
+    <!-- Modal: Añadir / Editar gusto -->
+    <div class="modal" id="gusto-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="gusto-modal-title">Agregar gusto</h3>
+                <button class="close-modal" data-close="gusto-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="gusto-form">
+                    <input type="hidden" id="gusto-id">
+                    <div class="form-group">
+                        <label for="gusto-name">Gusto</label>
+                        <input type="text" id="gusto-name" class="form-control" required>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="btn-submit">Guardar</button>
+                        <button type="button" class="btn-submit" data-close="gusto-modal" style="background:#ccc; color:#333;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Script for Gustos Mi novia -->
+<script>
+(function(){
+    // Storage key
+    const GUSTOS_KEY = 'gustosNovia_v1';
+
+    // Elements
+    const gustosBody = document.getElementById('gustos-main-body');
+    const openGustoAddBtn = document.getElementById('open-gusto-add');
+    const gustoModal = document.getElementById('gusto-modal');
+    const gustoForm = document.getElementById('gusto-form');
+    const gustoIdInput = document.getElementById('gusto-id');
+    const gustoNameInput = document.getElementById('gusto-name');
+
+    // Helpers (reuse existing global helpers if present)
+    function readStorage(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; } }
+    function writeStorage(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+    function genId(){ return Date.now().toString(36) + Math.floor(Math.random()*1000).toString(36); }
+    function openModal(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
+    function closeModal(id){ const el=document.getElementById(id); if(el) el.classList.remove('active'); }
+    function showNotification(text){ try{ const n=document.getElementById('notification'); if(!n) return; n.classList.add('show'); document.getElementById('notification-text').textContent = text; setTimeout(()=> n.classList.remove('show'), 2000);}catch(e){} }
+
+    // Data
+    let gustos = readStorage(GUSTOS_KEY);
+
+    // Render
+    function renderGustos(){
+        if(!gustosBody) return;
+        gustosBody.innerHTML = '';
+        if(gustos.length === 0){
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="2" style="padding:18px; color:#6c757d;">No hay gustos guardados. Añade uno 😉</td>';
+            gustosBody.appendChild(tr);
+            return;
+        }
+        gustos.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="padding:12px;">${escapeHtml(item.name)}</td>
+                <td style="padding:12px; text-align:right;">
+                    <button class="action-btn edit-gusto" data-id="${item.id}" title="Editar"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-gusto" data-id="${item.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            gustosBody.appendChild(tr);
+        });
+    }
+
+    // Escape HTML (simple)
+    function escapeHtml(str){
+        if(!str && str !== 0) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+    }
+
+    // Open add modal
+    openGustoAddBtn.addEventListener('click', function(){
+        gustoForm.reset();
+        gustoIdInput.value = '';
+        document.getElementById('gusto-modal-title').textContent = 'Agregar gusto';
+        openModal('gusto-modal');
+    });
+
+    // Close modal buttons (delegation for data-close)
+    document.querySelectorAll('.close-modal[data-close]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.getAttribute('data-close');
+            closeModal(id);
+        });
+    });
+
+    // Submit add/edit
+    gustoForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = gustoIdInput.value || genId();
+        const name = gustoNameInput.value.trim();
+        if(!name) return alert('Escribe un gusto.');
+        const existingIndex = gustos.findIndex(x => x.id === id);
+        const payload = { id, name };
+        if(existingIndex >= 0){
+            gustos[existingIndex] = payload;
+        } else {
+            gustos.push(payload);
+        }
+        writeStorage(GUSTOS_KEY, gustos);
+        renderGustos();
+        closeModal('gusto-modal');
+        showNotification('Guardado');
+    });
+
+    // Delegated actions (edit / delete)
+    if(gustosBody){
+        gustosBody.addEventListener('click', function(e){
+            const editBtn = e.target.closest('.edit-gusto');
+            const delBtn = e.target.closest('.delete-gusto');
+            if(editBtn){
+                const id = editBtn.getAttribute('data-id');
+                const item = gustos.find(x => x.id === id);
+                if(!item) return;
+                gustoIdInput.value = item.id;
+                gustoNameInput.value = item.name;
+                document.getElementById('gusto-modal-title').textContent = 'Editar gusto';
+                openModal('gusto-modal');
+            }
+            if(delBtn){
+                const id = delBtn.getAttribute('data-id');
+                if(!confirm('¿Eliminar este gusto?')) return;
+                gustos = gustos.filter(x => x.id !== id);
+                writeStorage(GUSTOS_KEY, gustos);
+                renderGustos();
+                showNotification('Eliminado');
+            }
+        });
+    }
+
+    // Init
+    renderGustos();
+})();
+</script>
+
 
     <section id="compras" class="section">
         <div class="espacio-header">
@@ -2729,9 +2896,56 @@ document.addEventListener('DOMContentLoaded', function() {
             <h1><i class="fas fa-star"></i>Fechas Importantes</h1>
             <p>Aniversarios, cumpleaños y eventos especiales</p>
         </div>
-        <div class="proximamente-container">
-            <h2>Próximamente...</h2>
-            <p>Esta sección está en desarrollo. ¡Vuelve pronto!</p>
+
+        <div class="pending-section">
+            <div style="overflow-x:auto;">
+                <table class="loans-table" style="min-width:600px;">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Fecha</th>
+                            <th>Días Restantes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fechas-main-body">
+                        <!-- filas generadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+                <button id="open-fecha-add" class="add-btn" style="max-width:220px;">
+                    <i class="fas fa-calendar-plus"></i> Añadir fecha
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal: Añadir / Editar Fecha -->
+        <div class="modal" id="fecha-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="fecha-modal-title">Agregar fecha importante</h3>
+                    <button class="close-modal" data-close="fecha-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="fecha-form">
+                        <input type="hidden" id="fecha-id">
+                        <div class="form-group">
+                            <label for="fecha-name">Nombre del evento</label>
+                            <input type="text" id="fecha-name" class="form-control" placeholder="Ej. Cumpleaños de Lety" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-date">Fecha</label>
+                            <input type="date" id="fecha-date" class="form-control" required>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button type="submit" class="btn-submit">Guardar</button>
+                            <button type="button" class="btn-submit" data-close="fecha-modal" style="background:#ccc; color:#333;">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -4964,6 +5178,355 @@ document.addEventListener('DOMContentLoaded', function() {
 
         });
     </script>
+
+<section id="gustos-sam" class="section">
+    <div class="espacio-header">
+        <h1><i class="fas fa-gift"></i>Gustos de Mi novia</h1>
+        <p>Recordatorios de cosas que le gustan a Mi novia</p>
+    </div>
+
+    <div class="pending-section">
+        <div style="overflow-x:auto;">
+            <table class="loans-table" style="min-width:600px;">
+                <thead>
+                    <tr>
+                        <th>Qué le gusta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="gustos-main-body">
+                    <!-- filas generadas dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+            <button id="open-gusto-add" class="add-btn" style="max-width:220px;">
+                <i class="fas fa-plus-circle"></i> Añadir gusto
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal: Añadir / Editar gusto -->
+    <div class="modal" id="gusto-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="gusto-modal-title">Agregar gusto</h3>
+                <button class="close-modal" data-close="gusto-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="gusto-form">
+                    <input type="hidden" id="gusto-id">
+                    <div class="form-group">
+                        <label for="gusto-name">Gusto</label>
+                        <input type="text" id="gusto-name" class="form-control" required>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="btn-submit">Guardar</button>
+                        <button type="button" class="btn-submit" data-close="gusto-modal" style="background:#ccc; color:#333;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Script for Gustos Mi novia -->
+<script>
+(function(){
+    // Storage key
+    const GUSTOS_KEY = 'gustosNovia_v1';
+
+    // Elements
+    const gustosBody = document.getElementById('gustos-main-body');
+    const openGustoAddBtn = document.getElementById('open-gusto-add');
+    const gustoModal = document.getElementById('gusto-modal');
+    const gustoForm = document.getElementById('gusto-form');
+    const gustoIdInput = document.getElementById('gusto-id');
+    const gustoNameInput = document.getElementById('gusto-name');
+
+    // Helpers (reuse existing global helpers if present)
+    function readStorage(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; } }
+    function writeStorage(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+    function genId(){ return Date.now().toString(36) + Math.floor(Math.random()*1000).toString(36); }
+    function openModal(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
+    function closeModal(id){ const el=document.getElementById(id); if(el) el.classList.remove('active'); }
+    function showNotification(text){ try{ const n=document.getElementById('notification'); if(!n) return; n.classList.add('show'); document.getElementById('notification-text').textContent = text; setTimeout(()=> n.classList.remove('show'), 2000);}catch(e){} }
+
+    // Data
+    let gustos = readStorage(GUSTOS_KEY);
+
+    // Render
+    function renderGustos(){
+        if(!gustosBody) return;
+        gustosBody.innerHTML = '';
+        if(gustos.length === 0){
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="2" style="padding:18px; color:#6c757d;">No hay gustos guardados. Añade uno 😉</td>';
+            gustosBody.appendChild(tr);
+            return;
+        }
+        gustos.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="padding:12px;">${escapeHtml(item.name)}</td>
+                <td style="padding:12px; text-align:right;">
+                    <button class="action-btn edit-gusto" data-id="${item.id}" title="Editar"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-gusto" data-id="${item.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            gustosBody.appendChild(tr);
+        });
+    }
+
+    // Escape HTML (simple)
+    function escapeHtml(str){
+        if(!str && str !== 0) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+    }
+
+    // Open add modal
+    openGustoAddBtn.addEventListener('click', function(){
+        gustoForm.reset();
+        gustoIdInput.value = '';
+        document.getElementById('gusto-modal-title').textContent = 'Agregar gusto';
+        openModal('gusto-modal');
+    });
+
+    // Close modal buttons (delegation for data-close)
+    document.querySelectorAll('.close-modal[data-close]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.getAttribute('data-close');
+            closeModal(id);
+        });
+    });
+
+    // Submit add/edit
+    gustoForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = gustoIdInput.value || genId();
+        const name = gustoNameInput.value.trim();
+        if(!name) return alert('Escribe un gusto.');
+        const existingIndex = gustos.findIndex(x => x.id === id);
+        const payload = { id, name };
+        if(existingIndex >= 0){
+            gustos[existingIndex] = payload;
+        } else {
+            gustos.push(payload);
+        }
+        writeStorage(GUSTOS_KEY, gustos);
+        renderGustos();
+        closeModal('gusto-modal');
+        showNotification('Guardado');
+    });
+
+    // Delegated actions (edit / delete)
+    if(gustosBody){
+        gustosBody.addEventListener('click', function(e){
+            const editBtn = e.target.closest('.edit-gusto');
+            const delBtn = e.target.closest('.delete-gusto');
+            if(editBtn){
+                const id = editBtn.getAttribute('data-id');
+                const item = gustos.find(x => x.id === id);
+                if(!item) return;
+                gustoIdInput.value = item.id;
+                gustoNameInput.value = item.name;
+                document.getElementById('gusto-modal-title').textContent = 'Editar gusto';
+                openModal('gusto-modal');
+            }
+            if(delBtn){
+                const id = delBtn.getAttribute('data-id');
+                if(!confirm('¿Eliminar este gusto?')) return;
+                gustos = gustos.filter(x => x.id !== id);
+                writeStorage(GUSTOS_KEY, gustos);
+                renderGustos();
+                showNotification('Eliminado');
+            }
+        });
+    }
+
+    // Init
+    renderGustos();
+})();
+
+(function(){
+    // --- Configuración y Claves ---
+    const FECHAS_KEY = 'fechasImportantes_v1';
+
+    // --- Elementos del DOM ---
+    const fechasBody = document.getElementById('fechas-main-body');
+    const openFechaAddBtn = document.getElementById('open-fecha-add');
+    const fechaModal = document.getElementById('fecha-modal');
+    const fechaForm = document.getElementById('fecha-form');
+    const fechaIdInput = document.getElementById('fecha-id');
+    const fechaNameInput = document.getElementById('fecha-name');
+    const fechaDateInput = document.getElementById('fecha-date');
+
+    // --- Helpers Locales ---
+    function readStorage(key){ try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e){ return []; } }
+    function writeStorage(key, data){ localStorage.setItem(key, JSON.stringify(data)); }
+    function genId(){ return Date.now().toString(36) + Math.floor(Math.random()*1000).toString(36); }
+    function openModal(id){ const el=document.getElementById(id); if(el) el.classList.add('active'); }
+    function closeModal(id){ const el=document.getElementById(id); if(el) el.classList.remove('active'); }
+    
+    // Notificación simple (intenta usar la global si existe, sino no hace nada)
+    function showNotification(text){ 
+        try{ 
+            const n=document.getElementById('notification'); 
+            if(n) {
+                n.classList.add('show'); 
+                document.getElementById('notification-text').textContent = text; 
+                setTimeout(()=> n.classList.remove('show'), 2000);
+            }
+        }catch(e){} 
+    }
+
+    // Calcular días restantes
+    function getDaysRemaining(dateString) {
+        if (!dateString) return '---';
+        const targetDate = new Date(dateString);
+        // Ajustar a medianoche para evitar problemas de horas
+        targetDate.setUTCHours(0,0,0,0);
+        
+        const today = new Date();
+        today.setUTCHours(0,0,0,0);
+
+        const diffTime = targetDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        
+        if (diffDays === 0) return '¡Es hoy!';
+        if (diffDays < 0) return `Pasó hace ${Math.abs(diffDays)} días`;
+        return `${diffDays} días`;
+    }
+
+    // Formatear fecha para mostrar
+    function formatDate(dateString) {
+        if(!dateString) return '';
+        const [year, month, day] = dateString.split('-');
+        return `${day}/${month}/${year}`;
+    }
+
+    // --- Lógica Principal ---
+    let fechas = readStorage(FECHAS_KEY);
+
+    // Renderizar Tabla
+    function renderFechas(){
+        if(!fechasBody) return;
+        fechasBody.innerHTML = '';
+
+        if(fechas.length === 0){
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="4" style="padding:18px; color:#6c757d; text-align:center;">No hay fechas importantes guardadas.</td>';
+            fechasBody.appendChild(tr);
+            return;
+        }
+
+        // Ordenar por fecha (las más cercanas primero)
+        fechas.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        fechas.forEach(item => {
+            const tr = document.createElement('tr');
+            const remaining = getDaysRemaining(item.date);
+            
+            // Estilo para destacar si es hoy o mañana
+            let rowStyle = '';
+            if(remaining === '¡Es hoy!') rowStyle = 'color: #2ecc71; font-weight: bold;';
+            else if(remaining.includes('1 días')) rowStyle = 'color: #e67e22; font-weight: bold;';
+
+            tr.innerHTML = `
+                <td style="padding:12px;">${item.name}</td>
+                <td style="padding:12px;">${formatDate(item.date)}</td>
+                <td style="padding:12px; ${rowStyle}">${remaining}</td>
+                <td style="padding:12px; text-align:right;">
+                    <button class="action-btn edit-fecha" data-id="${item.id}" title="Editar"><i class="fas fa-pen"></i></button>
+                    <button class="action-btn delete-fecha" data-id="${item.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            fechasBody.appendChild(tr);
+        });
+    }
+
+    // Abrir Modal para Agregar
+    openFechaAddBtn.addEventListener('click', function(){
+        fechaForm.reset();
+        fechaIdInput.value = '';
+        document.getElementById('fecha-modal-title').textContent = 'Agregar fecha importante';
+        openModal('fecha-modal');
+    });
+
+    // Cerrar Modal (Delegación)
+    document.querySelectorAll('.close-modal[data-close]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.currentTarget.getAttribute('data-close');
+            closeModal(id);
+        });
+    });
+
+    // Guardar (Submit)
+    fechaForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const id = fechaIdInput.value || genId();
+        const name = fechaNameInput.value.trim();
+        const date = fechaDateInput.value;
+
+        if(!name || !date) return alert('Completa todos los campos.');
+
+        const existingIndex = fechas.findIndex(x => x.id === id);
+        const payload = { id, name, date };
+
+        if(existingIndex >= 0){
+            fechas[existingIndex] = payload;
+        } else {
+            fechas.push(payload);
+        }
+
+        writeStorage(FECHAS_KEY, fechas);
+        renderFechas();
+        closeModal('fecha-modal');
+        showNotification('Fecha guardada correctamente');
+    });
+
+    // Acciones de Tabla (Editar / Eliminar)
+    if(fechasBody){
+        fechasBody.addEventListener('click', function(e){
+            const editBtn = e.target.closest('.edit-fecha');
+            const delBtn = e.target.closest('.delete-fecha');
+
+            if(editBtn){
+                const id = editBtn.getAttribute('data-id');
+                const item = fechas.find(x => x.id === id);
+                if(!item) return;
+                
+                fechaIdInput.value = item.id;
+                fechaNameInput.value = item.name;
+                fechaDateInput.value = item.date;
+                
+                document.getElementById('fecha-modal-title').textContent = 'Editar fecha';
+                openModal('fecha-modal');
+            }
+
+            if(delBtn){
+                const id = delBtn.getAttribute('data-id');
+                if(!confirm('¿Eliminar esta fecha importante?')) return;
+                
+                fechas = fechas.filter(x => x.id !== id);
+                writeStorage(FECHAS_KEY, fechas);
+                renderFechas();
+                showNotification('Fecha eliminada');
+            }
+        });
+    }
+
+    // Inicializar
+    renderFechas();
+})();
+</script>
+
 </body>
 </html>
 
